@@ -1,0 +1,60 @@
+---
+import technologiesData from '../data/p2p-technologies.json';
+
+const technologies = technologiesData.technologies;
+
+function getBadgeClass(value: string): string {
+  if (value === 'Yes' || value === 'Released' || value === 'Permissive') {
+    return 'badge badge-yes';
+  } else if (value === 'No' || value === 'None' || value === 'Proprietary') {
+    return 'badge badge-no';
+  } else if (value === 'Alpha' || value === 'Beta' || value === 'Partial' || value === 'Optional' || value === 'Planned') {
+    return 'badge badge-partial';
+  } else {
+    return 'badge badge-partial';
+  }
+}
+---
+
+<div class="matrix-container">
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Technology</th>
+        <th>P2P</th>
+        <th>Local-first</th>
+        <th>E2EE</th>
+        <th>Content Addressing</th>
+        <th>CRDTs</th>
+        <th>Byzantine FT</th>
+        <th>Semantic Web</th>
+        <th>Query Language</th>
+        <th>Collab Editing</th>
+        <th>Mobile</th>
+        <th>Web</th>
+        <th>Dev Status</th>
+        <th>License</th>
+      </tr>
+    </thead>
+    <tbody>
+      {technologies.map((tech) => (
+        <tr>
+          <td>{tech.name}</td>
+          <td><span class={getBadgeClass(tech.p2p)}>{tech.p2p}</span></td>
+          <td><span class={getBadgeClass(tech.localFirst)}>{tech.localFirst}</span></td>
+          <td><span class={getBadgeClass(tech.e2ee)}>{tech.e2ee}</span></td>
+          <td><span class={getBadgeClass(tech.contentAddressing)}>{tech.contentAddressing}</span></td>
+          <td><span class={getBadgeClass(tech.crdts)}>{tech.crdts}</span></td>
+          <td><span class={getBadgeClass(tech.byzantineFaultTolerance)}>{tech.byzantineFaultTolerance}</span></td>
+          <td><span class={getBadgeClass(tech.semanticWeb)}>{tech.semanticWeb}</span></td>
+          <td>{tech.queryLanguage}</td>
+          <td><span class={getBadgeClass(tech.collaborativeLiveEditing)}>{tech.collaborativeLiveEditing}</span></td>
+          <td><span class={getBadgeClass(tech.mobileSupport)}>{tech.mobileSupport}</span></td>
+          <td><span class={getBadgeClass(tech.webSupport)}>{tech.webSupport}</span></td>
+          <td><span class={getBadgeClass(tech.devStatus)}>{tech.devStatus}</span></td>
+          <td><span class={getBadgeClass(tech.license)}>{tech.license}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

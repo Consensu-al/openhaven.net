@@ -1,0 +1,28 @@
+{
+  "sections": [
+    {
+      "title": "Beyond Client-Server Architecture",
+      "content": "The web's foundational architecture is changing. What began with simple file-sharing has matured into sophisticated distributed systems capable of running entire applications without centralized servers. From CRDTs to content addressing, we're witnessing the emergence of truly distributed computing."
+    },
+    {
+      "title": "Reclaiming Digital Sovereignty",
+      "content": "As platform consolidation accelerates, peer-to-peer technologies offer an alternative path. These systems eliminate single points of control, enable offline-first applications, and return data ownership to users. The question isn't whether decentralization will happen, but how quickly we can build better tools."
+    },
+    {
+      "title": "The Interoperability Challenge",
+      "content": "Today's decentralized ecosystem resembles the early web - brilliant innovations trapped in incompatible silos. Developers face difficult choices between protocols, limiting adoption and fragmenting user experiences. We need bridges, not walls."
+    },
+    {
+      "title": "Standards as Infrastructure",
+      "content": "The most successful technologies become invisible infrastructure. Just as HTTP enabled the web's explosive growth, shared protocols for peer-to-peer systems can unlock exponential possibilities. Standards don't limit innovation - they enable it at scale."
+    },
+    {
+      "title": "The Technical Foundations",
+      "content": "Core building blocks are already emerging: IPLD for content addressing, DIDs for identity, CRDTs for synchronization, DHTs for discovery, and libp2p for transport. These modular components can compose into systems more powerful than any single protocol."
+    },
+    {
+      "title": "Building the Next Web",
+      "content": "The transition to decentralized systems requires collaboration across projects, protocols, and communities. OpenHaven documents the landscape and advocates for standards that enable interoperability. The future web will be local-first, user-owned, and globally connected."
+    }
+  ]
+}

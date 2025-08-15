@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import InteractiveMatrix from '../components/InteractiveMatrix.astro';
+import narrativeData from '../data/narrative.json';
+
+const narrativeSections = narrativeData.sections;
+---
+
+<Layout title="OpenHaven - P2P Technology Standards">
+  <main>
+    <div class="hero">
+      <div class="container">
+        <h1>OpenHaven</h1>
+        <p class="tagline">Building Bridges in the P2P Ecosystem</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <section class="section">
+        <h2>Mapping the Distributed Landscape</h2>
+        <p>
+          A comprehensive analysis of decentralized protocols and their capabilities. 
+          From content addressing to collaborative editing, explore the building blocks 
+          of tomorrow's web infrastructure.
+        </p>
+        <InteractiveMatrix />
+      </section>
+
+      <section class="section">
+        <h2>Toward Interoperable Infrastructure</h2>
+        {narrativeSections.map((section) => (
+          <div class="narrative-section">
+            <h3>{section.title}</h3>
+            <p>{section.content}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="section">
+        <h2>Building Together</h2>
+        <div class="narrative-section">
+          <p>
+            The shift to decentralized systems requires collaboration across research labs, 
+            protocol teams, and application developers. OpenHaven documents the current 
+            landscape and advocates for interoperability. Our principles:
+          </p>
+          <ul style="margin-left: 2rem; margin-top: 1rem;">
+            <li>Modular protocols over monolithic platforms</li>
+            <li>Local-first applications with global connectivity</li>
+            <li>User-controlled data and identity</li>
+            <li>Composable standards that enable innovation</li>
+            <li>Pragmatic solutions for real-world adoption</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>

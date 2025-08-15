@@ -1,0 +1,225 @@
+---
+import technologiesData from '../data/p2p-technologies.json';
+
+const technologies = technologiesData.technologies;
+
+const columns = [
+  { key: 'p2p', label: 'P2P', defaultVisible: true },
+  { key: 'overlayNetwork', label: 'Overlay Network', defaultVisible: false },
+  { key: 'localFirst', label: 'Local-first', defaultVisible: true },
+  { key: 'e2ee', label: 'E2EE', defaultVisible: false },
+  { key: 'contentAddressing', label: 'Content Addressing', defaultVisible: false },
+  { key: 'crdts', label: 'CRDTs', defaultVisible: true },
+  { key: 'byzantineFaultTolerance', label: 'Byzantine FT', defaultVisible: false },
+  { key: 'semanticWeb', label: 'Semantic Web', defaultVisible: false },
+  { key: 'queryLanguage', label: 'Query Language', defaultVisible: true },
+  { key: 'database', label: 'Database', defaultVisible: false },
+  { key: 'collaborativeLiveEditing', label: 'Collab Editing', defaultVisible: false },
+  { key: 'richTextEditing', label: 'Rich Text', defaultVisible: false },
+  { key: 'mobileSupport', label: 'Mobile', defaultVisible: true },
+  { key: 'webSupport', label: 'Web', defaultVisible: true },
+  { key: 'devStatus', label: 'Dev Status', defaultVisible: true },
+  { key: 'license', label: 'License', defaultVisible: true }
+];
+
+function getBadgeClass(value: string): string {
+  if (value === 'Yes' || value === 'Released' || value === 'Permissive') {
+    return 'badge badge-yes';
+  } else if (value === 'No' || value === 'None' || value === 'Proprietary') {
+    return 'badge badge-no';
+  } else if (value === 'Alpha' || value === 'Beta' || value === 'Partial' || value === 'Optional' || value === 'Planned') {
+    return 'badge badge-partial';
+  } else {
+    return 'badge badge-partial';
+  }
+}
+
+function countGreens(tech: any): number {
+  let count = 0;
+  for (const col of columns) {
+    const value = tech[col.key];
+    if (value === 'Yes' || value === 'Released' || value === 'Permissive') {
+      count++;
+    }
+  }
+  return count;
+}
+
+const sortedTechnologies = [...technologies].sort((a, b) => {
+  return countGreens(b) - countGreens(a);
+});
+---
+
+<div class="matrix-wrapper">
+  <div class="column-selector">
+    <h3>Select Columns:</h3>
+    <div class="checkbox-grid">
+      {columns.map((col) => (
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            data-column={col.key}
+            checked={col.defaultVisible}
+            class="column-checkbox"
+          />
+          <span>{col.label}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  <div class="matrix-container">
+    <table class="matrix-table" id="comparison-table">
+      <thead>
+        <tr>
+          <th>Technology</th>
+          {columns.map((col) => (
+            <th data-column={col.key} class={col.defaultVisible ? '' : 'hidden'}>
+              {col.label}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        {sortedTechnologies.map((tech) => (
+          <tr data-tech-name={tech.name}>
+            <td><a href={tech.website} target="_blank" rel="noopener noreferrer">{tech.name}</a></td>
+            {columns.map((col) => {
+              const value = tech[col.key];
+              const isTextField = col.key === 'queryLanguage' || col.key === 'database' || col.key === 'overlayNetwork';
+              return (
+                <td data-column={col.key} class={col.defaultVisible ? '' : 'hidden'}>
+                  {isTextField ? (
+                    value
+                  ) : (
+                    <span class={getBadgeClass(value)}>{value}</span>
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .matrix-wrapper {
+    margin: 2rem 0;
+  }
+
+  .column-selector {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+  }
+
+  .column-selector h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+
+  .checkbox-label:hover {
+    color: var(--color-accent-text);
+  }
+
+  .column-checkbox {
+    margin-right: 0.5rem;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .checkbox-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+  }
+</style>
+
+<script>
+  const checkboxes = document.querySelectorAll('.column-checkbox');
+  const table = document.getElementById('comparison-table');
+  const tableBody = document.getElementById('table-body');
+  
+  function getBadgeClass(value: string): string {
+    if (value === 'Yes' || value === 'Released' || value === 'Permissive') {
+      return 'badge badge-yes';
+    } else if (value === 'No' || value === 'None' || value === 'Proprietary') {
+      return 'badge badge-no';
+    } else if (value === 'Alpha' || value === 'Beta' || value === 'Partial' || value === 'Optional' || value === 'Planned') {
+      return 'badge badge-partial';
+    } else {
+      return 'badge badge-partial';
+    }
+  }
+
+  function countVisibleGreens(row: HTMLTableRowElement): number {
+    let count = 0;
+    const cells = row.querySelectorAll('td:not(.hidden)');
+    cells.forEach((cell) => {
+      const badge = cell.querySelector('.badge-yes');
+      if (badge) count++;
+    });
+    return count;
+  }
+
+  function toggleColumn(columnKey: string, show: boolean) {
+    const elements = table?.querySelectorAll(`[data-column="${columnKey}"]`);
+    elements?.forEach(element => {
+      if (show) {
+        element.classList.remove('hidden');
+      } else {
+        element.classList.add('hidden');
+      }
+    });
+  }
+
+  function sortTableRows() {
+    if (!tableBody) return;
+    
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    
+    rows.sort((a, b) => {
+      const aGreens = countVisibleGreens(a as HTMLTableRowElement);
+      const bGreens = countVisibleGreens(b as HTMLTableRowElement);
+      return bGreens - aGreens;
+    });
+    
+    rows.forEach(row => tableBody.appendChild(row));
+  }
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      const columnKey = target.dataset.column;
+      if (columnKey) {
+        toggleColumn(columnKey, target.checked);
+        sortTableRows();
+      }
+    });
+  });
+
+  sortTableRows();
+</script>
