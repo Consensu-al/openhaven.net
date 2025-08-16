@@ -8,5 +8,9 @@ export default defineConfig({
   output: 'static',
   build: {
     format: 'file'
+  },
+  server: {
+    host: true,
+    allowedHosts: ['openhaven.ngrok.app']
   }
 });
