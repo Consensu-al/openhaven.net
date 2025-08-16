@@ -1,7 +1,7 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import InteractiveMatrix from '../components/InteractiveMatrix.astro';
-import narrativeData from '../data/narrative.json';
+import Layout from "../layouts/Layout.astro";
+import InteractiveMatrix from "../components/InteractiveMatrix.astro";
+import narrativeData from "../data/narrative.json";
 
 const narrativeSections = narrativeData.sections;
 ---
@@ -15,18 +15,7 @@ const narrativeSections = narrativeData.sections;
       </div>
     </div>
 
-    <div class="container">
-      <section class="section">
-        <h2>Mapping the Distributed Landscape</h2>
-        <p>
-          A comprehensive analysis of decentralized protocols and their capabilities. 
-          From content addressing to collaborative editing, explore the building blocks 
-          of tomorrow's web infrastructure.
-        </p>
-        <InteractiveMatrix />
-      </section>
-
-      <section class="section">
+      <!-- <section class="section">
         <h2>Toward Interoperable Infrastructure</h2>
         {narrativeSections.map((section) => (
           <div class="narrative-section">
@@ -34,7 +23,7 @@ const narrativeSections = narrativeData.sections;
             <p>{section.content}</p>
           </div>
         ))}
-      </section>
+      </section> -->
 
       <section class="section">
         <h2>Building Together</h2>
