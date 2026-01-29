@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import RandomImage from "../components/RandomImage.astro";
-import SoundCloudPlayer from "../components/SoundCloudPlayer.astro";
+import MediaEmbed from "../components/MediaEmbed.astro";
 import calendarsData from "../data/calendars.json";
 
 // Fetch raw ICS at build time (solves CORS), parsing happens client-side
@@ -41,7 +41,7 @@ const buildTime = new Date().toISOString();
 
         <div class="sidebar-media">
           <RandomImage class="sidebar-image" />
-          <SoundCloudPlayer class="sidebar-player" />
+          <MediaEmbed class="sidebar-player" />
         </div>
 
         <p class="last-updated">Updated: {new Date(buildTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>

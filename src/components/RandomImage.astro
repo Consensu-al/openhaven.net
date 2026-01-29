@@ -1,5 +1,6 @@
 ---
 // Embeds all images, client-side JS picks randomly on each page load
+// Click to re-randomize both image and embed
 import fs from "node:fs";
 import path from "node:path";
 
@@ -28,17 +29,32 @@ try {
     alt=""
     class={className}
     data-images={JSON.stringify(images)}
+    title="Click to shuffle"
   />
 )}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  function pickRandomImage() {
     const img = document.querySelector('img[data-images]') as HTMLImageElement;
     if (img) {
       const images = JSON.parse(img.dataset.images || '[]');
       if (images.length > 0) {
         img.src = images[Math.floor(Math.random() * images.length)];
       }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    pickRandomImage();
+
+    const img = document.querySelector('img[data-images]') as HTMLImageElement;
+    if (img) {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', () => {
+        pickRandomImage();
+        // Dispatch event so embed can also re-randomize
+        window.dispatchEvent(new CustomEvent('shuffle-media'));
+      });
     }
   });
 </script>
@@ -48,5 +64,10 @@ try {
     width: 100%;
     height: auto;
     border-radius: 4px;
+    transition: opacity 0.15s;
+  }
+
+  img:hover {
+    opacity: 0.85;
   }
 </style>

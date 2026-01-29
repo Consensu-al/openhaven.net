@@ -1,5 +1,7 @@
 ---
-// Embeds all options, client-side JS picks randomly on each page load
+// Random media embed (SoundCloud, YouTube, Spotify, etc.)
+// Reads .html files from src/data/media-embeds/
+// Listens for shuffle-media event to re-randomize
 import fs from "node:fs";
 import path from "node:path";
 
@@ -9,7 +11,7 @@ interface Props {
 
 const { class: className } = Astro.props;
 
-const embedDir = path.join(process.cwd(), "src/data/soundcloud-embeds");
+const embedDir = path.join(process.cwd(), "src/data/media-embeds");
 let embeds: string[] = [];
 
 try {
@@ -21,11 +23,11 @@ try {
 ---
 
 {embeds.length > 0 && (
-  <div class={className} data-embeds={JSON.stringify(embeds)}></div>
+  <div class:list={[className, "embed-container"]} data-embeds={JSON.stringify(embeds)}></div>
 )}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  function pickRandomEmbed() {
     const container = document.querySelector('div[data-embeds]') as HTMLDivElement;
     if (container) {
       const embeds = JSON.parse(container.dataset.embeds || '[]');
@@ -33,16 +35,31 @@ try {
         container.innerHTML = embeds[Math.floor(Math.random() * embeds.length)];
       }
     }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    pickRandomEmbed();
+  });
+
+  // Listen for shuffle event from image click
+  window.addEventListener('shuffle-media', () => {
+    pickRandomEmbed();
   });
 </script>
 
 <style>
-  div {
+  .embed-container {
     border-radius: 4px;
     overflow: hidden;
+    max-width: 100%;
   }
 
-  div :global(iframe) {
+  .embed-container :global(iframe) {
     display: block;
+    max-width: 100%;
+  }
+
+  .embed-container :global(*) {
+    max-width: 100%;
   }
 </style>
