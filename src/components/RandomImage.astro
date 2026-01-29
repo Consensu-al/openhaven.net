@@ -1,0 +1,40 @@
+---
+// Randomly selects an image from public/images/sidebar/ at build time
+import fs from "node:fs";
+import path from "node:path";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const imageDir = path.join(process.cwd(), "public/images/sidebar");
+let imageSrc = "";
+
+try {
+  const files = fs.readdirSync(imageDir).filter((file) => {
+    const ext = path.extname(file).toLowerCase();
+    return [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"].includes(ext);
+  });
+
+  if (files.length > 0) {
+    const randomFile = files[Math.floor(Math.random() * files.length)];
+    imageSrc = `/images/sidebar/${randomFile}`;
+  }
+} catch (err) {
+  // Directory doesn't exist or can't be read
+}
+---
+
+{imageSrc && (
+  <img src={imageSrc} alt="" class={className} />
+)}
+
+<style>
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+</style>

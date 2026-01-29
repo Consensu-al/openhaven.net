@@ -1,0 +1,42 @@
+---
+// Randomly selects a SoundCloud embed from src/data/soundcloud-embeds/ at build time
+import fs from "node:fs";
+import path from "node:path";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const embedDir = path.join(process.cwd(), "src/data/soundcloud-embeds");
+let embedHtml = "";
+
+try {
+  const files = fs.readdirSync(embedDir).filter((file) => {
+    return file.endsWith(".html");
+  });
+
+  if (files.length > 0) {
+    const randomFile = files[Math.floor(Math.random() * files.length)];
+    embedHtml = fs.readFileSync(path.join(embedDir, randomFile), "utf-8");
+  }
+} catch (err) {
+  // Directory doesn't exist or can't be read
+}
+---
+
+{embedHtml && (
+  <div class={className} set:html={embedHtml} />
+)}
+
+<style>
+  div {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  div :global(iframe) {
+    display: block;
+  }
+</style>
