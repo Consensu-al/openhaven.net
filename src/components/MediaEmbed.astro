@@ -50,13 +50,14 @@ try {
 <style>
   .embed-container {
     border-radius: 4px;
-    overflow: hidden;
     max-width: 100%;
   }
 
   .embed-container :global(iframe) {
     display: block;
+    width: 100% !important;
     max-width: 100%;
+    border: none;
   }
 
   .embed-container :global(*) {
