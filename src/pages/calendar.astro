@@ -333,8 +333,8 @@ import calendarsData from "../data/calendars.json";
   // Load calendar sources from embedded JSON data
   const CALENDARS = JSON.parse(document.getElementById('calendar-data').textContent);
 
-  // Optional: CORS proxy prefix (if your ICS sources don't support CORS)
-  const CORS_PROXY = '';
+  // CORS proxy for fetching external ICS files
+  const CORS_PROXY = 'https://corsproxy.io/?';
 
   // =========================================
   // APPLICATION STATE
@@ -437,7 +437,7 @@ import calendarsData from "../data/calendars.json";
     const errorBadge = document.getElementById(`error-${cal.id}`);
 
     try {
-      const url = CORS_PROXY + cal.url;
+      const url = CORS_PROXY + encodeURIComponent(cal.url);
       const response = await fetch(url);
 
       if (!response.ok) {
