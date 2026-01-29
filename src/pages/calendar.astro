@@ -44,7 +44,7 @@ const buildTime = new Date().toISOString();
           <MediaEmbed class="sidebar-player" />
         </div>
 
-        <p class="last-updated">Updated: {new Date(buildTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+        <p class="last-updated">Updated: {new Date(buildTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })} UTC</p>
       </aside>
 
       <div class="main">
