@@ -44,6 +44,20 @@ const buildTime = new Date().toISOString();
         <div id="calendar"></div>
       </div>
     </div>
+
+    <!-- Event Details Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal">
+        <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-meta">
+          <p class="modal-time" id="modal-time"></p>
+          <p class="modal-location" id="modal-location"></p>
+        </div>
+        <p class="modal-description" id="modal-description"></p>
+        <a class="modal-link" id="modal-link" href="#" target="_blank" rel="noopener">Open Link</a>
+      </div>
+    </div>
   </main>
 </Layout>
 
@@ -195,6 +209,121 @@ const buildTime = new Date().toISOString();
     margin-left: 0.5rem;
   }
 
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+    color: var(--color-accent-text);
+    margin-bottom: 1rem;
+    padding-right: 2rem;
+  }
+
+  .modal-meta {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .modal-time {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+
+  .modal-location {
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  .modal-location:empty {
+    display: none;
+  }
+
+  .modal-description {
+    font-size: 0.9rem;
+    color: #444;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin-bottom: 1rem;
+  }
+
+  .modal-description:empty {
+    display: none;
+  }
+
+  .modal-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--color-accent-text);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-bottom: none;
+    transition: all 0.15s;
+  }
+
+  .modal-link:hover {
+    background: #6d370f;
+    border-bottom: none;
+  }
+
+  .modal-link.hidden {
+    display: none;
+  }
+
   /* Responsive */
   @media (max-width: 768px) {
     .calendar-container {
@@ -330,6 +459,7 @@ const buildTime = new Date().toISOString();
   document.addEventListener('DOMContentLoaded', () => {
     initCalendar();
     initSidebar();
+    initModal();
     loadAllCalendars();
   });
 
@@ -345,10 +475,8 @@ const buildTime = new Date().toISOString();
       },
       height: 'auto',
       eventClick: (info) => {
-        if (info.event.url) {
-          window.open(info.event.url, '_blank');
-          info.jsEvent.preventDefault();
-        }
+        info.jsEvent.preventDefault();
+        showModal(info.event);
       },
       eventDidMount: (info) => {
         if (info.event.extendedProps.description) {
@@ -513,5 +641,112 @@ const buildTime = new Date().toISOString();
       checkbox.checked = visible;
       toggleCalendar(cal.id, visible);
     });
+  }
+
+  // =========================================
+  // MODAL
+  // =========================================
+
+  function initModal() {
+    const overlay = document.getElementById('modal-overlay');
+    const closeBtn = document.getElementById('modal-close');
+
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        hideModal();
+      }
+    });
+
+    // Close on button click
+    closeBtn.addEventListener('click', hideModal);
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideModal();
+      }
+    });
+  }
+
+  function showModal(event) {
+    const overlay = document.getElementById('modal-overlay');
+    const titleEl = document.getElementById('modal-title');
+    const timeEl = document.getElementById('modal-time');
+    const locationEl = document.getElementById('modal-location');
+    const descriptionEl = document.getElementById('modal-description');
+    const linkEl = document.getElementById('modal-link');
+
+    // Set title
+    titleEl.textContent = event.title;
+
+    // Format time
+    const start = event.start;
+    const end = event.end;
+    let timeStr = '';
+
+    if (event.allDay) {
+      timeStr = start.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      if (end && end.getTime() !== start.getTime()) {
+        const endDate = new Date(end.getTime() - 86400000); // Subtract 1 day for all-day end
+        if (endDate.getTime() !== start.getTime()) {
+          timeStr += ' – ' + endDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+          });
+        }
+      }
+    } else {
+      timeStr = start.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      timeStr += ' at ' + start.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+      if (end) {
+        timeStr += ' – ' + end.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit'
+        });
+      }
+    }
+    timeEl.textContent = timeStr;
+
+    // Set location
+    const location = event.extendedProps.location || '';
+    locationEl.textContent = location;
+
+    // Set description
+    const description = event.extendedProps.description || '';
+    descriptionEl.textContent = description;
+
+    // Set link
+    if (event.url) {
+      linkEl.href = event.url;
+      linkEl.classList.remove('hidden');
+    } else {
+      linkEl.classList.add('hidden');
+    }
+
+    // Show modal
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
   }
 </script>
