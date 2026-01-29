@@ -1,0 +1,575 @@
+---
+import Layout from "../layouts/Layout.astro";
+import calendarsData from "../data/calendars.json";
+---
+
+<Layout title="NAO Calendar" description="Aggregated sub-group events for NAO">
+  <main class="calendar-page">
+    <div class="calendar-container">
+      <aside class="sidebar">
+        <h1>NAO Calendar</h1>
+        <p class="sidebar-subtitle">Aggregated sub-group events</p>
+
+        <div class="loading-indicator" id="loading">
+          <div class="spinner"></div>
+          <span>Loading calendars...</span>
+        </div>
+
+        <ul class="calendar-list" id="calendar-list"></ul>
+
+        <div class="sidebar-actions">
+          <button id="show-all-btn">Show All</button>
+          <button id="hide-all-btn">Hide All</button>
+        </div>
+      </aside>
+
+      <div class="main">
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .calendar-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .calendar-container {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 100px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: white;
+    border-right: 1px solid #e0e0e0;
+    padding: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .sidebar h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-accent-text);
+  }
+
+  .sidebar-subtitle {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .calendar-list {
+    list-style: none;
+  }
+
+  :global(.calendar-item) {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 0;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  :global(.calendar-item:hover) {
+    opacity: 0.85;
+  }
+
+  :global(.calendar-item input[type="checkbox"]) {
+    display: none;
+  }
+
+  :global(.calendar-item .checkbox) {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  :global(.calendar-item .checkbox svg) {
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  :global(.calendar-item input:checked + .checkbox svg) {
+    opacity: 1;
+  }
+
+  :global(.calendar-item input:not(:checked) + .checkbox) {
+    opacity: 0.4;
+  }
+
+  :global(.calendar-item .name) {
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  :global(.calendar-item input:not(:checked) ~ .name) {
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .sidebar-actions {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .sidebar-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    background: var(--color-bg);
+    border: 1px solid #e0e0e0;
+    color: #666;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .sidebar-actions button:hover {
+    background: var(--color-yellow-light);
+    border-color: var(--color-yellow);
+    color: var(--color-accent-text);
+  }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    padding: 1.5rem;
+    overflow: auto;
+    background: var(--color-bg);
+  }
+
+  /* Loading state */
+  .loading-indicator {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    background: var(--color-yellow-light);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-accent-text);
+  }
+
+  :global(.loading-indicator.active) {
+    display: flex;
+  }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e0e0e0;
+    border-top-color: var(--color-accent-text);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Error state */
+  :global(.error-badge) {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #d32f2f;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .calendar-container {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .calendar-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    :global(.calendar-item) {
+      padding: 0.4rem 0.75rem;
+      background: var(--color-bg);
+      border-radius: 4px;
+      border: 1px solid #e0e0e0;
+    }
+  }
+</style>
+
+<style is:global>
+  /* FullCalendar overrides for light theme */
+  .fc {
+    --fc-border-color: #e0e0e0;
+    --fc-page-bg-color: var(--color-bg);
+    --fc-neutral-bg-color: white;
+    --fc-list-event-hover-bg-color: var(--color-yellow-light);
+    --fc-today-bg-color: rgba(244, 208, 63, 0.15);
+    --fc-event-border-color: transparent;
+  }
+
+  .fc .fc-toolbar-title {
+    color: var(--color-accent-text);
+    font-size: 1.25rem;
+    font-family: var(--font-mono);
+  }
+
+  .fc .fc-button {
+    background: white;
+    border-color: #e0e0e0;
+    color: #666;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .fc .fc-button:hover {
+    background: var(--color-yellow-light);
+    border-color: var(--color-yellow);
+    color: var(--color-accent-text);
+  }
+
+  .fc .fc-button-primary:not(:disabled).fc-button-active,
+  .fc .fc-button-primary:not(:disabled):active {
+    background: var(--color-accent-text);
+    border-color: var(--color-accent-text);
+    color: var(--color-bg);
+  }
+
+  .fc .fc-col-header-cell-cushion,
+  .fc .fc-daygrid-day-number {
+    color: #666;
+    font-family: var(--font-mono);
+  }
+
+  .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+    color: var(--color-accent-text);
+    font-weight: 600;
+  }
+
+  .fc-theme-standard td,
+  .fc-theme-standard th {
+    border-color: #e0e0e0;
+  }
+
+  .fc-event {
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+  }
+
+  .fc-event-title {
+    font-weight: 500;
+  }
+
+  .fc .fc-daygrid-day-frame {
+    min-height: 100px;
+  }
+
+  .fc .fc-scrollgrid {
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .fc .fc-col-header {
+    background: var(--color-accent-text);
+  }
+
+  .fc .fc-col-header-cell-cushion {
+    color: var(--color-bg);
+    padding: 0.75rem;
+  }
+</style>
+
+<!-- Embed calendar data from JSON -->
+<script id="calendar-data" type="application/json" set:html={JSON.stringify(calendarsData.calendars)}></script>
+
+<!-- FullCalendar CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" />
+
+<!-- FullCalendar JS -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+<!-- ICAL.js for parsing ICS -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
+
+<script is:inline>
+  // =========================================
+  // CONFIGURATION
+  // =========================================
+
+  // Load calendar sources from embedded JSON data
+  const CALENDARS = JSON.parse(document.getElementById('calendar-data').textContent);
+
+  // Optional: CORS proxy prefix (if your ICS sources don't support CORS)
+  const CORS_PROXY = '';
+
+  // =========================================
+  // APPLICATION STATE
+  // =========================================
+
+  let calendar;
+  const calendarState = new Map();
+
+  // =========================================
+  // INITIALIZATION
+  // =========================================
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    initCalendar();
+    initSidebar();
+    await loadAllCalendars();
+  });
+
+  function initCalendar() {
+    const calendarEl = document.getElementById('calendar');
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,listMonth'
+      },
+      height: 'auto',
+      eventClick: (info) => {
+        if (info.event.url) {
+          window.open(info.event.url, '_blank');
+          info.jsEvent.preventDefault();
+        }
+      },
+      eventDidMount: (info) => {
+        if (info.event.extendedProps.description) {
+          info.el.title = info.event.extendedProps.description;
+        }
+      }
+    });
+
+    calendar.render();
+  }
+
+  function initSidebar() {
+    const listEl = document.getElementById('calendar-list');
+
+    CALENDARS.forEach(cal => {
+      calendarState.set(cal.id, {
+        visible: cal.defaultVisible,
+        events: [],
+        error: false
+      });
+
+      const li = document.createElement('li');
+      li.className = 'calendar-item';
+      li.innerHTML = `
+        <label style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+          <input type="checkbox"
+                 id="cal-${cal.id}"
+                 ${cal.defaultVisible ? 'checked' : ''}>
+          <span class="checkbox" style="background: ${cal.color}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+          <span class="name">${cal.name}</span>
+          <span class="error-badge" id="error-${cal.id}" style="display: none;" title="Failed to load"></span>
+        </label>
+      `;
+
+      li.querySelector('input').addEventListener('change', (e) => {
+        toggleCalendar(cal.id, e.target.checked);
+      });
+
+      listEl.appendChild(li);
+    });
+
+    document.getElementById('show-all-btn').addEventListener('click', () => toggleAll(true));
+    document.getElementById('hide-all-btn').addEventListener('click', () => toggleAll(false));
+  }
+
+  // =========================================
+  // CALENDAR LOADING
+  // =========================================
+
+  async function loadAllCalendars() {
+    const loadingEl = document.getElementById('loading');
+    loadingEl.classList.add('active');
+
+    const promises = CALENDARS.map(cal => loadCalendar(cal));
+    await Promise.allSettled(promises);
+
+    loadingEl.classList.remove('active');
+  }
+
+  async function loadCalendar(cal) {
+    const state = calendarState.get(cal.id);
+    const errorBadge = document.getElementById(`error-${cal.id}`);
+
+    try {
+      const url = CORS_PROXY + cal.url;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const icsText = await response.text();
+      const events = parseICS(icsText, cal);
+
+      state.events = events;
+      state.error = false;
+      errorBadge.style.display = 'none';
+
+      if (state.visible) {
+        addEventsToCalendar(cal.id, events);
+      }
+
+    } catch (err) {
+      console.error(`Failed to load ${cal.name}:`, err);
+      state.error = true;
+      errorBadge.style.display = 'inline-block';
+    }
+  }
+
+  function parseICS(icsText, cal) {
+    const events = [];
+
+    try {
+      const jcalData = ICAL.parse(icsText);
+      const comp = new ICAL.Component(jcalData);
+      const vevents = comp.getAllSubcomponents('vevent');
+
+      vevents.forEach(vevent => {
+        const event = new ICAL.Event(vevent);
+
+        const fcEvent = {
+          id: `${cal.id}-${event.uid}`,
+          title: event.summary || 'Untitled',
+          start: event.startDate.toJSDate(),
+          end: event.endDate ? event.endDate.toJSDate() : null,
+          allDay: event.startDate.isDate,
+          backgroundColor: cal.color,
+          borderColor: cal.color,
+          extendedProps: {
+            calendarId: cal.id,
+            description: event.description || '',
+            location: event.location || ''
+          }
+        };
+
+        const urlProp = vevent.getFirstPropertyValue('url');
+        if (urlProp) {
+          fcEvent.url = urlProp;
+        }
+
+        events.push(fcEvent);
+
+        if (event.isRecurring()) {
+          const start = event.startDate.clone();
+          const end = start.clone();
+          end.addDuration(ICAL.Duration.fromSeconds(365 * 24 * 60 * 60));
+
+          const iterator = event.iterator();
+          let next;
+          let count = 0;
+
+          while ((next = iterator.next()) && count < 100) {
+            if (next.compare(start) > 0 && next.compare(end) <= 0) {
+              const recurEvent = { ...fcEvent };
+              recurEvent.id = `${cal.id}-${event.uid}-${count}`;
+              recurEvent.start = next.toJSDate();
+
+              if (event.endDate) {
+                const duration = event.endDate.subtractDate(event.startDate);
+                const newEnd = next.clone();
+                newEnd.addDuration(duration);
+                recurEvent.end = newEnd.toJSDate();
+              }
+
+              events.push(recurEvent);
+              count++;
+            }
+          }
+        }
+      });
+
+    } catch (err) {
+      console.error('Failed to parse ICS:', err);
+    }
+
+    return events;
+  }
+
+  // =========================================
+  // EVENT MANAGEMENT
+  // =========================================
+
+  function addEventsToCalendar(calId, events) {
+    events.forEach(event => {
+      calendar.addEvent(event);
+    });
+  }
+
+  function removeEventsFromCalendar(calId) {
+    const events = calendar.getEvents();
+    events.forEach(event => {
+      if (event.extendedProps.calendarId === calId) {
+        event.remove();
+      }
+    });
+  }
+
+  // =========================================
+  // UI HANDLERS
+  // =========================================
+
+  function toggleCalendar(calId, visible) {
+    const state = calendarState.get(calId);
+    state.visible = visible;
+
+    if (visible) {
+      addEventsToCalendar(calId, state.events);
+    } else {
+      removeEventsFromCalendar(calId);
+    }
+  }
+
+  function toggleAll(visible) {
+    CALENDARS.forEach(cal => {
+      const checkbox = document.getElementById(`cal-${cal.id}`);
+      checkbox.checked = visible;
+      toggleCalendar(cal.id, visible);
+    });
+  }
+</script>

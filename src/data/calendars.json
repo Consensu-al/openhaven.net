@@ -1,0 +1,32 @@
+{
+  "calendars": [
+    {
+      "id": "working-group",
+      "name": "Working Group",
+      "url": "https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/features/calendars/one-event.ics",
+      "color": "#c0392b",
+      "defaultVisible": true
+    },
+    {
+      "id": "stewards",
+      "name": "Stewards Circle",
+      "url": "https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/features/calendars/one-event.ics",
+      "color": "#2980b9",
+      "defaultVisible": true
+    },
+    {
+      "id": "tech-guild",
+      "name": "Tech Guild",
+      "url": "https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/features/calendars/one-event.ics",
+      "color": "#27ae60",
+      "defaultVisible": true
+    },
+    {
+      "id": "events",
+      "name": "Events Committee",
+      "url": "https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/features/calendars/one-event.ics",
+      "color": "#f39c12",
+      "defaultVisible": false
+    }
+  ]
+}
