@@ -1,21 +1,102 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import calendarsData from "../data/calendars.json";
+import ICAL from "ical.js";
 
-// Fetch all ICS files at build time (no CORS issues server-side)
-const calendarsWithICS = await Promise.all(
+// Parse ICS and convert to FullCalendar events
+function parseICS(icsText: string, cal: any) {
+  const events: any[] = [];
+
+  try {
+    const jcalData = ICAL.parse(icsText);
+    const comp = new ICAL.Component(jcalData);
+    const vevents = comp.getAllSubcomponents("vevent");
+
+    vevents.forEach((vevent: any) => {
+      const event = new ICAL.Event(vevent);
+
+      const fcEvent: any = {
+        id: `${cal.id}-${event.uid}`,
+        title: event.summary || "Untitled",
+        start: event.startDate.toJSDate().toISOString(),
+        end: event.endDate ? event.endDate.toJSDate().toISOString() : null,
+        allDay: event.startDate.isDate,
+        backgroundColor: cal.color,
+        borderColor: cal.color,
+        extendedProps: {
+          calendarId: cal.id,
+          description: event.description || "",
+          location: event.location || "",
+        },
+      };
+
+      // Check for explicit URL property first
+      const urlProp = vevent.getFirstPropertyValue("url");
+      if (urlProp) {
+        fcEvent.url = urlProp;
+      } else {
+        // Extract first URL from description if no explicit URL
+        const urlMatch = (event.description || "").match(
+          /https?:\/\/[^\s<>"{}|\\^`\[\]]+/i
+        );
+        if (urlMatch) {
+          fcEvent.url = urlMatch[0];
+        }
+      }
+
+      events.push(fcEvent);
+
+      // Handle recurring events
+      if (event.isRecurring()) {
+        const start = event.startDate.clone();
+        const end = start.clone();
+        end.addDuration(ICAL.Duration.fromSeconds(365 * 24 * 60 * 60)); // 1 year ahead
+
+        const iterator = event.iterator();
+        let next;
+        let count = 0;
+
+        while ((next = iterator.next()) && count < 100) {
+          if (next.compare(start) > 0 && next.compare(end) <= 0) {
+            const recurEvent = { ...fcEvent };
+            recurEvent.id = `${cal.id}-${event.uid}-${count}`;
+            recurEvent.start = next.toJSDate().toISOString();
+
+            if (event.endDate) {
+              const duration = event.endDate.subtractDate(event.startDate);
+              const newEnd = next.clone();
+              newEnd.addDuration(duration);
+              recurEvent.end = newEnd.toJSDate().toISOString();
+            }
+
+            events.push(recurEvent);
+            count++;
+          }
+        }
+      }
+    });
+  } catch (err) {
+    console.error("Failed to parse ICS:", err);
+  }
+
+  return events;
+}
+
+// Fetch and parse all calendars at build time
+const calendarsWithEvents = await Promise.all(
   calendarsData.calendars.map(async (cal) => {
     try {
       const response = await fetch(cal.url);
       if (!response.ok) {
         console.error(`Failed to fetch ${cal.name}: HTTP ${response.status}`);
-        return { ...cal, icsData: null, error: true };
+        return { ...cal, events: [], error: true };
       }
-      const icsData = await response.text();
-      return { ...cal, icsData, error: false };
+      const icsText = await response.text();
+      const events = parseICS(icsText, cal);
+      return { ...cal, events, error: false };
     } catch (err) {
       console.error(`Failed to fetch ${cal.name}:`, err);
-      return { ...cal, icsData: null, error: true };
+      return { ...cal, events: [], error: true };
     }
   })
 );
@@ -437,17 +518,14 @@ const buildTime = new Date().toISOString();
   }
 </style>
 
-<!-- Embed pre-fetched calendar data -->
-<script id="calendar-data" type="application/json" set:html={JSON.stringify(calendarsWithICS)}></script>
+<!-- Embed pre-parsed calendar data -->
+<script id="calendar-data" type="application/json" set:html={JSON.stringify(calendarsWithEvents)}></script>
 
 <!-- FullCalendar CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" />
 
 <!-- FullCalendar JS -->
 <script is:inline src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-
-<!-- ICAL.js for parsing ICS -->
-<script is:inline src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
 
 <script is:inline>
   // Load pre-fetched calendar data (ICS fetched at build time)
@@ -527,93 +605,15 @@ const buildTime = new Date().toISOString();
   }
 
   function loadAllCalendars() {
+    // Events are pre-parsed at build time, just load them
     CALENDARS.forEach(cal => {
-      if (cal.icsData) {
-        const events = parseICS(cal.icsData, cal);
-        const state = calendarState.get(cal.id);
-        state.events = events;
+      const state = calendarState.get(cal.id);
+      state.events = cal.events || [];
 
-        if (state.visible) {
-          addEventsToCalendar(cal.id, events);
-        }
+      if (state.visible && state.events.length > 0) {
+        addEventsToCalendar(cal.id, state.events);
       }
     });
-  }
-
-  function parseICS(icsText, cal) {
-    const events = [];
-
-    try {
-      const jcalData = ICAL.parse(icsText);
-      const comp = new ICAL.Component(jcalData);
-      const vevents = comp.getAllSubcomponents('vevent');
-
-      vevents.forEach(vevent => {
-        const event = new ICAL.Event(vevent);
-
-        const fcEvent = {
-          id: `${cal.id}-${event.uid}`,
-          title: event.summary || 'Untitled',
-          start: event.startDate.toJSDate(),
-          end: event.endDate ? event.endDate.toJSDate() : null,
-          allDay: event.startDate.isDate,
-          backgroundColor: cal.color,
-          borderColor: cal.color,
-          extendedProps: {
-            calendarId: cal.id,
-            description: event.description || '',
-            location: event.location || ''
-          }
-        };
-
-        // Check for explicit URL property first
-        const urlProp = vevent.getFirstPropertyValue('url');
-        if (urlProp) {
-          fcEvent.url = urlProp;
-        } else {
-          // Extract first URL from description if no explicit URL
-          const urlMatch = (event.description || '').match(/https?:\/\/[^\s<>"{}|\\^`\[\]]+/i);
-          if (urlMatch) {
-            fcEvent.url = urlMatch[0];
-          }
-        }
-
-        events.push(fcEvent);
-
-        if (event.isRecurring()) {
-          const start = event.startDate.clone();
-          const end = start.clone();
-          end.addDuration(ICAL.Duration.fromSeconds(365 * 24 * 60 * 60));
-
-          const iterator = event.iterator();
-          let next;
-          let count = 0;
-
-          while ((next = iterator.next()) && count < 100) {
-            if (next.compare(start) > 0 && next.compare(end) <= 0) {
-              const recurEvent = { ...fcEvent };
-              recurEvent.id = `${cal.id}-${event.uid}-${count}`;
-              recurEvent.start = next.toJSDate();
-
-              if (event.endDate) {
-                const duration = event.endDate.subtractDate(event.startDate);
-                const newEnd = next.clone();
-                newEnd.addDuration(duration);
-                recurEvent.end = newEnd.toJSDate();
-              }
-
-              events.push(recurEvent);
-              count++;
-            }
-          }
-        }
-      });
-
-    } catch (err) {
-      console.error('Failed to parse ICS:', err);
-    }
-
-    return events;
   }
 
   function addEventsToCalendar(calId, events) {
