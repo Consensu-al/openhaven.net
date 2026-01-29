@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  schedule:
+    # Run every hour at :45 (e.g., 00:45, 01:45, 02:45, etc.)
+    - cron: '45 * * * *'
 
 permissions:
   contents: read
