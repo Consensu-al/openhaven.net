@@ -684,6 +684,10 @@ const buildTime = new Date().toISOString();
 
   function toggleCalendar(calId, visible) {
     const state = calendarState.get(calId);
+
+    // Skip if already in desired state
+    if (state.visible === visible) return;
+
     state.visible = visible;
 
     if (visible) {
