@@ -334,7 +334,8 @@ import calendarsData from "../data/calendars.json";
   const CALENDARS = JSON.parse(document.getElementById('calendar-data').textContent);
 
   // CORS proxy for fetching external ICS files
-  const CORS_PROXY = 'https://corsproxy.io/?';
+  // allorigins.win is a free public proxy - for production, consider a Cloudflare Worker
+  const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
   // =========================================
   // APPLICATION STATE
