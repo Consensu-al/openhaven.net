@@ -8,25 +8,11 @@
       "defaultVisible": true
     },
     {
-      "id": "stewards",
-      "name": "Stewards Circle",
-      "url": "https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/features/calendars/one-event.ics",
-      "color": "#2980b9",
-      "defaultVisible": true
-    },
-    {
-      "id": "tech-guild",
-      "name": "Tech Guild",
-      "url": "https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/features/calendars/one-event.ics",
-      "color": "#27ae60",
-      "defaultVisible": true
-    },
-    {
       "id": "dweb-and-friends",
       "name": "dWeb & Friends",
       "url": "https://calendar.proton.me/api/calendar/v1/url/tUHQPozGvOUVWZL6oJtgJSYq9JFaLTWxmQYoXaJzzG_lUUVgvKVwzvN0ZkWYTdN7CXI_o_nlUnuWdvcRaqmBkA==/calendar.ics?CacheKey=1-0v0kO4kXkjWJSXYjGwog%3D%3D&PassphraseKey=v1UQ7OltmVpxdxxYi-tPNl0U8Me_vL_OOMGrMcE7hbE%3D",
       "color": "#f39c12",
-      "defaultVisible": false
+      "defaultVisible": true
     }
   ]
 }
