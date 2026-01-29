@@ -1,5 +1,5 @@
 ---
-// Randomly selects an image from public/images/sidebar/ at build time
+// Embeds all images, client-side JS picks randomly on each page load
 import fs from "node:fs";
 import path from "node:path";
 
@@ -10,26 +10,38 @@ interface Props {
 const { class: className } = Astro.props;
 
 const imageDir = path.join(process.cwd(), "public/images/sidebar");
-let imageSrc = "";
+let images: string[] = [];
 
 try {
-  const files = fs.readdirSync(imageDir).filter((file) => {
+  images = fs.readdirSync(imageDir).filter((file) => {
     const ext = path.extname(file).toLowerCase();
     return [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"].includes(ext);
-  });
-
-  if (files.length > 0) {
-    const randomFile = files[Math.floor(Math.random() * files.length)];
-    imageSrc = `/images/sidebar/${randomFile}`;
-  }
+  }).map(file => `/images/sidebar/${file}`);
 } catch (err) {
   // Directory doesn't exist or can't be read
 }
 ---
 
-{imageSrc && (
-  <img src={imageSrc} alt="" class={className} />
+{images.length > 0 && (
+  <img
+    src=""
+    alt=""
+    class={className}
+    data-images={JSON.stringify(images)}
+  />
 )}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const img = document.querySelector('img[data-images]') as HTMLImageElement;
+    if (img) {
+      const images = JSON.parse(img.dataset.images || '[]');
+      if (images.length > 0) {
+        img.src = images[Math.floor(Math.random() * images.length)];
+      }
+    }
+  });
+</script>
 
 <style>
   img {

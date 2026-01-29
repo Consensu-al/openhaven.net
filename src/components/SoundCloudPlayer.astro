@@ -1,5 +1,5 @@
 ---
-// Randomly selects a SoundCloud embed from src/data/soundcloud-embeds/ at build time
+// Embeds all options, client-side JS picks randomly on each page load
 import fs from "node:fs";
 import path from "node:path";
 
@@ -10,25 +10,31 @@ interface Props {
 const { class: className } = Astro.props;
 
 const embedDir = path.join(process.cwd(), "src/data/soundcloud-embeds");
-let embedHtml = "";
+let embeds: string[] = [];
 
 try {
-  const files = fs.readdirSync(embedDir).filter((file) => {
-    return file.endsWith(".html");
-  });
-
-  if (files.length > 0) {
-    const randomFile = files[Math.floor(Math.random() * files.length)];
-    embedHtml = fs.readFileSync(path.join(embedDir, randomFile), "utf-8");
-  }
+  const files = fs.readdirSync(embedDir).filter((file) => file.endsWith(".html"));
+  embeds = files.map(file => fs.readFileSync(path.join(embedDir, file), "utf-8"));
 } catch (err) {
   // Directory doesn't exist or can't be read
 }
 ---
 
-{embedHtml && (
-  <div class={className} set:html={embedHtml} />
+{embeds.length > 0 && (
+  <div class={className} data-embeds={JSON.stringify(embeds)}></div>
 )}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('div[data-embeds]') as HTMLDivElement;
+    if (container) {
+      const embeds = JSON.parse(container.dataset.embeds || '[]');
+      if (embeds.length > 0) {
+        container.innerHTML = embeds[Math.floor(Math.random() * embeds.length)];
+      }
+    }
+  });
+</script>
 
 <style>
   div {
