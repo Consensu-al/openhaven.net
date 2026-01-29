@@ -566,9 +566,16 @@ const buildTime = new Date().toISOString();
           }
         };
 
+        // Check for explicit URL property first
         const urlProp = vevent.getFirstPropertyValue('url');
         if (urlProp) {
           fcEvent.url = urlProp;
+        } else {
+          // Extract first URL from description if no explicit URL
+          const urlMatch = (event.description || '').match(/https?:\/\/[^\s<>"{}|\\^`\[\]]+/i);
+          if (urlMatch) {
+            fcEvent.url = urlMatch[0];
+          }
         }
 
         events.push(fcEvent);
@@ -641,6 +648,23 @@ const buildTime = new Date().toISOString();
       checkbox.checked = visible;
       toggleCalendar(cal.id, visible);
     });
+  }
+
+  // =========================================
+  // UTILITIES
+  // =========================================
+
+  function linkifyText(text) {
+    // Escape HTML first to prevent XSS
+    const escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+
+    // Convert URLs to clickable links
+    const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/gi;
+    return escaped.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   }
 
   // =========================================
@@ -727,9 +751,9 @@ const buildTime = new Date().toISOString();
     const location = event.extendedProps.location || '';
     locationEl.textContent = location;
 
-    // Set description
+    // Set description (with clickable links)
     const description = event.extendedProps.description || '';
-    descriptionEl.textContent = description;
+    descriptionEl.innerHTML = linkifyText(description);
 
     // Set link
     if (event.url) {
