@@ -35,16 +35,16 @@ const {
       <p>{subheading}</p>
     </div>
 
-    <!-- VARIANT 1: Timeline with connecting line -->
-    <div class="variant-label">Variant 1: Timeline</div>
-    <div class="principles-timeline">
+    <!-- VARIANT 1: Horizontal Timeline (Left to Right) -->
+    <div class="variant-label">Variant 1: Horizontal Timeline</div>
+    <div class="horizontal-timeline">
+      <div class="timeline-track"></div>
       {principles.map((principle, index) => (
-        <div class="timeline-step">
-          <div class="timeline-marker">
-            <span class="step-number">{index + 1}</span>
-            {index < principles.length - 1 && <div class="timeline-line" />}
+        <div class="timeline-item">
+          <div class="timeline-node">
+            <span class="timeline-number">{index + 1}</span>
           </div>
-          <div class="timeline-content">
+          <div class="timeline-card">
             <h3>{principle.title}</h3>
             <p>{principle.description}</p>
           </div>
@@ -73,22 +73,20 @@ const {
       ))}
     </div>
 
-    <!-- VARIANT 3: Connected cards with chevrons -->
-    <div class="variant-label">Variant 3: Connected Cards</div>
-    <div class="principles-connected">
+    <!-- VARIANT 3A: Connected Cards - Earth Tones with Large Numbers -->
+    <div class="variant-label">Variant 3A: Earth Tones</div>
+    <div class="principles-connected variant-earth">
       {principles.map((principle, index) => (
         <div class="connected-item">
           <div class="connected-card">
-            <div class="connected-header">
-              <span class="connected-step">Step {index + 1}</span>
-            </div>
+            <div class="large-number">{index + 1}</div>
             <h3>{principle.title}</h3>
             <p>{principle.description}</p>
           </div>
           {index < principles.length - 1 && (
             <div class="chevron-connector">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           )}
@@ -96,19 +94,44 @@ const {
       ))}
     </div>
 
-    <!-- VARIANT 4: Progress path -->
-    <div class="variant-label">Variant 4: Progress Path</div>
-    <div class="principles-progress">
-      <div class="progress-track" />
+    <!-- VARIANT 3B: Connected Cards - Warm Gradient with Bold Numbers -->
+    <div class="variant-label">Variant 3B: Warm Gradient</div>
+    <div class="principles-connected variant-warm">
       {principles.map((principle, index) => (
-        <div class="progress-step">
-          <div class="progress-node">
-            <span>{index + 1}</span>
-          </div>
-          <div class="progress-content">
+        <div class="connected-item">
+          <div class="connected-card">
+            <div class="large-number">{index + 1}</div>
             <h3>{principle.title}</h3>
             <p>{principle.description}</p>
           </div>
+          {index < principles.length - 1 && (
+            <div class="chevron-connector">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- VARIANT 3C: Connected Cards - Minimal with Accent Numbers -->
+    <div class="variant-label">Variant 3C: Minimal Accent</div>
+    <div class="principles-connected variant-minimal">
+      {principles.map((principle, index) => (
+        <div class="connected-item">
+          <div class="connected-card">
+            <div class="large-number">{index + 1}</div>
+            <h3>{principle.title}</h3>
+            <p>{principle.description}</p>
+          </div>
+          {index < principles.length - 1 && (
+            <div class="chevron-connector">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -158,66 +181,100 @@ const {
     margin-top: 0;
   }
 
-  /* ===== VARIANT 1: Timeline ===== */
-  .principles-timeline {
+  /* ===== VARIANT 1: Horizontal Timeline ===== */
+  .horizontal-timeline {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 1.5rem;
+    position: relative;
     margin-bottom: 2rem;
   }
 
-  .timeline-step {
-    display: flex;
-    gap: 1.5rem;
-    position: relative;
+  @media (min-width: 768px) {
+    .horizontal-timeline {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 0;
+    }
   }
 
-  .timeline-marker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
+  .timeline-track {
+    display: none;
   }
 
-  .step-number {
-    width: 2.5rem;
-    height: 2.5rem;
+  @media (min-width: 768px) {
+    .timeline-track {
+      display: block;
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      height: 4px;
+      background: linear-gradient(to right, var(--color-brand-primary), var(--color-brand-accent), var(--color-brand-primary));
+      border-radius: 2px;
+      z-index: 0;
+    }
+  }
+
+  .timeline-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+    .timeline-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .timeline-node {
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
     background: var(--color-brand-primary);
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 1rem;
+    flex-shrink: 0;
     z-index: 1;
+    box-shadow: 0 0 0 4px white, 0 0 0 6px var(--color-brand-accent);
   }
 
-  .timeline-line {
-    width: 2px;
+  .timeline-number {
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .timeline-card {
     flex: 1;
-    min-height: 2rem;
-    background: linear-gradient(to bottom, var(--color-brand-primary), var(--color-brand-accent));
   }
 
-  .timeline-content {
-    padding-bottom: 2rem;
-    flex: 1;
+  @media (min-width: 768px) {
+    .timeline-card {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
   }
 
-  .timeline-content h3 {
-    font-size: 1.125rem;
+  .timeline-card h3 {
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-brand-primary);
     margin-bottom: 0.5rem;
-    margin-top: 0.25rem;
+    margin-top: 0;
   }
 
-  .timeline-content p {
-    font-size: 0.875rem;
+  .timeline-card p {
+    font-size: 0.8125rem;
     color: var(--color-brand-text);
     opacity: 0.7;
-    line-height: 1.6;
+    line-height: 1.5;
     margin: 0;
   }
 
@@ -302,7 +359,7 @@ const {
     }
   }
 
-  /* ===== VARIANT 3: Connected Cards ===== */
+  /* ===== VARIANT 3: Connected Cards (Base) ===== */
   .principles-connected {
     display: flex;
     flex-direction: column;
@@ -331,47 +388,33 @@ const {
   }
 
   .connected-card {
-    padding: 1.25rem;
-    border: 2px solid var(--color-brand-accent);
+    padding: 1.5rem;
     border-radius: 1rem;
-    background: white;
     flex: 1;
     position: relative;
   }
 
-  .connected-header {
+  .large-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
     margin-bottom: 0.75rem;
-  }
-
-  .connected-step {
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-brand-primary);
-    background: var(--color-brand-accent-light);
-    padding: 0.25rem 0.625rem;
-    border-radius: 1rem;
   }
 
   .connected-card h3 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-brand-primary);
-    margin-bottom: 0.375rem;
+    margin-bottom: 0.5rem;
     margin-top: 0;
   }
 
   .connected-card p {
     font-size: 0.8125rem;
-    color: var(--color-brand-text);
-    opacity: 0.7;
     line-height: 1.5;
     margin: 0;
   }
 
   .chevron-connector {
-    color: var(--color-brand-accent);
     padding: 0.5rem;
     transform: rotate(90deg);
     flex-shrink: 0;
@@ -383,75 +426,80 @@ const {
     }
   }
 
-  /* ===== VARIANT 4: Progress Path ===== */
-  .principles-progress {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-left: 3rem;
-  }
-
-  .progress-track {
-    position: absolute;
-    left: 1.125rem;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(
-      to bottom,
-      var(--color-brand-accent) 0%,
-      var(--color-brand-primary) 50%,
-      var(--color-brand-accent) 100%
-    );
-    border-radius: 2px;
-  }
-
-  .progress-step {
-    display: flex;
-    gap: 1.5rem;
-    position: relative;
-  }
-
-  .progress-node {
-    position: absolute;
-    left: -3rem;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    background: white;
-    border: 3px solid var(--color-brand-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.875rem;
-    color: var(--color-brand-primary);
-    z-index: 1;
-  }
-
-  .progress-content {
+  /* ===== VARIANT 3A: Earth Tones ===== */
+  .variant-earth .connected-card {
     background: var(--color-brand-bg);
-    padding: 1.25rem;
-    border-radius: 0.75rem;
-    border: 1px solid rgba(139, 69, 19, 0.12);
-    flex: 1;
+    border: 2px solid var(--color-brand-accent);
   }
 
-  .progress-content h3 {
-    font-size: 1.0625rem;
-    font-weight: 600;
+  .variant-earth .large-number {
     color: var(--color-brand-primary);
-    margin-bottom: 0.5rem;
-    margin-top: 0;
+    opacity: 0.9;
   }
 
-  .progress-content p {
-    font-size: 0.875rem;
+  .variant-earth .connected-card h3 {
+    color: var(--color-brand-primary);
+  }
+
+  .variant-earth .connected-card p {
     color: var(--color-brand-text);
     opacity: 0.7;
-    line-height: 1.5;
-    margin: 0;
+  }
+
+  .variant-earth .chevron-connector {
+    color: var(--color-brand-primary);
+  }
+
+  /* ===== VARIANT 3B: Warm Gradient ===== */
+  .variant-warm .connected-card {
+    background: linear-gradient(135deg, #fef7f0 0%, #fdf2e9 100%);
+    border: 2px solid #e8b89a;
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.08);
+  }
+
+  .variant-warm .large-number {
+    background: linear-gradient(135deg, #8b4513 0%, #d2691e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .variant-warm .connected-card h3 {
+    color: #6b3410;
+  }
+
+  .variant-warm .connected-card p {
+    color: #5c4033;
+    opacity: 0.8;
+  }
+
+  .variant-warm .chevron-connector {
+    color: #d2691e;
+  }
+
+  /* ===== VARIANT 3C: Minimal Accent ===== */
+  .variant-minimal .connected-card {
+    background: white;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .variant-minimal .large-number {
+    color: var(--color-brand-accent);
+    font-size: 3rem;
+  }
+
+  .variant-minimal .connected-card h3 {
+    color: var(--color-brand-text);
+  }
+
+  .variant-minimal .connected-card p {
+    color: var(--color-brand-text);
+    opacity: 0.6;
+  }
+
+  .variant-minimal .chevron-connector {
+    color: #d1d5db;
   }
 
   @media (min-width: 1024px) {
