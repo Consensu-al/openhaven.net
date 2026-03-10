@@ -39,24 +39,24 @@ function SectionHeader({ variant, description }: { variant: string; description:
   )
 }
 
-// Shared step subheader: numbered circle + title + subtitle as one tight unit
+// Shared step subheader: circle + title on one row, subtitle indented beneath
 function StepHeader({ step, title, subtitle }: { step: number; title: string; subtitle: string }) {
   return (
-    <div className="flex items-center gap-3 mb-8">
-      <div
-        className="w-11 h-11 rounded-full flex items-center justify-center text-lg font-bold shrink-0"
-        style={{ backgroundColor: 'var(--color-brand-primary)', color: 'white' }}
-      >
-        {step}
-      </div>
-      <div>
-        <h2 className="text-xl font-semibold leading-tight" style={{ color: 'var(--color-brand-primary)' }}>
+    <div className="mb-8">
+      <div className="flex items-center gap-3 mb-1">
+        <div
+          className="w-11 h-11 rounded-full flex items-center justify-center text-lg font-bold shrink-0"
+          style={{ backgroundColor: 'var(--color-brand-primary)', color: 'white' }}
+        >
+          {step}
+        </div>
+        <h2 className="text-xl font-semibold leading-none" style={{ color: 'var(--color-brand-primary)' }}>
           {title}
         </h2>
-        <p className="text-sm leading-snug mt-0.5" style={{ color: 'var(--color-brand-text)', opacity: 0.55 }}>
-          {subtitle}
-        </p>
       </div>
+      <p className="text-sm leading-snug pl-14" style={{ color: 'var(--color-brand-text)', opacity: 0.55 }}>
+        {subtitle}
+      </p>
     </div>
   )
 }
