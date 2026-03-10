@@ -70,7 +70,6 @@ function DomainCards({ domains }: { domains: Domain[] }) {
               boxShadow: isSelected
                 ? '0 8px 24px rgba(139, 69, 19, 0.14)'
                 : '0 2px 8px rgba(0,0,0,0.06)',
-              borderTop: isSelected ? '3px solid var(--color-brand-primary)' : '3px solid transparent',
             }}
           >
             <div
@@ -386,15 +385,15 @@ function AffordancesVariantC({ affordances }: { affordances: Affordance[] }) {
                     backgroundColor: 'var(--color-domain-selected-bg)',
                     color: 'var(--color-brand-primary)',
                     border: '1px solid var(--color-brand-primary)',
-                    borderTop: '2px solid var(--color-brand-primary)',
                     fontWeight: 600,
                     boxShadow: '0 4px 12px rgba(139, 69, 19, 0.10)',
+                    outline: '2px solid var(--color-brand-primary)',
+                    outlineOffset: '-2px',
                   }
                 : {
                     backgroundColor: 'white',
                     color: 'var(--color-brand-text)',
                     border: '1px solid var(--color-card-border)',
-                    borderTop: '2px solid transparent',
                     opacity: 0.7,
                     boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                   }
@@ -469,13 +468,12 @@ function AffordancesVariantC2({ affordances }: { affordances: Affordance[] }) {
               key={a.id}
               type="button"
               onClick={() => toggle(a.id)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer overflow-hidden"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer"
               style={isSelected
                 ? {
                     backgroundColor: 'var(--color-domain-selected-bg)',
                     color: 'var(--color-brand-primary)',
                     border: '2px solid var(--color-brand-primary)',
-                    borderTop: '3px solid var(--color-brand-primary)',
                     fontWeight: 600,
                     boxShadow: '0 4px 12px rgba(139, 69, 19, 0.10)',
                   }
@@ -483,7 +481,6 @@ function AffordancesVariantC2({ affordances }: { affordances: Affordance[] }) {
                     backgroundColor: 'white',
                     color: 'var(--color-brand-text)',
                     border: '2px solid rgba(139, 69, 19, 0.25)',
-                    borderTop: '3px solid transparent',
                     boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
                   }
               }
