@@ -411,8 +411,92 @@ function AffordancesVariantC({ affordances }: { affordances: Affordance[] }) {
 }
 
 // ============================================================================
-// Main export
+// AFFORDANCES VARIANT C2 — Variant C with more defined borders
 // ============================================================================
+function AffordancesVariantC2({ affordances }: { affordances: Affordance[] }) {
+  const [selected, setSelected] = useState<string[]>([])
+  const [matchMode, setMatchMode] = useState<'or' | 'and'>('or')
+
+  const toggle = (id: string) =>
+    setSelected((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])
+
+  const allSelected = affordances.every((a) => selected.includes(a.id))
+  const toggleAll = () => setSelected(allSelected ? [] : affordances.map((a) => a.id))
+
+  return (
+    <div>
+      <StepHeader
+        step={2}
+        title="Refine by Affordance"
+        subtitle="Narrow your results — check the affordances that matter to you"
+      />
+
+      <div className="flex items-center justify-between mb-4 ml-[52px]">
+        <div className="flex items-center gap-2">
+          <span className="text-xs" style={{ color: 'var(--color-brand-text)', opacity: 0.45 }}>Match:</span>
+          <div className="flex rounded-md overflow-hidden border" style={{ borderColor: 'var(--color-card-border)' }}>
+            {(['or', 'and'] as const).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setMatchMode(mode)}
+                className="px-2.5 py-0.5 text-xs font-bold transition-colors cursor-pointer"
+                style={matchMode === mode
+                  ? { backgroundColor: 'var(--color-brand-primary)', color: 'white' }
+                  : { backgroundColor: 'white', color: 'var(--color-brand-text)', opacity: 0.5 }
+                }
+              >
+                {mode === 'or' ? 'ANY' : 'ALL'}
+              </button>
+            ))}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={toggleAll}
+          className="text-xs cursor-pointer"
+          style={{ color: 'var(--color-brand-primary)', opacity: 0.6 }}
+        >
+          {allSelected ? 'Clear all' : 'Select all'}
+        </button>
+      </div>
+
+      <div className="flex flex-wrap gap-2 ml-[52px]">
+        {affordances.map((a) => {
+          const isSelected = selected.includes(a.id)
+          return (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => toggle(a.id)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer overflow-hidden"
+              style={isSelected
+                ? {
+                    backgroundColor: 'var(--color-domain-selected-bg)',
+                    color: 'var(--color-brand-primary)',
+                    border: '2px solid var(--color-brand-primary)',
+                    borderTop: '3px solid var(--color-brand-primary)',
+                    fontWeight: 600,
+                    boxShadow: '0 4px 12px rgba(139, 69, 19, 0.10)',
+                  }
+                : {
+                    backgroundColor: 'white',
+                    color: 'var(--color-brand-text)',
+                    border: '2px solid rgba(139, 69, 19, 0.25)',
+                    borderTop: '3px solid transparent',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+                  }
+              }
+            >
+              {isSelected && <Check className="w-3 h-3 shrink-0" />}
+              {a.name}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 export default function AffordancesVariantsShowcase({ domains, affordances }: Props) {
   return (
     <div>
@@ -441,6 +525,12 @@ export default function AffordancesVariantsShowcase({ domains, affordances }: Pr
         description="Mini-cards with the same top-border accent as domain cards — strong visual family. ANY/ALL and Select all on a single justified row above chips."
       />
       <AffordancesVariantC affordances={affordances} />
+
+      <VariantLabel
+        label="Affordances Variant C2"
+        description="Same as C but with a more defined 2px border on unselected chips so they stand out clearly against the light background."
+      />
+      <AffordancesVariantC2 affordances={affordances} />
     </div>
   )
 }
