@@ -309,6 +309,11 @@ a:hover {
   margin-top: 2.5rem;
 }
 
+/* CTA bar padding override */
+.cta-bar {
+  padding: 1.25rem 1.5rem;
+}
+
 /* Affordance chip focus ring */
 .affordance-chip:focus-visible {
   --tw-ring-color: var(--color-focus-ring);

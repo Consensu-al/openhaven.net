@@ -170,7 +170,7 @@ function CtaVariantA() {
 function CtaVariantB() {
   return (
     <div
-      className="flex items-center justify-between rounded-lg px-5 py-4 mb-8"
+      className="cta-bar flex items-center justify-between rounded-lg mb-8"
       style={{
         backgroundColor: 'white',
         border: '1px solid var(--color-card-border)',
