@@ -6,6 +6,8 @@ import GuidedDiscoveryWizard from '@/components/islands/GuidedDiscoveryWizard'
 import AffordancesPanel from '@/components/islands/AffordancesPanel'
 import ProtocolResults from '@/components/islands/ProtocolResults'
 import StepHeader from '@/components/islands/StepHeader'
+import * as Tooltip from '@radix-ui/react-tooltip'
+import { Info } from 'lucide-react'
 
 const NAVIGATOR_STRINGS = {
   heading: 'Choose a Use Case Domain',
@@ -187,7 +189,8 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
 
       {/* Step 2: Affordances Panel — render when domain is selected */}
       {selectedDomain && domainAffordances.length > 0 && (
-        <AffordancesPanel
+        <div className="mt-12">
+          <AffordancesPanel
           key={selectedDomain}
           affordances={domainAffordances}
           selectedAffordances={selectedAffordances}
@@ -196,11 +199,13 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
           onMatchModeChange={handleMatchModeChange}
           locale={locale}
         />
+        </div>
       )}
 
       {/* Protocol Results — only rendered when a domain is selected */}
       {selectedDomain && selectedDomainData && (
-        <div className="mt-8" key={`results-${selectedDomain}`}>
+        <div className="mt-12" key={`results-${selectedDomain}`}>
+          <Tooltip.Provider delayDuration={200}>
           <StepHeader
             step={3}
             title="Review Matching Protocols"
@@ -216,13 +221,36 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
                 >
                   {selectedDomainData.name}
                 </span>
-                {' '}protocols
+                {' '}protocols.
                 {selectedAffordances.length > 0 && (
                   <span> — filtered by {selectedAffordances.length} affordance{selectedAffordances.length > 1 ? 's' : ''}</span>
                 )}
+                {' '}
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button type="button" className="inline-flex items-center cursor-pointer align-middle">
+                      <Info className="w-3.5 h-3.5" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }} />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      className="z-50 max-w-xs rounded-lg px-3 py-2 text-xs shadow-lg"
+                      style={{
+                        backgroundColor: 'var(--color-brand-primary)',
+                        color: 'white',
+                        lineHeight: 1.5,
+                      }}
+                      sideOffset={6}
+                    >
+                      To see others, scroll up to Step 1 to change your selected Use Case or view the full Matrix.
+                      <Tooltip.Arrow style={{ fill: 'var(--color-brand-primary)' }} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
               </>
             }
           />
+          </Tooltip.Provider>
           <ProtocolResults
             protocols={protocols}
             selectedDomain={selectedDomain}

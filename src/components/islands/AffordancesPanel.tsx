@@ -43,6 +43,7 @@ export default function AffordancesPanel({
         step={2}
         title="Refine by Affordance"
         subtitle="Narrow your results — check the affordances that matter to you"
+        badge="Optional"
       />
 
       {/* Controls row: Match mode + Select/Clear all */}
