@@ -5,7 +5,7 @@
  * Static Astro version (no expand/collapse — keep it simple).
  *
  * Design tokens mapped to OpenHaven warm earth tones.
- * NOT wired into any page — reference component for future stories.
+ * Multiple variants available to show sequential flow.
  */
 
 export interface Principle {
@@ -17,12 +17,14 @@ export interface Props {
   heading?: string;
   subheading?: string;
   principles: Principle[];
+  variant?: 'timeline' | 'numbered' | 'arrows' | 'connected';
 }
 
 const {
   heading = 'Core Principles',
   subheading = 'The foundational values that guide our protocol recommendations',
   principles,
+  variant = 'timeline',
 } = Astro.props;
 ---
 
@@ -33,24 +35,90 @@ const {
       <p>{subheading}</p>
     </div>
 
-    <div class="principles-grid">
-      {principles.map((principle) => (
-        <div class="principle-card">
-          <h3>{principle.title}</h3>
-          <p>{principle.description}</p>
+    <!-- VARIANT 1: Timeline with connecting line -->
+    <div class="variant-label">Variant 1: Timeline</div>
+    <div class="principles-timeline">
+      {principles.map((principle, index) => (
+        <div class="timeline-step">
+          <div class="timeline-marker">
+            <span class="step-number">{index + 1}</span>
+            {index < principles.length - 1 && <div class="timeline-line" />}
+          </div>
+          <div class="timeline-content">
+            <h3>{principle.title}</h3>
+            <p>{principle.description}</p>
+          </div>
         </div>
       ))}
     </div>
+
+    <!-- VARIANT 2: Horizontal steps with arrows -->
+    <div class="variant-label">Variant 2: Horizontal Flow with Arrows</div>
+    <div class="principles-horizontal">
+      {principles.map((principle, index) => (
+        <div class="horizontal-step-wrapper">
+          <div class="horizontal-step">
+            <div class="step-badge">{index + 1}</div>
+            <h3>{principle.title}</h3>
+            <p>{principle.description}</p>
+          </div>
+          {index < principles.length - 1 && (
+            <div class="arrow-connector">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- VARIANT 3: Connected cards with chevrons -->
+    <div class="variant-label">Variant 3: Connected Cards</div>
+    <div class="principles-connected">
+      {principles.map((principle, index) => (
+        <div class="connected-item">
+          <div class="connected-card">
+            <div class="connected-header">
+              <span class="connected-step">Step {index + 1}</span>
+            </div>
+            <h3>{principle.title}</h3>
+            <p>{principle.description}</p>
+          </div>
+          {index < principles.length - 1 && (
+            <div class="chevron-connector">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- VARIANT 4: Progress path -->
+    <div class="variant-label">Variant 4: Progress Path</div>
+    <div class="principles-progress">
+      <div class="progress-track" />
+      {principles.map((principle, index) => (
+        <div class="progress-step">
+          <div class="progress-node">
+            <span>{index + 1}</span>
+          </div>
+          <div class="progress-content">
+            <h3>{principle.title}</h3>
+            <p>{principle.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
   </div>
 </section>
 
 <style>
   .principles-section {
     background: white;
-  }
-
-  .principles-inner {
-    /* max-width and centering handled by .container */
   }
 
   .principles-header {
@@ -72,40 +140,313 @@ const {
     opacity: 0.7;
   }
 
-  .principles-grid {
-    display: grid;
+  .variant-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+    display: inline-block;
+  }
+
+  .variant-label:first-of-type {
+    margin-top: 0;
+  }
+
+  /* ===== VARIANT 1: Timeline ===== */
+  .principles-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-step {
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .step-number {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--color-brand-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    z-index: 1;
+  }
+
+  .timeline-line {
+    width: 2px;
+    flex: 1;
+    min-height: 2rem;
+    background: linear-gradient(to bottom, var(--color-brand-primary), var(--color-brand-accent));
+  }
+
+  .timeline-content {
+    padding-bottom: 2rem;
+    flex: 1;
+  }
+
+  .timeline-content h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    margin-bottom: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .timeline-content p {
+    font-size: 0.875rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ===== VARIANT 2: Horizontal with Arrows ===== */
+  .principles-horizontal {
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    grid-template-columns: 1fr;
+    margin-bottom: 2rem;
   }
 
-  .principle-card {
-    padding: 1rem;
-    border: 1px solid rgba(139, 69, 19, 0.12);
-    border-radius: 0.75rem;
-    background: var(--color-brand-bg);
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  @media (min-width: 640px) {
-    .principle-card {
-      padding: 1.5rem;
+  @media (min-width: 1024px) {
+    .principles-horizontal {
+      flex-direction: row;
+      align-items: flex-start;
     }
   }
 
-  .principle-card:hover {
-    border-color: rgba(139, 69, 19, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  .horizontal-step-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
   }
 
-  .principle-card h3 {
-    font-size: 1.125rem;
+  @media (min-width: 1024px) {
+    .horizontal-step-wrapper {
+      flex-direction: row;
+      gap: 0.5rem;
+    }
+  }
+
+  .horizontal-step {
+    padding: 1.5rem;
+    border: 1px solid rgba(139, 69, 19, 0.12);
+    border-radius: 0.75rem;
+    background: var(--color-brand-bg);
+    flex: 1;
+    text-align: center;
+  }
+
+  .step-badge {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--color-brand-accent);
+    color: var(--color-brand-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .horizontal-step h3 {
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-brand-primary);
     margin-bottom: 0.5rem;
     margin-top: 0;
   }
 
-  .principle-card p {
+  .horizontal-step p {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .arrow-connector {
+    color: var(--color-brand-primary);
+    transform: rotate(90deg);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .arrow-connector {
+      transform: rotate(0deg);
+    }
+  }
+
+  /* ===== VARIANT 3: Connected Cards ===== */
+  .principles-connected {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .principles-connected {
+      flex-direction: row;
+      align-items: stretch;
+    }
+  }
+
+  .connected-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+    .connected-item {
+      flex-direction: row;
+    }
+  }
+
+  .connected-card {
+    padding: 1.25rem;
+    border: 2px solid var(--color-brand-accent);
+    border-radius: 1rem;
+    background: white;
+    flex: 1;
+    position: relative;
+  }
+
+  .connected-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .connected-step {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    padding: 0.25rem 0.625rem;
+    border-radius: 1rem;
+  }
+
+  .connected-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    margin-bottom: 0.375rem;
+    margin-top: 0;
+  }
+
+  .connected-card p {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .chevron-connector {
+    color: var(--color-brand-accent);
+    padding: 0.5rem;
+    transform: rotate(90deg);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .chevron-connector {
+      transform: rotate(0deg);
+    }
+  }
+
+  /* ===== VARIANT 4: Progress Path ===== */
+  .principles-progress {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-left: 3rem;
+  }
+
+  .progress-track {
+    position: absolute;
+    left: 1.125rem;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-brand-accent) 0%,
+      var(--color-brand-primary) 50%,
+      var(--color-brand-accent) 100%
+    );
+    border-radius: 2px;
+  }
+
+  .progress-step {
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .progress-node {
+    position: absolute;
+    left: -3rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--color-brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--color-brand-primary);
+    z-index: 1;
+  }
+
+  .progress-content {
+    background: var(--color-brand-bg);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(139, 69, 19, 0.12);
+    flex: 1;
+  }
+
+  .progress-content h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+
+  .progress-content p {
     font-size: 0.875rem;
     color: var(--color-brand-text);
     opacity: 0.7;
@@ -113,17 +454,7 @@ const {
     margin: 0;
   }
 
-  @media (min-width: 640px) {
-    .principles-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
   @media (min-width: 1024px) {
-    .principles-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
     .principles-header h2 {
       font-size: 2.5rem;
     }
