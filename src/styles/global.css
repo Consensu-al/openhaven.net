@@ -73,8 +73,6 @@
 }
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -293,6 +291,31 @@ a:hover {
   margin-left: -1rem;
 }
 
+
+/* Navigator variant showcase — domain card button padding override */
+.domain-card-btn {
+  padding: 1.5rem;
+}
+
+/* Guide me button padding override (global * { padding: 0 } kills Tailwind px/py) */
+.guide-me-btn {
+  padding: 0.5rem 1.25rem;
+}
+
+/* Spacing between CTA and step header (global * { margin: 0 } kills Tailwind mt-* on divs) */
+.step-header-wrapper {
+  margin-top: 2.5rem;
+}
+
+/* CTA bar padding override */
+.cta-bar {
+  padding: 1.25rem 1.5rem;
+}
+
+/* Domain card padding variants */
+.card-pad-sm { padding: 1rem; }
+.card-pad-md { padding: 1.25rem; }
+.card-pad-lg { padding: 1.5rem 1.75rem; }
 
 /* Affordance chip focus ring */
 .affordance-chip:focus-visible {

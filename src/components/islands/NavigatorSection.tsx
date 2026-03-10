@@ -5,6 +5,9 @@ import GuidedDiscoveryCTA from '@/components/islands/GuidedDiscoveryCTA'
 import GuidedDiscoveryWizard from '@/components/islands/GuidedDiscoveryWizard'
 import AffordancesPanel from '@/components/islands/AffordancesPanel'
 import ProtocolResults from '@/components/islands/ProtocolResults'
+import StepHeader from '@/components/islands/StepHeader'
+import * as Tooltip from '@radix-ui/react-tooltip'
+import { Info } from 'lucide-react'
 
 const NAVIGATOR_STRINGS = {
   heading: 'Choose a Use Case Domain',
@@ -160,45 +163,15 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
 
   return (
     <div>
-      {/* Section heading */}
-      <div className="text-center mb-8">
-        <span
-          className="inline-block text-xs font-semibold uppercase tracking-wider mb-2 px-3 py-1 rounded-full"
-          style={{
-            color: 'var(--color-mvp-text)',
-            backgroundColor: 'var(--color-mvp-bg)',
-            border: '1px solid var(--color-mvp-border)',
-          }}
-        >
-          {NAVIGATOR_STRINGS.stepIndicator}
-        </span>
-        <h2
-          className="text-2xl sm:text-3xl font-semibold"
-          style={{ color: 'var(--color-brand-primary)' }}
-        >
-          {NAVIGATOR_STRINGS.heading}
-        </h2>
-
-        {/* Post-selection confirmation */}
-        {selectedDomainData && (
-          <p
-            className="text-sm mt-2"
-            style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}
-            data-testid="selection-confirmation"
-          >
-            {NAVIGATOR_STRINGS.showingResults}{' '}
-            <strong style={{ color: 'var(--color-brand-primary)' }}>
-              {selectedDomainData.name}
-            </strong>
-          </p>
-        )}
-      </div>
-
-      {/* Guided Discovery CTA — always visible */}
-      <GuidedDiscoveryCTA
-        onOpen={() => setWizardOpen(true)}
-        ctaButtonRef={ctaButtonRef}
+      {/* Step 1 heading */}
+      <StepHeader
+        step={1}
+        title="Choose a Use Case"
+        subtitle="Select the category that best describes your need"
+        badge="Required"
       />
+
+      {/* Domain Grid */}
 
       {/* Guided Discovery Wizard — modal dialog */}
       <GuidedDiscoveryWizard
@@ -217,7 +190,8 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
 
       {/* Step 2: Affordances Panel — render when domain is selected */}
       {selectedDomain && domainAffordances.length > 0 && (
-        <AffordancesPanel
+        <div className="mt-12">
+          <AffordancesPanel
           key={selectedDomain}
           affordances={domainAffordances}
           selectedAffordances={selectedAffordances}
@@ -226,27 +200,71 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
           onMatchModeChange={handleMatchModeChange}
           locale={locale}
         />
+        </div>
       )}
 
       {/* Protocol Results — only rendered when a domain is selected */}
       {selectedDomain && selectedDomainData && (
-        <div className="mt-8" key={`results-${selectedDomain}`}>
-          <div className="text-center mb-6">
-            <h3
-              className="text-xl sm:text-2xl font-semibold"
-              style={{ color: 'var(--color-brand-primary)' }}
-            >
-              {selectedDomainData.name} Protocols
-            </h3>
-            {selectedAffordances.length === 0 && (
-              <p
-                className="text-sm mt-1"
-                style={{ color: 'var(--color-brand-text)', opacity: 0.6 }}
-              >
-                {NAVIGATOR_STRINGS.allProtocolsHint(selectedDomainData.name)}
-              </p>
-            )}
-          </div>
+        <div className="mt-12" key={`results-${selectedDomain}`}>
+          <Tooltip.Provider delayDuration={200}>
+          <StepHeader
+            step={3}
+            title="Review Matching Protocols"
+            subtitle={
+              <>
+                Showing only{' '}
+                <span
+                  className="font-semibold px-1.5 py-0.5 rounded"
+                  style={{
+                    color: 'var(--color-brand-primary)',
+                    backgroundColor: 'var(--color-brand-accent-light)',
+                  }}
+                >
+                  {selectedDomainData.name}
+                </span>
+                {' '}protocols.
+                {selectedAffordances.length > 0 && (
+                  <span> — filtered by {selectedAffordances.length} affordance{selectedAffordances.length > 1 ? 's' : ''}</span>
+                )}
+
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center cursor-pointer align-middle ml-1"
+                      style={{
+                        width: '1rem',
+                        height: '1rem',
+                        borderRadius: '50%',
+                        backgroundColor: 'var(--color-brand-accent-light)',
+                        border: '1px solid rgba(139, 69, 19, 0.3)',
+                        verticalAlign: 'middle',
+                        position: 'relative',
+                        top: '-1px',
+                      }}
+                    >
+                      <Info className="w-2.5 h-2.5" style={{ color: 'var(--color-brand-primary)' }} />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      className="z-50 max-w-xs rounded-lg px-3 py-2 text-xs shadow-lg"
+                      style={{
+                        backgroundColor: 'var(--color-brand-primary)',
+                        color: 'white',
+                        lineHeight: 1.5,
+                      }}
+                      sideOffset={6}
+                    >
+                      To see other protocol matches, try changing your selections in Steps 1 and 2 above.
+                      <Tooltip.Arrow style={{ fill: 'var(--color-brand-primary)' }} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </>
+            }
+          />
+          </Tooltip.Provider>
           <ProtocolResults
             protocols={protocols}
             selectedDomain={selectedDomain}

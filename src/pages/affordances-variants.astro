@@ -1,0 +1,43 @@
+---
+import Layout from '@/layouts/BaseLayout.astro'
+import AffordancesVariantsShowcase from '@/components/islands/AffordancesVariantsShowcase'
+
+const mockDomains = [
+  { id: '1', slug: 'identity', name: 'Identity', description: 'Prove who you are without giving up control', icon: 'User', isPrimary: true },
+  { id: '2', slug: 'communication', name: 'Communication', description: 'Message securely with end-to-end encryption', icon: 'MessageSquare', isPrimary: true },
+  { id: '3', slug: 'group-formation', name: 'Group Formation', description: 'Create communities with shared governance', icon: 'Users', isPrimary: true },
+  { id: '4', slug: 'relationship', name: 'Relationships', description: 'Build trust over time with verified connections', icon: 'Heart', isPrimary: true },
+  { id: '5', slug: 'co-creation', name: 'Co-Creation', description: 'Collaborate on shared projects and resources', icon: 'Pencil', isPrimary: true },
+  { id: '6', slug: 'events', name: 'Events', description: 'Coordinate gatherings and meetings', icon: 'Calendar', isPrimary: true },
+]
+
+const mockAffordances = [
+  { id: 'a1', name: 'Self-Sovereign' },
+  { id: 'a2', name: 'Privacy-First' },
+  { id: 'a3', name: 'Decentralized' },
+  { id: 'a4', name: 'Interoperable' },
+  { id: 'a5', name: 'Open Source' },
+  { id: 'a6', name: 'Offline-First' },
+  { id: 'a7', name: 'Pseudonymous' },
+  { id: 'a8', name: 'Community-Governed' },
+]
+---
+
+<Layout title="Affordances Variants | OpenHaven">
+  <main class="container py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-bold" style="color: var(--color-brand-primary);">
+        Affordances Section Variants
+      </h1>
+      <p class="text-base mt-3" style="color: var(--color-brand-text); opacity: 0.65;">
+        Comparing filter UI designs — optionality, compactness, congruency with domain cards
+      </p>
+    </div>
+
+    <AffordancesVariantsShowcase
+      client:load
+      domains={mockDomains}
+      affordances={mockAffordances}
+    />
+  </main>
+</Layout>

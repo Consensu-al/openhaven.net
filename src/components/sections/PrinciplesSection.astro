@@ -1,56 +1,58 @@
 ---
-/**
- * PrinciplesSection — Harvested from v0-prototype principles-section.tsx
- * Card grid layout for displaying core principles or features.
- * Static Astro version (no expand/collapse — keep it simple).
- *
- * Design tokens mapped to OpenHaven warm earth tones.
- * NOT wired into any page — reference component for future stories.
- */
-
 export interface Principle {
   title: string;
   description: string;
 }
 
 export interface Props {
+  id?: string;
   heading?: string;
   subheading?: string;
   principles: Principle[];
 }
 
 const {
-  heading = 'Core Principles',
+  id,
+  heading = 'How OpenHaven Works',
   subheading = 'The foundational values that guide our protocol recommendations',
   principles,
 } = Astro.props;
+
+const stepLabels = ['Choose a Use Case', 'Refine by Affordance', 'Review Protocols', 'Connect & Build'];
 ---
 
-<section class="principles-section section-padding">
+<section id={id} class="principles-section section-padding">
   <div class="container principles-inner">
     <div class="principles-header">
       <h2>{heading}</h2>
       <p>{subheading}</p>
     </div>
 
-    <div class="principles-grid">
-      {principles.map((principle) => (
-        <div class="principle-card">
-          <h3>{principle.title}</h3>
-          <p>{principle.description}</p>
+    <div class="circle-steps">
+      {principles.map((principle, index) => (
+        <div class="circle-step-item">
+          <div class="circle-step-card">
+            <div class="circle-step-node">{index + 1}</div>
+            <span class="circle-step-label">{stepLabels[index] ?? principle.title}</span>
+            <p class="circle-step-desc">{principle.description}</p>
+          </div>
+          {index < principles.length - 1 && (
+            <div class="circle-step-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          )}
         </div>
       ))}
     </div>
+
   </div>
 </section>
 
 <style>
   .principles-section {
     background: white;
-  }
-
-  .principles-inner {
-    /* max-width and centering handled by .container */
   }
 
   .principles-header {
@@ -72,58 +74,105 @@ const {
     opacity: 0.7;
   }
 
-  .principles-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 1fr;
+  /* Steps row */
+  .circle-steps {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem; /* room for the straddling circle */
   }
 
-  .principle-card {
-    padding: 1rem;
-    border: 1px solid rgba(139, 69, 19, 0.12);
-    border-radius: 0.75rem;
-    background: var(--color-brand-bg);
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  @media (min-width: 640px) {
-    .principle-card {
-      padding: 1.5rem;
+  @media (min-width: 768px) {
+    .circle-steps {
+      flex-direction: row;
+      align-items: stretch;
     }
   }
 
-  .principle-card:hover {
-    border-color: rgba(139, 69, 19, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* Each item = card + arrow, flex: 1 1 0 forces equal widths */
+  .circle-step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
-  .principle-card h3 {
-    font-size: 1.125rem;
+  @media (min-width: 768px) {
+    .circle-step-item {
+      flex-direction: row;
+    }
+  }
+
+  /* Card */
+  .circle-step-card {
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+    padding: 1.5rem;
+    padding-top: 2.25rem;
+    border-radius: 1rem;
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Circle straddling the top border */
+  .circle-step-node {
+    position: absolute;
+    top: -1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--color-brand-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 0 0 3px white;
+    flex-shrink: 0;
+  }
+
+  .circle-step-label {
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-brand-primary);
-    margin-bottom: 0.5rem;
-    margin-top: 0;
+    line-height: 1.2;
+    margin-bottom: 0.625rem;
+    display: block;
   }
 
-  .principle-card p {
-    font-size: 0.875rem;
+  .circle-step-desc {
+    font-size: 0.8125rem;
     color: var(--color-brand-text);
     opacity: 0.7;
     line-height: 1.5;
     margin: 0;
   }
 
-  @media (min-width: 640px) {
-    .principles-grid {
-      grid-template-columns: repeat(2, 1fr);
+  /* Arrow between cards */
+  .circle-step-arrow {
+    color: var(--color-brand-primary);
+    padding: 0.75rem;
+    flex-shrink: 0;
+    transform: rotate(90deg);
+    opacity: 0.5;
+  }
+
+  @media (min-width: 768px) {
+    .circle-step-arrow {
+      transform: rotate(0deg);
     }
   }
 
   @media (min-width: 1024px) {
-    .principles-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
     .principles-header h2 {
       font-size: 2.5rem;
     }

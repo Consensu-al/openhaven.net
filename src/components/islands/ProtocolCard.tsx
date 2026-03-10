@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from '@/components/ui/tooltip'
-import { ExternalLink } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import type { Protocol } from '@/lib/types'
 
 const RESULTS_STRINGS = {
@@ -28,8 +28,6 @@ const RESULTS_STRINGS = {
     federated: 'Federated',
     hybrid: 'Hybrid',
   },
-  communityLinkLabel: 'Community',
-  lastInvestigatedLabel: 'Last investigated',
   viewDetails: 'View Details',
 } as const
 
@@ -96,7 +94,6 @@ export default function ProtocolCard({
     () => new Intl.DateTimeFormat(locale, {
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
     }),
     [locale]
   )
@@ -106,124 +103,127 @@ export default function ProtocolCard({
   const archStyle = ARCH_STYLE[protocol.architectureType]
 
   return (
-    <div
-      className="rounded-lg border p-4 sm:p-6 transition-colors"
+    <a
+      href={`/protocols/${protocol.id}`}
+      className="group block rounded-xl transition-all duration-200 cursor-pointer"
       style={{
-        borderColor: 'var(--color-card-border)',
-        backgroundColor: 'var(--color-card-bg)',
+        border: '2px solid rgba(139, 69, 19, 0.25)',
+        backgroundColor: 'white',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
       }}
       data-testid={`protocol-card-${protocol.id}`}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--color-brand-primary)'
+        e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 69, 19, 0.12)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(139, 69, 19, 0.25)'
+        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'
+      }}
     >
-      {/* Header: name + entity type */}
-      <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-        <h4
-          className="text-lg font-semibold"
-          style={{ color: 'var(--color-brand-primary)' }}
-        >
-          {protocol.name}
-        </h4>
-        <span
-          className="text-xs px-2 py-0.5 rounded-full whitespace-nowrap"
-          style={{
-            color: 'var(--color-brand-text)',
-            backgroundColor: 'var(--color-chip-unchecked-bg)',
-            border: '1px solid var(--color-card-border)',
-          }}
-        >
-          {protocol.entityType}
-        </span>
-      </div>
+      {/* Card content */}
+      <div className="p-5">
+        {/* Header: name + entity type */}
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <h4
+            className="text-base font-semibold leading-tight"
+            style={{ color: 'var(--color-brand-primary)' }}
+          >
+            {protocol.name}
+          </h4>
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap shrink-0"
+            style={{
+              color: 'var(--color-brand-text)',
+              backgroundColor: 'var(--color-chip-unchecked-bg)',
+              border: '1px solid var(--color-card-border)',
+              opacity: 0.7,
+            }}
+          >
+            {protocol.entityType}
+          </span>
+        </div>
 
-      {/* Badges row */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        {/* Architecture badge — outline style */}
-        <span
-          className="text-xs px-2 py-0.5 rounded-full border"
-          style={{
-            color: archStyle.text,
-            borderColor: archStyle.border,
-            backgroundColor: 'transparent',
-          }}
-        >
-          {RESULTS_STRINGS.architectureLabel[protocol.architectureType]}
-        </span>
+        {/* Badges row */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {/* Architecture badge — outline style */}
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full border"
+            style={{
+              color: archStyle.text,
+              borderColor: archStyle.border,
+              backgroundColor: 'transparent',
+            }}
+          >
+            {RESULTS_STRINGS.architectureLabel[protocol.architectureType]}
+          </span>
 
-        {/* Governance badge — filled style */}
-        <span
-          className="text-xs px-2 py-0.5 rounded-full"
-          style={{
-            backgroundColor: govStyle.bg,
-            color: govStyle.text,
-          }}
-          data-testid={`governance-badge-${protocol.id}`}
-        >
-          {RESULTS_STRINGS.governanceLabel[protocol.governanceModel]}
-        </span>
-      </div>
+          {/* Governance badge — filled style */}
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: govStyle.bg,
+              color: govStyle.text,
+            }}
+            data-testid={`governance-badge-${protocol.id}`}
+          >
+            {RESULTS_STRINGS.governanceLabel[protocol.governanceModel]}
+          </span>
+        </div>
 
-      {/* Capture risk + date row */}
-      <div className="flex flex-wrap items-center gap-4 text-sm">
-        {/* Capture risk indicator with tooltip */}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span
-                className="inline-flex items-center gap-1.5 cursor-default"
-                data-testid={`capture-risk-${protocol.id}`}
-              >
+        {/* Capture risk + date row */}
+        <div className="flex items-center gap-3 text-xs mb-4">
+          {/* Capture risk indicator with tooltip */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <span
-                  className="inline-block w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: riskColor }}
-                  aria-hidden="true"
-                />
-                <span style={{ color: 'var(--color-brand-text)' }}>
-                  {RESULTS_STRINGS.captureRiskLabel[protocol.captureRisk]}
+                  className="inline-flex items-center gap-1 cursor-default"
+                  data-testid={`capture-risk-${protocol.id}`}
+                >
+                  <span
+                    className="inline-block w-2 h-2 rounded-full"
+                    style={{ backgroundColor: riskColor }}
+                    aria-hidden="true"
+                  />
+                  <span style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}>
+                    {RESULTS_STRINGS.captureRiskLabel[protocol.captureRisk]}
+                  </span>
                 </span>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="max-w-xs text-xs">
-                {RESULTS_STRINGS.captureRiskTooltip}
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-xs text-xs">
+                  {RESULTS_STRINGS.captureRiskTooltip}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        {/* Last investigated date */}
-        <span
-          className="text-xs"
-          style={{ color: 'var(--color-brand-text)', opacity: 0.6 }}
-        >
-          {dateFormatter.format(new Date(protocol.lastInvestigated))}
-        </span>
+          <span className="text-[10px]" style={{ color: 'var(--color-brand-text)', opacity: 0.5 }}>
+            {dateFormatter.format(new Date(protocol.lastInvestigated))}
+          </span>
+        </div>
       </div>
 
-      {/* Community link */}
-      {protocol.communityLink && (
-        <a
-          href={protocol.communityLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 mt-3 text-sm min-h-[44px] min-w-[44px] underline-offset-2 hover:underline"
-          style={{ color: 'var(--color-brand-primary)' }}
-          aria-label={`${protocol.name} community`}
-          data-testid={`community-link-${protocol.id}`}
-        >
-          <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-          {RESULTS_STRINGS.communityLinkLabel}
-        </a>
-      )}
-
-      {/* View Details link */}
-      <a
-        href={`/protocols/${protocol.id}`}
-        className="inline-flex items-center gap-1 mt-2 text-sm min-h-[44px] min-w-[44px] underline-offset-2 hover:underline"
-        style={{ color: 'var(--color-brand-primary)' }}
-        aria-label={`View details for ${protocol.name}`}
-        data-testid={`detail-link-${protocol.id}`}
+      {/* View Details footer - prominent CTA */}
+      <div
+        className="flex items-center justify-between px-5 py-3 rounded-b-xl transition-colors"
+        style={{
+          backgroundColor: 'var(--color-brand-accent-light)',
+          borderTop: '1px solid rgba(139, 69, 19, 0.1)',
+        }}
       >
-        {RESULTS_STRINGS.viewDetails}
-      </a>
-    </div>
+        <span
+          className="text-sm font-semibold"
+          style={{ color: 'var(--color-brand-primary)' }}
+        >
+          {RESULTS_STRINGS.viewDetails}
+        </span>
+        <ArrowRight
+          className="w-4 h-4 transition-transform group-hover:translate-x-1"
+          style={{ color: 'var(--color-brand-primary)' }}
+        />
+      </div>
+    </a>
   )
 }
