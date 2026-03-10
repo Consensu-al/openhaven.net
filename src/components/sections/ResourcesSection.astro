@@ -1,0 +1,189 @@
+---
+/**
+ * ResourcesSection — Harvested from v0-prototype resources-section.tsx
+ * Three-column layout for resources, communities, and contribute links.
+ *
+ * Design tokens mapped to OpenHaven warm earth tones.
+ * NOT wired into any page — reference component for future stories.
+ */
+
+export interface ResourceItem {
+  title: string;
+  description: string;
+  href?: string;
+  external?: boolean;
+}
+
+export interface ResourceColumn {
+  heading: string;
+  items: ResourceItem[];
+  note?: string;
+}
+
+export interface Props {
+  heading?: string;
+  subheading?: string;
+  columns: ResourceColumn[];
+}
+
+const {
+  heading = 'Go Deeper',
+  subheading = 'Resources, communities, and ways to contribute to the project.',
+  columns,
+} = Astro.props;
+---
+
+<section class="resources-section">
+  <div class="resources-inner">
+    <div class="resources-header">
+      <h2>{heading}</h2>
+      <p>{subheading}</p>
+    </div>
+
+    <div class="resources-grid">
+      {columns.map((col) => (
+        <div class="resource-column">
+          <h3>{col.heading}</h3>
+          <div class="resource-items">
+            {col.items.map((item) => (
+              item.href ? (
+                <a
+                  href={item.href}
+                  class="resource-item"
+                  target={item.external ? '_blank' : undefined}
+                  rel={item.external ? 'noopener noreferrer' : undefined}
+                >
+                  <span class="resource-title">{item.title}</span>
+                  <span class="resource-desc">{item.description}</span>
+                </a>
+              ) : (
+                <div class="resource-item">
+                  <span class="resource-title">{item.title}</span>
+                  <span class="resource-desc">{item.description}</span>
+                </div>
+              )
+            ))}
+          </div>
+          {col.note && (
+            <div class="resource-note">
+              <p set:html={col.note} />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .resources-section {
+    padding: 5rem 1rem;
+    background: white;
+  }
+
+  .resources-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .resources-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .resources-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin-bottom: 1rem;
+  }
+
+  .resources-header p {
+    max-width: 40rem;
+    margin: 0 auto;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .resources-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+
+  .resource-column {
+    padding: 1.5rem;
+    border: 1px solid rgba(139, 69, 19, 0.12);
+    border-radius: 0.75rem;
+    background: var(--color-brand-bg);
+  }
+
+  .resource-column h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    margin: 0 0 1.5rem;
+  }
+
+  .resource-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .resource-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    border-bottom: none;
+    transition: background 0.15s;
+  }
+
+  a.resource-item:hover {
+    background: rgba(139, 69, 19, 0.05);
+    border-bottom: none;
+  }
+
+  .resource-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-brand-text);
+  }
+
+  a.resource-item:hover .resource-title {
+    color: var(--color-brand-primary);
+  }
+
+  .resource-desc {
+    font-size: 0.75rem;
+    color: var(--color-brand-text);
+    opacity: 0.6;
+  }
+
+  .resource-note {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: rgba(139, 69, 19, 0.03);
+  }
+
+  .resource-note p {
+    font-size: 0.875rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .resources-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .resources-header h2 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

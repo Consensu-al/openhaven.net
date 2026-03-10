@@ -1,4 +1,11 @@
-:root {
+@import "tailwindcss";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+@import "@fontsource/jetbrains-mono/700.css";
+
+@theme {
+  /* Legacy tokens — preserved for existing components */
   --color-bg: #fdfbf7;
   --color-text: #1a1a1a;
   --color-accent-text: #8b4513;
@@ -6,6 +13,62 @@
   --color-blue: #3498db;
   --color-yellow-light: #fef5d4;
   --color-blue-light: #d6eaf8;
+
+  /* Semantic brand aliases */
+  --color-brand-primary: #8b4513;
+  --color-brand-bg: #fdfbf7;
+  --color-brand-accent: #f4d03f;
+  --color-brand-accent-light: #fef5d4;
+  --color-brand-blue: #3498db;
+  --color-brand-blue-light: #d6eaf8;
+  --color-brand-text: #1a1a1a;
+
+  /* Focus ring */
+  --color-focus-ring: #8b4513;
+
+  /* Governance badge tokens */
+  --color-badge-foundation-bg: #d6eaf8;
+  --color-badge-foundation-text: #1a5276;
+  --color-badge-dao-bg: #e8daef;
+  --color-badge-dao-text: #6c3483;
+  --color-badge-company-bg: #fef5d4;
+  --color-badge-company-text: #7d6608;
+  --color-badge-standard-bg: #d5f5e3;
+  --color-badge-standard-text: #1e8449;
+  --color-badge-community-bg: #d1f2eb;
+  --color-badge-community-text: #117a65;
+
+  /* Capture risk tokens */
+  --color-risk-low: #2e7d32;
+  --color-risk-medium: #f57c00;
+  --color-risk-high: #d32f2f;
+
+  /* Architecture badge tokens (outline style — use as border color) */
+  --color-arch-p2p-bg: #d6eaf8;
+  --color-arch-p2p-text: #1a5276;
+  --color-arch-federated-bg: #d5f5e3;
+  --color-arch-federated-text: #1e8449;
+  --color-arch-hybrid-bg: #fef5d4;
+  --color-arch-hybrid-text: #7d6608;
+
+  /* MVP badge tokens */
+  --color-mvp-bg: #fef5d4;
+  --color-mvp-border: #f4d03f;
+  --color-mvp-text: #8b4513;
+
+  /* Brand hover token */
+  --color-brand-primary-dark: #6d370f;
+
+  /* Domain card tokens */
+  --color-domain-selected-bg: #fef5d4;
+  --color-domain-hover-border: rgba(139, 69, 19, 0.5);
+  --color-card-bg: #ffffff;
+  --color-card-border: rgba(139, 69, 19, 0.12);
+  --color-card-shadow: rgba(0, 0, 0, 0.08);
+
+  /* Affordance chip tokens */
+  --color-chip-unchecked-bg: rgba(139, 69, 19, 0.06);
+
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 }
 
@@ -21,6 +84,13 @@ html {
   line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-bg);
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -75,7 +145,38 @@ a:hover {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 2rem 2rem;
+  }
+}
+
+/* Section spacing rhythm — all page sections except hero use this */
+.section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+/* Prevent vertical padding stacking when .container is nested inside .section-padding */
+.section-padding .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
 }
 
 .highlight-yellow {
@@ -192,17 +293,52 @@ a:hover {
   margin-left: -1rem;
 }
 
-footer {
-  margin-top: auto;
-  padding: 2rem;
-  text-align: center;
-  background: var(--color-accent-text);
-  color: var(--color-bg);
+
+/* Affordance chip focus ring */
+.affordance-chip:focus-visible {
+  --tw-ring-color: var(--color-focus-ring);
 }
 
-footer a {
-  color: var(--color-yellow);
-  border-bottom-color: var(--color-yellow);
+/* Affordances panel entrance animation */
+.affordances-panel-enter {
+  animation: panel-slide-down 200ms ease-out;
+}
+@keyframes panel-slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .affordances-panel-enter { animation: none; }
+}
+
+/* Protocol results entrance animation */
+.results-slide-down {
+  animation: results-slide-down 200ms ease-out;
+}
+@keyframes results-slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .results-slide-down { animation: none; }
+}
+
+/* Dialog open/close transitions */
+@keyframes dialog-open {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog {
+    animation: none !important;
+  }
 }
 
 @media (max-width: 768px) {

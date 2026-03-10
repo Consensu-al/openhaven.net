@@ -1,0 +1,110 @@
+---
+/**
+ * DisclaimerBanner — Harvested from v0-prototype disclaimer-banner.tsx
+ * Horizontal alert/info banner with icon, message, and optional CTA link.
+ *
+ * Design tokens mapped to OpenHaven warm earth tones.
+ * NOT wired into any page — reference component for future stories.
+ */
+
+export interface Props {
+  message: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  message,
+  ctaLabel,
+  ctaHref,
+} = Astro.props;
+---
+
+<section class="disclaimer-banner">
+  <div class="disclaimer-inner">
+    <div class="disclaimer-content">
+      <span class="disclaimer-icon" aria-hidden="true">&#9432;</span>
+      <p set:html={message} />
+    </div>
+    {ctaLabel && ctaHref && (
+      <a href={ctaHref} class="disclaimer-cta">
+        {ctaLabel}
+        <span class="disclaimer-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    )}
+  </div>
+</section>
+
+<style>
+  .disclaimer-banner {
+    border-top: 1px solid var(--color-brand-accent);
+    border-bottom: 1px solid var(--color-brand-accent);
+    background: var(--color-brand-accent-light);
+    padding: 1rem;
+  }
+
+  .disclaimer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .disclaimer-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .disclaimer-icon {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    color: var(--color-brand-primary);
+    margin-top: 0.1rem;
+  }
+
+  .disclaimer-content p {
+    font-size: 0.875rem;
+    color: var(--color-brand-text);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .disclaimer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  .disclaimer-cta:hover {
+    text-decoration: underline;
+    border-bottom: none;
+  }
+
+  .disclaimer-arrow {
+    transition: transform 0.2s;
+  }
+
+  .disclaimer-cta:hover .disclaimer-arrow {
+    transform: translateX(2px);
+  }
+
+  @media (min-width: 640px) {
+    .disclaimer-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .disclaimer-cta {
+      flex-shrink: 0;
+    }
+  }
+</style>

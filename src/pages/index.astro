@@ -1,47 +1,63 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import InteractiveMatrix from "../components/InteractiveMatrix.astro";
-import narrativeData from "../data/narrative.json";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import PrinciplesSection from "@/components/sections/PrinciplesSection.astro";
+import DisclaimerBanner from "@/components/sections/DisclaimerBanner.astro";
+import NavigatorSection from "@/components/islands/NavigatorSection";
+import { loadDomains, loadAffordances, loadProtocols } from "@/lib/data";
 
-const narrativeSections = narrativeData.sections;
+const domains = loadDomains();
+const affordances = loadAffordances();
+const protocols = loadProtocols();
+
+const principles = [
+  {
+    title: "Start from Need",
+    description: "Enter through real-world use cases like Communication, Identity, or Mutual Aid — not technical jargon.",
+  },
+  {
+    title: "Understand What Matters",
+    description: "See plain-language affordances that explain technical capabilities in terms of what they enable for you.",
+  },
+  {
+    title: "Find Your Stack",
+    description: "Arrive at verified protocols with governance, risk, and community context so you can choose with confidence.",
+  },
+  {
+    title: "Export & Build",
+    description: "Export prompt-ready context for AI IDEs or download llms-full.txt to supercharge your development workflow.",
+  },
+];
 ---
 
-<Layout title="OpenHaven - P2P Technology Standards">
-  <main>
-    <div class="hero">
-      <div class="container">
-        <h1>OpenHaven</h1>
-        <p class="tagline">Building Bridges in the P2P Ecosystem</p>
-      </div>
-    </div>
+<BaseLayout
+  title="OpenHaven — Navigate the Open Protocol Landscape"
+  description="OpenHaven maps the open protocol landscape so builders, coalitions, and communities can discover verified tools through human needs — not technical jargon."
+>
+  <HeroSection
+    title="Navigate the Open Protocol"
+    highlight="Landscape"
+    subtitle="Discover verified protocols organized by real-world needs — not technical jargon. Built for builders, coalitions, and communities shaping the decentralized web."
+    badge="MVP — Real data, growing"
+    primaryCta={{ label: "Find Your Stack", href: "#navigator" }}
+    secondaryCta={{ label: "Browse Full Registry", href: "/registry" }}
+  />
 
-      <!-- <section class="section">
-        <h2>Toward Interoperable Infrastructure</h2>
-        {narrativeSections.map((section) => (
-          <div class="narrative-section">
-            <h3>{section.title}</h3>
-            <p>{section.content}</p>
-          </div>
-        ))}
-      </section> -->
+  <PrinciplesSection
+    heading="How OpenHaven Works"
+    subheading="Open protocols, organized by what matters to you."
+    principles={principles}
+  />
 
-      <section class="section">
-        <h2>Building Together</h2>
-        <div class="narrative-section">
-          <p>
-            The shift to decentralized systems requires collaboration across research labs, 
-            protocol teams, and application developers. OpenHaven documents the current 
-            landscape and advocates for interoperability. Our principles:
-          </p>
-          <ul style="margin-left: 2rem; margin-top: 1rem;">
-            <li>Modular protocols over monolithic platforms</li>
-            <li>Local-first applications with global connectivity</li>
-            <li>User-controlled data and identity</li>
-            <li>Composable standards that enable innovation</li>
-            <li>Pragmatic solutions for real-world adoption</li>
-          </ul>
-        </div>
-      </section>
+  <DisclaimerBanner
+    message="Alpha — data coverage is incomplete and unverified. Unmapped areas are visible gaps, not omissions."
+    ctaLabel="Help us grow"
+    ctaHref="/contribute"
+  />
+
+  <section id="navigator" class="section-padding">
+    <div class="container">
+      <NavigatorSection client:load domains={domains} affordances={affordances} protocols={protocols} locale="en" />
     </div>
-  </main>
-</Layout>
+  </section>
+</BaseLayout>

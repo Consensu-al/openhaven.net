@@ -1,0 +1,82 @@
+[
+  {
+    "id": "identity-trust",
+    "name": "Identity & Trust",
+    "slug": "identity-trust",
+    "description": "Control your identity and decide who to trust, without relying on a central authority",
+    "icon": "scan-face",
+    "isPrimary": true
+  },
+  {
+    "id": "communication",
+    "name": "Communication",
+    "slug": "communication",
+    "description": "Tools for messaging, calls, and group chat without centralized control",
+    "icon": "message-circle",
+    "isPrimary": true
+  },
+  {
+    "id": "group-governance",
+    "name": "Group Formation & Governance",
+    "slug": "group-governance",
+    "description": "Organize groups and make decisions together using transparent, shared rules",
+    "icon": "users",
+    "isPrimary": true
+  },
+  {
+    "id": "relationship-development",
+    "name": "Relationship Development",
+    "slug": "relationship-development",
+    "description": "Deepen connections and repair trust through intentional relational practices",
+    "icon": "heart-handshake",
+    "isPrimary": true
+  },
+  {
+    "id": "co-creation-knowledge",
+    "name": "Co-Creation & Knowledge",
+    "slug": "co-creation-knowledge",
+    "description": "Build knowledge and create together using shared tools and collective intelligence",
+    "icon": "lightbulb",
+    "isPrimary": true
+  },
+  {
+    "id": "events-coordination",
+    "name": "Events & Coordination",
+    "slug": "events-coordination",
+    "description": "Plan events and coordinate projects across groups without a central organizer",
+    "icon": "calendar",
+    "isPrimary": true
+  },
+  {
+    "id": "mutual-aid-exchange",
+    "name": "Mutual Aid & Exchange",
+    "slug": "mutual-aid-exchange",
+    "description": "Share resources, skills, and support within your community",
+    "icon": "helping-hand",
+    "isPrimary": true
+  },
+  {
+    "id": "learning-development",
+    "name": "Learning & Development",
+    "slug": "learning-development",
+    "description": "Grow your skills and capacities through peer learning and open education tools",
+    "icon": "graduation-cap",
+    "isPrimary": true
+  },
+  {
+    "id": "platform-sovereignty",
+    "name": "Platform Evolution & Sovereignty",
+    "slug": "platform-sovereignty",
+    "description": "Ensure the technology itself remains trustworthy, open, and community-governed",
+    "icon": "shield-check",
+    "isPrimary": false
+  },
+  {
+    "id": "place-mapping",
+    "name": "Place-Based Mapping",
+    "slug": "place-mapping",
+    "description": "Make shared geography visible and connect people to place-based resources",
+    "icon": "map-pin",
+    "isPrimary": false
+  }
+]

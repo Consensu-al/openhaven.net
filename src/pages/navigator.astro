@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NavigatorSection from '@/components/islands/NavigatorSection';
+import { loadDomains, loadAffordances, loadProtocols } from '@/lib/data';
+
+const domains = loadDomains();
+const affordances = loadAffordances();
+const protocols = loadProtocols();
+---
+
+<BaseLayout
+  title="Open Protocol Navigator — OpenHaven"
+  description="Navigate and compare open protocols for the decentralized web."
+>
+  <main>
+    <div class="hero">
+      <div class="container">
+        <h1>Open Protocol Navigator</h1>
+        <p class="tagline">Discover, compare, and choose open protocols</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <section class="section">
+        <NavigatorSection client:load domains={domains} affordances={affordances} protocols={protocols} locale="en" />
+      </section>
+
+      <section class="section">
+        <p>
+          <a href="/">← Back to OpenHaven</a>
+        </p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

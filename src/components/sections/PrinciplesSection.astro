@@ -1,0 +1,131 @@
+---
+/**
+ * PrinciplesSection — Harvested from v0-prototype principles-section.tsx
+ * Card grid layout for displaying core principles or features.
+ * Static Astro version (no expand/collapse — keep it simple).
+ *
+ * Design tokens mapped to OpenHaven warm earth tones.
+ * NOT wired into any page — reference component for future stories.
+ */
+
+export interface Principle {
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  heading?: string;
+  subheading?: string;
+  principles: Principle[];
+}
+
+const {
+  heading = 'Core Principles',
+  subheading = 'The foundational values that guide our protocol recommendations',
+  principles,
+} = Astro.props;
+---
+
+<section class="principles-section section-padding">
+  <div class="container principles-inner">
+    <div class="principles-header">
+      <h2>{heading}</h2>
+      <p>{subheading}</p>
+    </div>
+
+    <div class="principles-grid">
+      {principles.map((principle) => (
+        <div class="principle-card">
+          <h3>{principle.title}</h3>
+          <p>{principle.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .principles-section {
+    background: white;
+  }
+
+  .principles-inner {
+    /* max-width and centering handled by .container */
+  }
+
+  .principles-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .principles-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin-bottom: 1rem;
+  }
+
+  .principles-header p {
+    max-width: 40rem;
+    margin: 0 auto;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .principles-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .principle-card {
+    padding: 1rem;
+    border: 1px solid rgba(139, 69, 19, 0.12);
+    border-radius: 0.75rem;
+    background: var(--color-brand-bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  @media (min-width: 640px) {
+    .principle-card {
+      padding: 1.5rem;
+    }
+  }
+
+  .principle-card:hover {
+    border-color: rgba(139, 69, 19, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .principle-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+
+  .principle-card p {
+    font-size: 0.875rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .principles-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .principles-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .principles-header h2 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

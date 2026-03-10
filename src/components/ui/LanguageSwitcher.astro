@@ -1,0 +1,86 @@
+---
+const currentLocale = Astro.currentLocale ?? 'en';
+
+const locales = [
+  { code: 'en', label: 'EN' },
+  { code: 'es', label: 'ES' },
+  { code: 'pt-BR', label: 'PT-BR' },
+];
+---
+
+<div class="lang-switcher" aria-label="Language selector">
+  {locales.map(({ code, label }, i) => (
+    <>
+      {i > 0 && <span class="lang-divider" aria-hidden="true">|</span>}
+      <a
+        href="#"
+        class={`lang-option ${currentLocale === code ? 'lang-option--active' : 'lang-option--inactive'}`}
+        aria-label={`Switch to ${label}`}
+        aria-current={currentLocale === code ? 'true' : undefined}
+        hreflang={code}
+      >
+        {label}
+      </a>
+    </>
+  ))}
+</div>
+
+<style>
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .lang-divider {
+    color: var(--color-brand-primary);
+    opacity: 0.4;
+    padding: 0 0.125rem;
+    user-select: none;
+  }
+
+  .lang-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.25rem 0.375rem;
+    text-decoration: none;
+    border-bottom: none;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .lang-option--active {
+    color: var(--color-brand-primary);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-brand-accent);
+    text-underline-offset: 2px;
+  }
+
+  .lang-option--inactive {
+    color: var(--color-brand-text);
+    opacity: 0.5;
+  }
+
+  .lang-option--inactive:hover {
+    color: var(--color-brand-primary);
+    opacity: 1;
+    background-color: var(--color-brand-accent-light);
+  }
+
+  .lang-option:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.lang-option--inactive').forEach((link) => {
+    link.addEventListener('click', (e) => e.preventDefault());
+  });
+</script>

@@ -1,0 +1,329 @@
+---
+import { loadProtocols, loadDomains, loadAffordances } from '@/lib/data'
+import type { Protocol, Domain, Affordance } from '@/lib/types'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+export function getStaticPaths() {
+  const protocols = loadProtocols()
+  return protocols.map((protocol) => ({
+    params: { id: protocol.id },
+    props: { protocol },
+  }))
+}
+
+const { protocol } = Astro.props as { protocol: Protocol }
+const domains = loadDomains()
+const affordances = loadAffordances()
+
+// Lookup maps
+const domainMap = new Map<string, Domain>(domains.map((d) => [d.id, d]))
+const affordanceMap = new Map<string, Affordance>(affordances.map((a) => [a.id, a]))
+
+// Resolve names
+const protocolDomains = protocol.domainIds
+  .map((id) => domainMap.get(id))
+  .filter((d): d is Domain => d !== undefined)
+const protocolAffordances = protocol.affordanceIds
+  .map((id) => affordanceMap.get(id))
+  .filter((a): a is Affordance => a !== undefined)
+
+// Date formatting (locale-aware for future i18n support)
+const locale = Astro.currentLocale ?? 'en'
+const dateFormatted = new Intl.DateTimeFormat(locale, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(new Date(protocol.lastInvestigated))
+
+// --- UI Strings (i18n-ready) ---
+const DETAIL_STRINGS = {
+  breadcrumbHome: 'Home',
+  breadcrumbProtocols: 'Protocols',
+  governanceLabel: {
+    foundation: 'Foundation',
+    dao: 'DAO',
+    'single-company': 'Company',
+    'open-standard-body': 'Open Standard',
+    community: 'Community',
+  } as Record<Protocol['governanceModel'], string>,
+  architectureLabel: {
+    'fully-p2p': 'Fully P2P',
+    federated: 'Federated',
+    hybrid: 'Hybrid',
+  } as Record<Protocol['architectureType'], string>,
+  captureRiskLabel: {
+    low: 'Low capture risk',
+    medium: 'Medium capture risk',
+    high: 'High capture risk',
+  } as Record<Protocol['captureRisk'], string>,
+  attrLicense: 'License',
+  attrDevStatus: 'Dev Status',
+  attrOwner: 'Owner',
+  attrCountry: 'Country',
+  attrStartYear: 'Start Year',
+  attrStack: 'Stack',
+  attrFunding: 'Funding',
+  attrLastInvestigated: 'Last Investigated',
+  sectionDomains: 'Domains',
+  sectionAffordances: 'Affordances',
+  sectionLinks: 'Links',
+  communityLinkLabel: 'Community',
+  backToNavigator: 'Back to Navigator',
+} as const
+
+// --- Badge Style Maps ---
+const GOVERNANCE_STYLE: Record<Protocol['governanceModel'], { bg: string; text: string }> = {
+  foundation: { bg: 'var(--color-badge-foundation-bg)', text: 'var(--color-badge-foundation-text)' },
+  dao: { bg: 'var(--color-badge-dao-bg)', text: 'var(--color-badge-dao-text)' },
+  'single-company': { bg: 'var(--color-badge-company-bg)', text: 'var(--color-badge-company-text)' },
+  'open-standard-body': { bg: 'var(--color-badge-standard-bg)', text: 'var(--color-badge-standard-text)' },
+  community: { bg: 'var(--color-badge-community-bg)', text: 'var(--color-badge-community-text)' },
+}
+
+const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
+  low: 'var(--color-risk-low)',
+  medium: 'var(--color-risk-medium)',
+  high: 'var(--color-risk-high)',
+}
+
+const ARCH_STYLE: Record<Protocol['architectureType'], { border: string; text: string }> = {
+  'fully-p2p': { border: 'var(--color-arch-p2p-bg)', text: 'var(--color-arch-p2p-text)' },
+  federated: { border: 'var(--color-arch-federated-bg)', text: 'var(--color-arch-federated-text)' },
+  hybrid: { border: 'var(--color-arch-hybrid-bg)', text: 'var(--color-arch-hybrid-text)' },
+}
+
+const govStyle = GOVERNANCE_STYLE[protocol.governanceModel]
+const riskColor = RISK_COLOR[protocol.captureRisk]
+const archStyle = ARCH_STYLE[protocol.architectureType]
+
+// --- SEO ---
+const META_DESC_MAX = 155
+const metaSuffix = `${DETAIL_STRINGS.architectureLabel[protocol.architectureType]} architecture, ${DETAIL_STRINGS.governanceLabel[protocol.governanceModel]} governance`
+const metaDomains = protocolDomains.length > 0 ? `Domains: ${protocolDomains.map((d) => d.name).join(', ')}` : null
+const metaParts = [protocol.description, metaDomains, metaSuffix].filter(Boolean)
+const fullDescription = metaParts.join(' — ')
+const pageDescription = fullDescription.length <= META_DESC_MAX
+  ? fullDescription
+  : `${fullDescription.slice(0, META_DESC_MAX - 1)}…`
+
+// --- JSON-LD ---
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://openhaven.net')
+const siteUrl = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '')
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  name: protocol.name,
+  headline: protocol.name,
+  description: protocol.description ?? '',
+  url: canonicalUrl.href,
+  dateModified: protocol.lastInvestigated,
+  author: { '@type': 'Organization', name: 'OpenHaven' },
+  publisher: { '@type': 'Organization', name: 'OpenHaven', url: siteUrl },
+  ...(protocol.communityLink ? { discussionUrl: protocol.communityLink } : {}),
+  about: [
+    { '@type': 'Thing', name: `Governance: ${DETAIL_STRINGS.governanceLabel[protocol.governanceModel]}` },
+    { '@type': 'Thing', name: `Architecture: ${DETAIL_STRINGS.architectureLabel[protocol.architectureType]}` },
+  ],
+  keywords: [
+    DETAIL_STRINGS.governanceLabel[protocol.governanceModel],
+    DETAIL_STRINGS.architectureLabel[protocol.architectureType],
+    ...protocolDomains.map((d) => d.name),
+  ],
+}
+
+// --- Key Attributes (only show if value exists) ---
+type KeyAttribute = { label: string; value: string }
+const keyAttributes: KeyAttribute[] = [
+  protocol.license ? { label: DETAIL_STRINGS.attrLicense, value: protocol.license } : null,
+  protocol.devStatus ? { label: DETAIL_STRINGS.attrDevStatus, value: protocol.devStatus } : null,
+  protocol.owner ? { label: DETAIL_STRINGS.attrOwner, value: protocol.owner } : null,
+  protocol.country ? { label: DETAIL_STRINGS.attrCountry, value: protocol.country } : null,
+  protocol.startYear ? { label: DETAIL_STRINGS.attrStartYear, value: String(protocol.startYear) } : null,
+  protocol.stack.length > 0 ? { label: DETAIL_STRINGS.attrStack, value: protocol.stack.join(', ') } : null,
+  protocol.funding.length > 0 ? { label: DETAIL_STRINGS.attrFunding, value: protocol.funding.join(', ') } : null,
+  { label: DETAIL_STRINGS.attrLastInvestigated, value: dateFormatted },
+].filter((attr): attr is KeyAttribute => attr !== null)
+---
+
+<BaseLayout title={`${protocol.name} — OpenHaven`} description={pageDescription}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <main class="section-padding">
+    <div class="container">
+
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" class="mb-6 text-sm" data-testid="breadcrumb">
+        <ol class="flex flex-wrap items-center gap-1" style="color: var(--color-brand-text); opacity: 0.7;">
+          <li>
+            <a
+              href="/"
+              class="min-h-[44px] min-w-[44px] inline-flex items-center underline-offset-2 hover:underline"
+              style="color: var(--color-brand-primary); border-bottom: none;"
+              data-testid="breadcrumb-home"
+            >
+              {DETAIL_STRINGS.breadcrumbHome}
+            </a>
+          </li>
+          <li aria-hidden="true">&gt;</li>
+          <li>
+            <span>{DETAIL_STRINGS.breadcrumbProtocols}</span>
+          </li>
+          <li aria-hidden="true">&gt;</li>
+          <li aria-current="page">
+            <span style="color: var(--color-brand-text);">{protocol.name}</span>
+          </li>
+        </ol>
+      </nav>
+
+      {/* Header: Name + Entity Type */}
+      <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl mb-0" data-testid="protocol-name">
+          {protocol.name}
+        </h1>
+        <span
+          class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap mt-2"
+          style={`color: var(--color-brand-text); background-color: var(--color-chip-unchecked-bg); border: 1px solid var(--color-card-border);`}
+          data-testid="entity-type"
+        >
+          {protocol.entityType}
+        </span>
+      </div>
+
+      {/* Description */}
+      {protocol.description && (
+        <p class="text-base mb-6" style="color: var(--color-brand-text); max-width: 65ch;" data-testid="protocol-description">
+          {protocol.description}
+        </p>
+      )}
+
+      {/* Badge Row */}
+      <div class="flex flex-wrap gap-2 mb-8" data-testid="badge-row">
+        {/* Architecture badge — outline style */}
+        <span
+          class="text-xs px-2 py-0.5 rounded-full border"
+          style={`color: ${archStyle.text}; border-color: ${archStyle.border}; background-color: transparent;`}
+          data-testid="architecture-badge"
+        >
+          {DETAIL_STRINGS.architectureLabel[protocol.architectureType]}
+        </span>
+
+        {/* Governance badge — filled style */}
+        <span
+          class="text-xs px-2 py-0.5 rounded-full"
+          style={`background-color: ${govStyle.bg}; color: ${govStyle.text};`}
+          data-testid="governance-badge"
+        >
+          {DETAIL_STRINGS.governanceLabel[protocol.governanceModel]}
+        </span>
+
+        {/* Capture risk indicator */}
+        <span class="inline-flex items-center gap-1.5 text-xs" data-testid="capture-risk">
+          <span
+            class="inline-block w-2.5 h-2.5 rounded-full"
+            style={`background-color: ${riskColor};`}
+            aria-hidden="true"
+          ></span>
+          <span style="color: var(--color-brand-text);">
+            {DETAIL_STRINGS.captureRiskLabel[protocol.captureRisk]}
+          </span>
+        </span>
+      </div>
+
+      {/* Key Attributes — 2-col grid on desktop, single-col on mobile */}
+      <div
+        class="rounded-lg border p-4 sm:p-6 mb-8"
+        style="border-color: var(--color-card-border); background-color: var(--color-card-bg);"
+        data-testid="key-attributes"
+      >
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+          {keyAttributes.map((attr) => (
+            <div class="flex flex-col">
+              <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-brand-primary); opacity: 0.8;">
+                {attr.label}
+              </span>
+              <span class="text-sm" style="color: var(--color-brand-text);">
+                {attr.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Domains */}
+      {protocolDomains.length > 0 && (
+        <div class="mb-6" data-testid="domains-section">
+          <h2 class="text-lg font-semibold mb-3 mt-0">
+            {DETAIL_STRINGS.sectionDomains}
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {protocolDomains.map((domain) => (
+              <a
+                href={`/domains/${domain.slug}`}
+                class="text-xs px-3 py-1.5 rounded-full min-h-[44px] inline-flex items-center underline-offset-2 hover:underline"
+                style={`background-color: var(--color-brand-accent-light); color: var(--color-brand-primary); border: 1px solid var(--color-card-border); border-bottom: none;`}
+                data-testid={`domain-pill-${domain.id}`}
+              >
+                {domain.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Affordances */}
+      {protocolAffordances.length > 0 && (
+        <div class="mb-6" data-testid="affordances-section">
+          <h2 class="text-lg font-semibold mb-3 mt-0">
+            {DETAIL_STRINGS.sectionAffordances}
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {protocolAffordances.map((affordance) => (
+              <span
+                class="text-xs px-3 py-1.5 rounded-full"
+                style="background-color: var(--color-chip-unchecked-bg); color: var(--color-brand-text); border: 1px solid var(--color-card-border);"
+                data-testid={`affordance-pill-${affordance.id}`}
+              >
+                {affordance.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Links */}
+      {protocol.communityLink && (
+        <div class="mb-8" data-testid="links-section">
+          <h2 class="text-lg font-semibold mb-3 mt-0">
+            {DETAIL_STRINGS.sectionLinks}
+          </h2>
+          <a
+            href={protocol.communityLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-sm min-h-[44px] min-w-[44px] underline-offset-2 hover:underline"
+            style="color: var(--color-brand-primary); border-bottom: none;"
+            data-testid="community-link"
+          >
+            {DETAIL_STRINGS.communityLinkLabel} &#x2197;
+          </a>
+        </div>
+      )}
+
+      {/* Back to Navigator */}
+      <div class="pt-4 border-t" style="border-color: var(--color-card-border);">
+        <a
+          href="/#navigator"
+          class="inline-flex items-center gap-1 text-sm min-h-[44px] min-w-[44px] underline-offset-2 hover:underline"
+          style="color: var(--color-brand-primary); border-bottom: none;"
+          data-testid="back-to-navigator"
+        >
+          &larr; {DETAIL_STRINGS.backToNavigator}
+        </a>
+      </div>
+
+    </div>
+  </main>
+</BaseLayout>

@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import RandomImage from "../components/RandomImage.astro";
 import MediaEmbed from "../components/MediaEmbed.astro";
 import calendarsData from "../data/calendars.json";
@@ -25,7 +25,7 @@ const calendarsWithICS = await Promise.all(
 const buildTime = new Date().toISOString();
 ---
 
-<Layout title="NAO Calendar" description="Aggregated sub-group events for NAO">
+<BaseLayout title="NAO Calendar" description="Aggregated sub-group events for NAO">
   <main class="calendar-page">
     <div class="calendar-container">
       <aside class="sidebar">
@@ -66,7 +66,7 @@ const buildTime = new Date().toISOString();
       </div>
     </div>
   </main>
-</Layout>
+</BaseLayout>
 
 <style>
   .calendar-page {

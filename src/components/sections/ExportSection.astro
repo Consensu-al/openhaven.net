@@ -1,0 +1,229 @@
+---
+/**
+ * ExportSection — Harvested from v0-prototype export-section.tsx
+ * "Export your stack" feature with protocol selection and prompt generation.
+ * This is a STATIC layout reference — the interactive version will need
+ * a React island in a future story.
+ *
+ * Design tokens mapped to OpenHaven warm earth tones.
+ * NOT wired into any page — reference component for future stories.
+ */
+
+export interface ExportProtocol {
+  name: string;
+  useCase: string;
+}
+
+export interface Props {
+  heading?: string;
+  subheading?: string;
+  protocols: ExportProtocol[];
+}
+
+const {
+  heading = 'Export Your Stack for AI-Assisted Development',
+  subheading = 'Select your protocols and generate context for Cursor, Windsurf, Claude, or your vibe coding tool of choice.',
+  protocols,
+} = Astro.props;
+---
+
+<section class="export-section">
+  <div class="export-inner">
+    <div class="export-header">
+      <div class="export-badge">
+        <span>Vibe Coding Ready</span>
+      </div>
+      <h2>{heading}</h2>
+      <p>{subheading}</p>
+    </div>
+
+    <div class="export-card">
+      <div class="export-card-header">
+        <h3>Select Protocols</h3>
+      </div>
+
+      <div class="export-grid">
+        {protocols.map((protocol) => (
+          <label class="export-item">
+            <input type="checkbox" name="protocol" value={protocol.name} />
+            <span class="export-item-inner">
+              <span class="export-item-name">{protocol.name}</span>
+              <span class="export-item-usecase">{protocol.useCase}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <div class="export-card-footer">
+        <button class="btn btn-primary" type="button" disabled>
+          Generate Prompt
+        </button>
+        <span class="export-hint">Interactive version coming soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .export-section {
+    padding: 5rem 1rem;
+    background: white;
+  }
+
+  .export-inner {
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+
+  .export-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .export-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-bg);
+    border: 1px solid rgba(139, 69, 19, 0.15);
+    border-radius: 9999px;
+  }
+
+  .export-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin-bottom: 1rem;
+  }
+
+  .export-header p {
+    max-width: 40rem;
+    margin: 0 auto;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .export-card {
+    border: 1px solid rgba(139, 69, 19, 0.12);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: var(--color-brand-bg);
+  }
+
+  .export-card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.08);
+    background: var(--color-brand-accent-light);
+  }
+
+  .export-card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-brand-text);
+    margin: 0;
+  }
+
+  .export-grid {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .export-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .export-item:hover {
+    background: rgba(139, 69, 19, 0.03);
+  }
+
+  .export-item input[type="checkbox"] {
+    margin-top: 0.2rem;
+    accent-color: var(--color-brand-primary);
+  }
+
+  .export-item-inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .export-item-name {
+    font-weight: 500;
+    color: var(--color-brand-text);
+  }
+
+  .export-item-usecase {
+    font-size: 0.75rem;
+    color: var(--color-brand-text);
+    opacity: 0.6;
+  }
+
+  .export-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(139, 69, 19, 0.08);
+    background: var(--color-brand-accent-light);
+  }
+
+  .export-hint {
+    font-size: 0.8rem;
+    color: var(--color-brand-text);
+    opacity: 0.5;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--color-brand-primary);
+    color: var(--color-brand-bg);
+    border-color: var(--color-brand-primary);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: #6d370f;
+    border-color: #6d370f;
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (min-width: 640px) {
+    .export-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .export-header h2 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

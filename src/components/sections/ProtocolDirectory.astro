@@ -1,0 +1,245 @@
+---
+/**
+ * ProtocolDirectory — Harvested from v0-prototype protocol-directory.tsx
+ * Static card list layout for displaying protocol recommendations.
+ * The v0-prototype has interactive search/filter/expand — those will need
+ * a React island when we add interactivity in a future story.
+ *
+ * This static version renders the "Recommended by Use Case" view as a
+ * clean card list. Pass protocol data as props.
+ *
+ * Design tokens mapped to OpenHaven warm earth tones.
+ * NOT wired into any page — reference component for future stories.
+ */
+
+export interface Protocol {
+  name: string;
+  useCase: string;
+  rationale: string;
+  alternatives: string[];
+  category: string;
+  docLink?: string;
+}
+
+export interface Props {
+  heading?: string;
+  subheading?: string;
+  protocols: Protocol[];
+}
+
+const {
+  heading = 'Protocol Directory',
+  subheading = 'Curated recommendations by use case, with full transparency on what we evaluated and why.',
+  protocols,
+} = Astro.props;
+---
+
+<section class="protocol-directory">
+  <div class="protocol-inner">
+    <div class="protocol-header">
+      <h2>{heading}</h2>
+      <p>{subheading}</p>
+    </div>
+
+    <div class="protocol-list">
+      <div class="protocol-list-header">
+        <h3>Recommended Protocols by Use Case</h3>
+      </div>
+
+      {protocols.map((protocol) => (
+        <div class="protocol-row">
+          <div class="protocol-info">
+            <div class="protocol-mapping">
+              <span class="protocol-usecase">{protocol.useCase}</span>
+              <span class="protocol-arrow" aria-hidden="true">&rarr;</span>
+              <span class="protocol-name">{protocol.name}</span>
+            </div>
+            <p class="protocol-rationale">{protocol.rationale}</p>
+            <div class="protocol-alts">
+              <span class="alts-label">Alternatives:</span>
+              {protocol.alternatives.map((alt, i) => (
+                <span>
+                  {alt}{i < protocol.alternatives.length - 1 ? ',' : ''}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div class="protocol-actions">
+            <span class="badge badge-category">{protocol.category}</span>
+            {protocol.docLink && (
+              <a
+                href={protocol.docLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="protocol-doc-link"
+              >
+                Docs &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .protocol-directory {
+    padding: 5rem 1rem;
+  }
+
+  .protocol-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .protocol-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .protocol-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin-bottom: 1rem;
+  }
+
+  .protocol-header p {
+    max-width: 40rem;
+    margin: 0 auto;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .protocol-list {
+    border: 1px solid rgba(139, 69, 19, 0.12);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: white;
+  }
+
+  .protocol-list-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.08);
+    background: var(--color-brand-accent-light);
+  }
+
+  .protocol-list-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-brand-text);
+    margin: 0;
+  }
+
+  .protocol-row {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background 0.15s;
+  }
+
+  .protocol-row:last-child {
+    border-bottom: none;
+  }
+
+  .protocol-row:hover {
+    background: rgba(139, 69, 19, 0.02);
+  }
+
+  .protocol-info {
+    flex: 1;
+  }
+
+  .protocol-mapping {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .protocol-usecase {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-brand-primary);
+  }
+
+  .protocol-arrow {
+    color: var(--color-brand-text);
+    opacity: 0.4;
+  }
+
+  .protocol-name {
+    font-weight: 600;
+    color: var(--color-brand-text);
+  }
+
+  .protocol-rationale {
+    font-size: 0.875rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    line-height: 1.5;
+    margin: 0 0 0.5rem;
+  }
+
+  .protocol-alts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-brand-text);
+    opacity: 0.5;
+  }
+
+  .alts-label {
+    font-weight: 500;
+  }
+
+  .protocol-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+  }
+
+  .badge-category {
+    background: var(--color-brand-accent-light);
+    color: var(--color-brand-primary);
+    border: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .protocol-doc-link {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .protocol-doc-link:hover {
+    border-bottom-color: var(--color-brand-accent);
+  }
+
+  @media (min-width: 1024px) {
+    .protocol-row {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .protocol-header h2 {
+      font-size: 2.5rem;
+    }
+  }
+</style>
