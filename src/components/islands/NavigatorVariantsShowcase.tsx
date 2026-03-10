@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { getIcon } from '@/lib/icons'
-import { HelpCircle, Check, Compass, Sparkles } from 'lucide-react'
+import { Check, Compass, Sparkles } from 'lucide-react'
 
 interface Domain {
   id: string
@@ -130,42 +130,7 @@ function DomainCards({ domains }: { domains: Domain[] }) {
 }
 
 // ============================================================================
-// CTA VARIANT A: Subtle background, two-line text, pill button
-// ============================================================================
-function CtaVariantA() {
-  return (
-    <div
-      className="flex items-center justify-between rounded-xl px-6 py-4 mb-8"
-      style={{
-        backgroundColor: 'var(--color-brand-accent-light)',
-        border: '1px solid var(--color-brand-accent)',
-      }}
-    >
-      <div>
-        <p className="text-sm font-semibold !mb-0" style={{ color: 'var(--color-brand-primary)' }}>
-          Not sure where to start?
-        </p>
-        <p className="text-xs !mb-0 mt-0.5" style={{ color: 'var(--color-brand-text)', opacity: 0.65 }}>
-          Let us guide you to the right protocols
-        </p>
-      </div>
-      <button
-        type="button"
-        className="guide-me-btn flex items-center gap-2 rounded-full text-sm font-semibold cursor-pointer shrink-0 ml-6"
-        style={{
-          backgroundColor: 'var(--color-brand-primary)',
-          color: 'white',
-        }}
-      >
-        <HelpCircle className="w-4 h-4" />
-        Guide me
-      </button>
-    </div>
-  )
-}
-
-// ============================================================================
-// CTA VARIANT B: Left border accent, minimal, link-style button
+// CTA VARIANT B: Left border accent, full-width
 // ============================================================================
 function CtaVariantB() {
   return (
@@ -197,6 +162,48 @@ function CtaVariantB() {
         <Compass className="w-4 h-4" />
         Guide me
       </button>
+    </div>
+  )
+}
+
+// ============================================================================
+// CTA VARIANT B2: Left border accent, centered/hugged, warm tinted background
+// ============================================================================
+function CtaVariantB2() {
+  return (
+    <div className="flex justify-center mb-8">
+      <div
+        className="cta-bar flex items-center gap-6 rounded-lg"
+        style={{
+          backgroundColor: 'rgba(139,69,19,0.04)',
+          border: '1px solid var(--color-brand-accent)',
+          borderLeft: '4px solid var(--color-brand-primary)',
+          maxWidth: '480px',
+          width: '100%',
+        }}
+      >
+        <Sparkles className="w-5 h-5 shrink-0" style={{ color: 'var(--color-brand-primary)' }} />
+        <div className="flex-1">
+          <p className="text-sm font-semibold !mb-0" style={{ color: 'var(--color-brand-primary)' }}>
+            Not sure where to start?
+          </p>
+          <p className="text-xs !mb-0 mt-0.5" style={{ color: 'var(--color-brand-text)', opacity: 0.65 }}>
+            Let us guide you to the right protocols
+          </p>
+        </div>
+        <button
+          type="button"
+          className="guide-me-btn flex items-center gap-2 rounded-lg text-sm font-semibold cursor-pointer shrink-0"
+          style={{
+            backgroundColor: 'var(--color-brand-accent-light)',
+            color: 'var(--color-brand-primary)',
+            border: '1px solid var(--color-brand-accent)',
+          }}
+        >
+          <Compass className="w-4 h-4" />
+          Guide me
+        </button>
+      </div>
     </div>
   )
 }
@@ -239,11 +246,11 @@ function VariantB({ domains }: { domains: Domain[] }) {
         description="Left-aligned icon + text cards, step header with numbered circle, multiple CTA styles."
       />
 
-      <p className="text-xs font-bold uppercase tracking-wider !mb-3" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }}>CTA — Variant A: Accent background</p>
-      <CtaVariantA />
-
-      <p className="text-xs font-bold uppercase tracking-wider !mb-3" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }}>CTA — Variant B: Left border</p>
+      <p className="text-xs font-bold uppercase tracking-wider !mb-3" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }}>CTA — Variant B: Left border, full-width</p>
       <CtaVariantB />
+
+      <p className="text-xs font-bold uppercase tracking-wider !mb-3" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }}>CTA — Variant B2: Left border, centered, warm tint</p>
+      <CtaVariantB2 />
 
       <p className="text-xs font-bold uppercase tracking-wider !mb-3" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }}>CTA — Variant C: Inline text</p>
       <CtaVariantC />
