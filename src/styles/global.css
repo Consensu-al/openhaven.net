@@ -314,6 +314,11 @@ a:hover {
   padding: 1.25rem 1.5rem;
 }
 
+/* Domain card padding variants */
+.card-pad-sm { padding: 1rem; }
+.card-pad-md { padding: 1.25rem; }
+.card-pad-lg { padding: 1.5rem 1.75rem; }
+
 /* Affordance chip focus ring */
 .affordance-chip:focus-visible {
   --tw-ring-color: var(--color-focus-ring);
