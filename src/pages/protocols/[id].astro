@@ -27,7 +27,7 @@ const protocolAffordances = protocol.affordanceIds
   .map((id) => affordanceMap.get(id))
   .filter((a): a is Affordance => a !== undefined)
 
-// Date formatting (locale-aware for future i18n support)
+// Date formatting
 const locale = Astro.currentLocale ?? 'en'
 const dateFormatted = new Intl.DateTimeFormat(locale, {
   year: 'numeric',
@@ -35,295 +35,473 @@ const dateFormatted = new Intl.DateTimeFormat(locale, {
   day: 'numeric',
 }).format(new Date(protocol.lastInvestigated))
 
-// --- UI Strings (i18n-ready) ---
-const DETAIL_STRINGS = {
-  breadcrumbHome: 'Home',
-  breadcrumbProtocols: 'Protocols',
-  governanceLabel: {
+// UI Strings
+const LABELS = {
+  governance: {
     foundation: 'Foundation',
     dao: 'DAO',
     'single-company': 'Company',
     'open-standard-body': 'Open Standard',
     community: 'Community',
   } as Record<Protocol['governanceModel'], string>,
-  architectureLabel: {
+  architecture: {
     'fully-p2p': 'Fully P2P',
     federated: 'Federated',
     hybrid: 'Hybrid',
   } as Record<Protocol['architectureType'], string>,
-  captureRiskLabel: {
+  captureRisk: {
     low: 'Low capture risk',
     medium: 'Medium capture risk',
     high: 'High capture risk',
   } as Record<Protocol['captureRisk'], string>,
-  attrLicense: 'License',
-  attrDevStatus: 'Dev Status',
-  attrOwner: 'Owner',
-  attrCountry: 'Country',
-  attrStartYear: 'Start Year',
-  attrStack: 'Stack',
-  attrFunding: 'Funding',
-  attrLastInvestigated: 'Last Investigated',
-  sectionDomains: 'Domains',
-  sectionAffordances: 'Affordances',
-  sectionLinks: 'Links',
-  communityLinkLabel: 'Community',
-  backToNavigator: 'Back to Navigator',
-} as const
-
-// --- Badge Style Maps ---
-const GOVERNANCE_STYLE: Record<Protocol['governanceModel'], { bg: string; text: string }> = {
-  foundation: { bg: 'var(--color-badge-foundation-bg)', text: 'var(--color-badge-foundation-text)' },
-  dao: { bg: 'var(--color-badge-dao-bg)', text: 'var(--color-badge-dao-text)' },
-  'single-company': { bg: 'var(--color-badge-company-bg)', text: 'var(--color-badge-company-text)' },
-  'open-standard-body': { bg: 'var(--color-badge-standard-bg)', text: 'var(--color-badge-standard-text)' },
-  community: { bg: 'var(--color-badge-community-bg)', text: 'var(--color-badge-community-text)' },
 }
 
 const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
-  low: 'var(--color-risk-low)',
-  medium: 'var(--color-risk-medium)',
-  high: 'var(--color-risk-high)',
+  low: '#22c55e',
+  medium: '#f59e0b',
+  high: '#ef4444',
 }
 
-const ARCH_STYLE: Record<Protocol['architectureType'], { border: string; text: string }> = {
-  'fully-p2p': { border: 'var(--color-arch-p2p-bg)', text: 'var(--color-arch-p2p-text)' },
-  federated: { border: 'var(--color-arch-federated-bg)', text: 'var(--color-arch-federated-text)' },
-  hybrid: { border: 'var(--color-arch-hybrid-bg)', text: 'var(--color-arch-hybrid-text)' },
-}
+// Key Attributes
+type KeyAttribute = { label: string; value: string }
+const keyAttributes: KeyAttribute[] = [
+  protocol.license ? { label: 'License', value: protocol.license } : null,
+  protocol.devStatus ? { label: 'Dev Status', value: protocol.devStatus } : null,
+  protocol.owner ? { label: 'Owner', value: protocol.owner } : null,
+  protocol.country ? { label: 'Country', value: protocol.country } : null,
+  protocol.startYear ? { label: 'Start Year', value: String(protocol.startYear) } : null,
+  protocol.stack.length > 0 ? { label: 'Stack', value: protocol.stack.join(', ') } : null,
+  protocol.funding.length > 0 ? { label: 'Funding', value: protocol.funding.join(', ') } : null,
+  { label: 'Last Investigated', value: dateFormatted },
+].filter((attr): attr is KeyAttribute => attr !== null)
 
-const govStyle = GOVERNANCE_STYLE[protocol.governanceModel]
-const riskColor = RISK_COLOR[protocol.captureRisk]
-const archStyle = ARCH_STYLE[protocol.architectureType]
-
-// --- SEO ---
+// SEO
 const META_DESC_MAX = 155
-const metaSuffix = `${DETAIL_STRINGS.architectureLabel[protocol.architectureType]} architecture, ${DETAIL_STRINGS.governanceLabel[protocol.governanceModel]} governance`
-const metaDomains = protocolDomains.length > 0 ? `Domains: ${protocolDomains.map((d) => d.name).join(', ')}` : null
-const metaParts = [protocol.description, metaDomains, metaSuffix].filter(Boolean)
-const fullDescription = metaParts.join(' — ')
+const fullDescription = `${protocol.description ?? protocol.name} — ${LABELS.architecture[protocol.architectureType]} architecture, ${LABELS.governance[protocol.governanceModel]} governance`
 const pageDescription = fullDescription.length <= META_DESC_MAX
   ? fullDescription
   : `${fullDescription.slice(0, META_DESC_MAX - 1)}…`
-
-// --- JSON-LD ---
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://openhaven.net')
-const siteUrl = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '')
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'TechArticle',
-  name: protocol.name,
-  headline: protocol.name,
-  description: protocol.description ?? '',
-  url: canonicalUrl.href,
-  dateModified: protocol.lastInvestigated,
-  author: { '@type': 'Organization', name: 'OpenHaven' },
-  publisher: { '@type': 'Organization', name: 'OpenHaven', url: siteUrl },
-  ...(protocol.communityLink ? { discussionUrl: protocol.communityLink } : {}),
-  about: [
-    { '@type': 'Thing', name: `Governance: ${DETAIL_STRINGS.governanceLabel[protocol.governanceModel]}` },
-    { '@type': 'Thing', name: `Architecture: ${DETAIL_STRINGS.architectureLabel[protocol.architectureType]}` },
-  ],
-  keywords: [
-    DETAIL_STRINGS.governanceLabel[protocol.governanceModel],
-    DETAIL_STRINGS.architectureLabel[protocol.architectureType],
-    ...protocolDomains.map((d) => d.name),
-  ],
-}
-
-// --- Key Attributes (only show if value exists) ---
-type KeyAttribute = { label: string; value: string }
-const keyAttributes: KeyAttribute[] = [
-  protocol.license ? { label: DETAIL_STRINGS.attrLicense, value: protocol.license } : null,
-  protocol.devStatus ? { label: DETAIL_STRINGS.attrDevStatus, value: protocol.devStatus } : null,
-  protocol.owner ? { label: DETAIL_STRINGS.attrOwner, value: protocol.owner } : null,
-  protocol.country ? { label: DETAIL_STRINGS.attrCountry, value: protocol.country } : null,
-  protocol.startYear ? { label: DETAIL_STRINGS.attrStartYear, value: String(protocol.startYear) } : null,
-  protocol.stack.length > 0 ? { label: DETAIL_STRINGS.attrStack, value: protocol.stack.join(', ') } : null,
-  protocol.funding.length > 0 ? { label: DETAIL_STRINGS.attrFunding, value: protocol.funding.join(', ') } : null,
-  { label: DETAIL_STRINGS.attrLastInvestigated, value: dateFormatted },
-].filter((attr): attr is KeyAttribute => attr !== null)
 ---
 
 <BaseLayout title={`${protocol.name} — OpenHaven`} description={pageDescription}>
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-  </Fragment>
-
-  <main class="section-padding">
+  <main class="protocol-detail">
     <div class="container">
 
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" class="mb-6 text-sm" data-testid="breadcrumb">
-        <ol class="flex flex-wrap items-center gap-1" style="color: var(--color-brand-text); opacity: 0.7;">
-          <li>
-            <a
-              href="/"
-              class="min-h-[44px] min-w-[44px] inline-flex items-center underline-offset-2 hover:underline"
-              style="color: var(--color-brand-primary); border-bottom: none;"
-              data-testid="breadcrumb-home"
-            >
-              {DETAIL_STRINGS.breadcrumbHome}
-            </a>
-          </li>
-          <li aria-hidden="true">&gt;</li>
-          <li>
-            <span>{DETAIL_STRINGS.breadcrumbProtocols}</span>
-          </li>
-          <li aria-hidden="true">&gt;</li>
-          <li aria-current="page">
-            <span style="color: var(--color-brand-text);">{protocol.name}</span>
-          </li>
-        </ol>
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{protocol.name}</span>
       </nav>
 
-      {/* Header: Name + Entity Type */}
-      <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
-        <h1 class="text-2xl sm:text-3xl lg:text-4xl mb-0" data-testid="protocol-name">
-          {protocol.name}
-        </h1>
-        <span
-          class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap mt-2"
-          style={`color: var(--color-brand-text); background-color: var(--color-chip-unchecked-bg); border: 1px solid var(--color-card-border);`}
-          data-testid="entity-type"
-        >
-          {protocol.entityType}
-        </span>
-      </div>
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <!-- Header Row -->
+        <div class="hero-header">
+          <div class="hero-title-group">
+            <h1 class="hero-title">{protocol.name}</h1>
+            <span class="entity-badge">{protocol.entityType}</span>
+          </div>
+        </div>
 
-      {/* Description */}
-      {protocol.description && (
-        <p class="text-base mb-6" style="color: var(--color-brand-text); max-width: 65ch;" data-testid="protocol-description">
-          {protocol.description}
-        </p>
-      )}
+        <!-- Description -->
+        {protocol.description && (
+          <p class="hero-description">{protocol.description}</p>
+        )}
 
-      {/* Badge Row */}
-      <div class="flex flex-wrap gap-2 mb-8" data-testid="badge-row">
-        {/* Architecture badge — outline style */}
-        <span
-          class="text-xs px-2 py-0.5 rounded-full border"
-          style={`color: ${archStyle.text}; border-color: ${archStyle.border}; background-color: transparent;`}
-          data-testid="architecture-badge"
-        >
-          {DETAIL_STRINGS.architectureLabel[protocol.architectureType]}
-        </span>
-
-        {/* Governance badge — filled style */}
-        <span
-          class="text-xs px-2 py-0.5 rounded-full"
-          style={`background-color: ${govStyle.bg}; color: ${govStyle.text};`}
-          data-testid="governance-badge"
-        >
-          {DETAIL_STRINGS.governanceLabel[protocol.governanceModel]}
-        </span>
-
-        {/* Capture risk indicator */}
-        <span class="inline-flex items-center gap-1.5 text-xs" data-testid="capture-risk">
-          <span
-            class="inline-block w-2.5 h-2.5 rounded-full"
-            style={`background-color: ${riskColor};`}
-            aria-hidden="true"
-          ></span>
-          <span style="color: var(--color-brand-text);">
-            {DETAIL_STRINGS.captureRiskLabel[protocol.captureRisk]}
+        <!-- Badge Row -->
+        <div class="badge-row">
+          <span class="badge badge--architecture">
+            {LABELS.architecture[protocol.architectureType]}
           </span>
-        </span>
+          <span class="badge badge--governance">
+            {LABELS.governance[protocol.governanceModel]}
+          </span>
+          <span class="badge badge--risk">
+            <span class="risk-dot" style={`background-color: ${RISK_COLOR[protocol.captureRisk]}`}></span>
+            {LABELS.captureRisk[protocol.captureRisk]}
+          </span>
+        </div>
       </div>
 
-      {/* Key Attributes — 2-col grid on desktop, single-col on mobile */}
-      <div
-        class="rounded-lg border p-4 sm:p-6 mb-8"
-        style="border-color: var(--color-card-border); background-color: var(--color-card-bg);"
-        data-testid="key-attributes"
-      >
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-          {keyAttributes.map((attr) => (
-            <div class="flex flex-col">
-              <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-brand-primary); opacity: 0.8;">
-                {attr.label}
-              </span>
-              <span class="text-sm" style="color: var(--color-brand-text);">
-                {attr.value}
-              </span>
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+
+        <!-- Left Column: Attributes -->
+        <div class="attributes-card">
+          <h2 class="section-title">Details</h2>
+          <div class="attributes-list">
+            {keyAttributes.map((attr) => (
+              <div class="attribute-row">
+                <span class="attribute-label">{attr.label}</span>
+                <span class="attribute-value">{attr.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Right Column: Domains & Affordances -->
+        <div class="tags-column">
+          {protocolDomains.length > 0 && (
+            <div class="tags-card">
+              <h2 class="section-title">Domains</h2>
+              <div class="tags-list">
+                {protocolDomains.map((domain) => (
+                  <a href={`/domains/${domain.slug}`} class="tag tag--domain">
+                    {domain.name}
+                  </a>
+                ))}
+              </div>
             </div>
-          ))}
+          )}
+
+          {protocolAffordances.length > 0 && (
+            <div class="tags-card">
+              <h2 class="section-title">Affordances</h2>
+              <div class="tags-list">
+                {protocolAffordances.map((affordance) => (
+                  <span class="tag tag--affordance">
+                    {affordance.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Domains */}
-      {protocolDomains.length > 0 && (
-        <div class="mb-6" data-testid="domains-section">
-          <h2 class="text-lg font-semibold mb-3 mt-0">
-            {DETAIL_STRINGS.sectionDomains}
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            {protocolDomains.map((domain) => (
-              <a
-                href={`/domains/${domain.slug}`}
-                class="text-xs px-3 py-1.5 rounded-full min-h-[44px] inline-flex items-center underline-offset-2 hover:underline"
-                style={`background-color: var(--color-brand-accent-light); color: var(--color-brand-primary); border: 1px solid var(--color-card-border); border-bottom: none;`}
-                data-testid={`domain-pill-${domain.id}`}
-              >
-                {domain.name}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Affordances */}
-      {protocolAffordances.length > 0 && (
-        <div class="mb-6" data-testid="affordances-section">
-          <h2 class="text-lg font-semibold mb-3 mt-0">
-            {DETAIL_STRINGS.sectionAffordances}
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            {protocolAffordances.map((affordance) => (
-              <span
-                class="text-xs px-3 py-1.5 rounded-full"
-                style="background-color: var(--color-chip-unchecked-bg); color: var(--color-brand-text); border: 1px solid var(--color-card-border);"
-                data-testid={`affordance-pill-${affordance.id}`}
-              >
-                {affordance.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Links */}
-      {protocol.communityLink && (
-        <div class="mb-8" data-testid="links-section">
-          <h2 class="text-lg font-semibold mb-3 mt-0">
-            {DETAIL_STRINGS.sectionLinks}
-          </h2>
-          <a
-            href={protocol.communityLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 text-sm min-h-[44px] min-w-[44px] underline-offset-2 hover:underline"
-            style="color: var(--color-brand-primary); border-bottom: none;"
-            data-testid="community-link"
-          >
-            {DETAIL_STRINGS.communityLinkLabel} &#x2197;
-          </a>
-        </div>
-      )}
-
-      {/* Back to Navigator */}
-      <div class="pt-4 border-t" style="border-color: var(--color-card-border);">
-        <a
-          href="/#navigator"
-          class="inline-flex items-center gap-1 text-sm min-h-[44px] min-w-[44px] underline-offset-2 hover:underline"
-          style="color: var(--color-brand-primary); border-bottom: none;"
-          data-testid="back-to-navigator"
-        >
-          &larr; {DETAIL_STRINGS.backToNavigator}
+      <!-- Footer Actions -->
+      <div class="footer-actions">
+        <a href="/#navigator" class="action-btn action-btn--secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Navigator
         </a>
+        {protocol.communityLink && (
+          <a href={protocol.communityLink} target="_blank" rel="noopener noreferrer" class="action-btn action-btn--primary">
+            Visit Community
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
+        )}
       </div>
 
     </div>
   </main>
 </BaseLayout>
+
+<style>
+  .protocol-detail {
+    padding: 2rem 1rem 4rem;
+    background: var(--color-brand-bg);
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb-link {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-sep {
+    color: var(--color-brand-text);
+    opacity: 0.4;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  /* Hero Card */
+  .hero-card {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .hero-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .entity-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 9999px;
+  }
+
+  .hero-description {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-brand-text);
+    margin: 0 0 1.25rem 0;
+    max-width: 60ch;
+  }
+
+  /* Badge Row */
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+  }
+
+  .badge--architecture {
+    color: var(--color-brand-primary);
+    background: transparent;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+  }
+
+  .badge--governance {
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.15);
+  }
+
+  .badge--risk {
+    color: var(--color-brand-text);
+    background: transparent;
+    border: 1px solid var(--color-card-border);
+  }
+
+  .risk-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Content Grid */
+  .content-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .content-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Attributes Card */
+  .attributes-card {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .section-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .attributes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .attribute-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .attribute-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .attribute-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-brand-text);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+
+  .attribute-value {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    text-align: right;
+  }
+
+  /* Tags Column */
+  .tags-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .tags-card {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .tag--domain {
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+  }
+
+  .tag--domain:hover {
+    background: var(--color-domain-selected-bg);
+    border-color: var(--color-brand-primary);
+  }
+
+  .tag--affordance {
+    color: var(--color-brand-text);
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+  }
+
+  /* Footer Actions */
+  .footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(139, 69, 19, 0.15);
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+
+  .action-btn--primary {
+    color: white;
+    background: var(--color-brand-primary);
+    border: none;
+  }
+
+  .action-btn--primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .action-btn--secondary {
+    color: var(--color-brand-primary);
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+  }
+
+  .action-btn--secondary:hover {
+    background: var(--color-brand-accent-light);
+    border-color: var(--color-brand-primary);
+  }
+
+  @media (max-width: 639px) {
+    .hero-title {
+      font-size: 1.5rem;
+    }
+
+    .footer-actions {
+      flex-direction: column;
+    }
+
+    .action-btn {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>

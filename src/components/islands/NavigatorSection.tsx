@@ -256,7 +256,7 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
                       }}
                       sideOffset={6}
                     >
-                      To see others, scroll up to Step 1 to change your selected Use Case or view the full Matrix.
+                      To see other protocol matches, try changing your selections in Steps 1 and 2 above.
                       <Tooltip.Arrow style={{ fill: 'var(--color-brand-primary)' }} />
                     </Tooltip.Content>
                   </Tooltip.Portal>
