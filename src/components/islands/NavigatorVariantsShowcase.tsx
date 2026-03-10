@@ -269,8 +269,59 @@ function CardVariant4({ domains }: { domains: Domain[] }) {
 }
 
 // ============================================================================
-// CTA VARIANTS
+// CARD VARIANT 5 (Hybrid 1+4): Icon-top, colored top border + background change
+// + check badge on selection. Gallery grid, premium feel.
 // ============================================================================
+function CardVariant5({ domains }: { domains: Domain[] }) {
+  const [selected, setSelected] = useState<string | null>(null)
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {domains.slice(0, 6).map((domain) => {
+        const Icon = getIcon(domain.icon)
+        const isSelected = selected === domain.slug
+        return (
+          <button
+            key={domain.id}
+            type="button"
+            onClick={() => setSelected(isSelected ? null : domain.slug)}
+            className="card-pad-lg group relative flex flex-col rounded-2xl border transition-all duration-200 cursor-pointer text-left overflow-hidden"
+            style={{
+              borderColor: isSelected ? 'var(--color-brand-primary)' : 'var(--color-card-border)',
+              backgroundColor: isSelected ? 'var(--color-domain-selected-bg)' : 'white',
+              boxShadow: isSelected
+                ? '0 8px 24px rgba(139, 69, 19, 0.14)'
+                : '0 2px 8px rgba(0,0,0,0.06)',
+              borderTop: isSelected ? '3px solid var(--color-brand-primary)' : '3px solid transparent',
+            }}
+          >
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+              style={{
+                backgroundColor: isSelected ? 'var(--color-brand-primary)' : 'var(--color-brand-accent-light)',
+              }}
+            >
+              <Icon className="h-5 w-5" style={{ color: isSelected ? 'white' : 'var(--color-brand-primary)' }} />
+            </div>
+            <span className="block text-sm font-semibold mb-2 !mt-0" style={{ color: 'var(--color-brand-text)' }}>
+              {domain.name}
+            </span>
+            <p className="text-xs leading-relaxed !mb-0" style={{ color: 'var(--color-brand-text)', opacity: 0.6 }}>
+              {domain.description}
+            </p>
+            {isSelected && (
+              <div
+                className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: 'var(--color-brand-primary)' }}
+              >
+                <Check className="w-3 h-3 text-white" />
+              </div>
+            )}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
 function CtaVariantB() {
   return (
     <div
@@ -431,6 +482,12 @@ function VariantB({ domains }: { domains: Domain[] }) {
         description="Premium feel — colored top border signals selection, generous spacing."
       />
       <CardVariant4 domains={domains} />
+
+      <CardVariantLabel
+        label="Cards 5: Hybrid 1+4 — top border + background change + check badge"
+        description="Colored top border activates on selection alongside background tint and check badge."
+      />
+      <CardVariant5 domains={domains} />
     </div>
   )
 }
