@@ -63,9 +63,9 @@ function DomainCards({ domains }: { domains: Domain[] }) {
             key={domain.id}
             type="button"
             onClick={() => setSelected(isSelected ? null : domain.slug)}
-            className="card-pad-lg group relative flex flex-col rounded-2xl border transition-all duration-200 cursor-pointer text-left overflow-hidden"
+            className="card-pad-lg group relative flex flex-col rounded-2xl transition-all duration-200 cursor-pointer text-left overflow-hidden"
             style={{
-              borderColor: isSelected ? 'var(--color-brand-primary)' : 'var(--color-card-border)',
+              border: isSelected ? '2px solid var(--color-brand-primary)' : '2px solid rgba(139, 69, 19, 0.25)',
               backgroundColor: isSelected ? 'var(--color-domain-selected-bg)' : 'white',
               boxShadow: isSelected
                 ? '0 8px 24px rgba(139, 69, 19, 0.14)'
