@@ -120,8 +120,9 @@ function VariantB({ domains }: { domains: Domain[] }) {
               key={domain.id}
               type="button"
               onClick={() => setSelected(isSelected ? null : domain.slug)}
-              className="group relative flex flex-col items-start rounded-2xl border-2 p-8 transition-all duration-200 cursor-pointer text-left"
+              className="group relative flex flex-col items-start rounded-2xl border-2 transition-all duration-200 cursor-pointer text-left"
               style={{
+                padding: '2rem',
                 borderColor: isSelected ? 'var(--color-brand-primary)' : 'var(--color-card-border)',
                 backgroundColor: isSelected ? 'var(--color-domain-selected-bg)' : 'white',
                 boxShadow: isSelected
