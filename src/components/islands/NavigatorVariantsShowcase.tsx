@@ -50,7 +50,7 @@ function StepHeader({ step, title, subtitle }: { step: number; title: string; su
         >
           {step}
         </div>
-        <h2 className="text-xl font-semibold leading-none" style={{ color: 'var(--color-brand-primary)' }}>
+        <h2 className="text-xl font-semibold" style={{ color: 'var(--color-brand-primary)', lineHeight: '2.75rem' }}>
           {title}
         </h2>
       </div>
