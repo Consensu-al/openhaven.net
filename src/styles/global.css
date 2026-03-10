@@ -298,6 +298,9 @@ a:hover {
 .domain-card-btn {
   padding: 2rem;
 }
+
+/* Affordance chip focus ring */
+.affordance-chip:focus-visible {
   --tw-ring-color: var(--color-focus-ring);
 }
 
