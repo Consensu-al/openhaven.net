@@ -168,25 +168,7 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
         subtitle="Select the category that best describes your need"
       />
 
-      {/* Post-selection confirmation */}
-      {selectedDomainData && (
-        <p
-          className="text-sm mb-4 ml-[52px]"
-          style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}
-          data-testid="selection-confirmation"
-        >
-          {NAVIGATOR_STRINGS.showingResults}{' '}
-          <strong style={{ color: 'var(--color-brand-primary)' }}>
-            {selectedDomainData.name}
-          </strong>
-        </p>
-      )}
-
-      {/* Guided Discovery CTA — always visible */}
-      <GuidedDiscoveryCTA
-        onOpen={() => setWizardOpen(true)}
-        ctaButtonRef={ctaButtonRef}
-      />
+      {/* Domain Grid */}
 
       {/* Guided Discovery Wizard — modal dialog */}
       <GuidedDiscoveryWizard
