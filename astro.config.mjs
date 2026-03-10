@@ -23,7 +23,7 @@ export default defineConfig({
     },
   },
   build: {
-    format: 'file'
+    format: 'directory'
   },
   server: {
     host: true,
