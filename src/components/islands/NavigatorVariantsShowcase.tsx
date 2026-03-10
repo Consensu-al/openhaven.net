@@ -137,9 +137,9 @@ function VariantB({ domains }: { domains: Domain[] }) {
                   <Check className="w-3.5 h-3.5 text-white" />
                 </div>
               )}
-              {/* Small icon container */}
+              {/* Icon container — w-12 h-12 gives 14px padding around the 20px icon */}
               <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center mb-5"
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 shrink-0"
                 style={{
                   backgroundColor: isSelected
                     ? 'var(--color-brand-primary)'
