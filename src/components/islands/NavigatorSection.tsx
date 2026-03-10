@@ -166,8 +166,9 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
       {/* Step 1 heading */}
       <StepHeader
         step={1}
-        title="Choose a Use Case Domain"
+        title="Choose a Use Case"
         subtitle="Select the category that best describes your need"
+        badge="Required"
       />
 
       {/* Domain Grid */}
