@@ -1,0 +1,44 @@
+---
+/**
+ * Navigator Design Variants — Side-by-side comparison of different visual treatments
+ * for the NavigatorSection component (static mockups without interactive state)
+ */
+import Layout from '@/layouts/Layout.astro'
+import NavigatorVariantsShowcase from '@/components/islands/NavigatorVariantsShowcase'
+
+// Mock data for static display
+const mockDomains = [
+  { id: '1', slug: 'identity', name: 'Identity', description: 'Prove who you are without giving up control', icon: 'User', isPrimary: true },
+  { id: '2', slug: 'communication', name: 'Communication', description: 'Message securely with end-to-end encryption', icon: 'MessageSquare', isPrimary: true },
+  { id: '3', slug: 'group-formation', name: 'Group Formation', description: 'Create communities with shared governance', icon: 'Users', isPrimary: true },
+  { id: '4', slug: 'relationship', name: 'Relationships', description: 'Build trust over time with verified connections', icon: 'Heart', isPrimary: true },
+  { id: '5', slug: 'co-creation', name: 'Co-Creation', description: 'Collaborate on shared projects and resources', icon: 'Pencil', isPrimary: true },
+  { id: '6', slug: 'events', name: 'Events', description: 'Coordinate gatherings and meetings', icon: 'Calendar', isPrimary: true },
+]
+
+const mockAffordances = [
+  { id: 'a1', name: 'Self-Sovereign', domainIds: ['identity'] },
+  { id: 'a2', name: 'Privacy-First', domainIds: ['identity', 'communication'] },
+  { id: 'a3', name: 'Decentralized', domainIds: ['identity', 'group-formation'] },
+  { id: 'a4', name: 'Interoperable', domainIds: ['communication'] },
+]
+---
+
+<Layout title="Navigator Design Variants | OpenHaven">
+  <main class="container">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl sm:text-4xl font-bold" style="color: var(--color-brand-primary);">
+        Navigator Section Design Variants
+      </h1>
+      <p class="text-lg mt-4" style="color: var(--color-brand-text); opacity: 0.7;">
+        Compare different visual treatments for the protocol navigator
+      </p>
+    </div>
+
+    <NavigatorVariantsShowcase 
+      client:load
+      domains={mockDomains}
+      affordances={mockAffordances}
+    />
+  </main>
+</Layout>
