@@ -334,6 +334,18 @@ a:hover {
   .affordances-panel-enter { animation: none; }
 }
 
+/* Affordances nudge callout pulse */
+.nudge-callout {
+  animation: nudge-pulse 1s ease-in-out 3;
+}
+@keyframes nudge-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nudge-callout { animation: none; }
+}
+
 /* Protocol results entrance animation */
 .results-slide-down {
   animation: results-slide-down 200ms ease-out;

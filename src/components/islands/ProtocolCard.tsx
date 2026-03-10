@@ -103,8 +103,7 @@ export default function ProtocolCard({
   const archStyle = ARCH_STYLE[protocol.architectureType]
 
   return (
-    <a
-      href={`/protocols/${protocol.id}`}
+    <div
       className="group block rounded-xl transition-all duration-200 cursor-pointer"
       style={{
         border: '2px solid rgba(139, 69, 19, 0.25)',
@@ -206,12 +205,15 @@ export default function ProtocolCard({
       </div>
 
       {/* View Details footer - prominent CTA */}
-      <div
+      <a
+        href={`/protocols/${protocol.id}`}
         className="flex items-center justify-between px-5 py-3 rounded-b-xl transition-colors"
         style={{
           backgroundColor: 'var(--color-brand-accent-light)',
           borderTop: '1px solid rgba(139, 69, 19, 0.1)',
+          textDecoration: 'none',
         }}
+        data-testid={`protocol-link-${protocol.id}`}
       >
         <span
           className="text-sm font-semibold"
@@ -223,7 +225,7 @@ export default function ProtocolCard({
           className="w-4 h-4 transition-transform group-hover:translate-x-1"
           style={{ color: 'var(--color-brand-primary)' }}
         />
-      </div>
-    </a>
+      </a>
+    </div>
   )
 }

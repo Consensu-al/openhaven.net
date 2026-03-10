@@ -50,11 +50,13 @@ export default function AffordancesPanel({
       <div className="flex items-center justify-between mb-4 ml-[52px]">
         <div className="flex items-center gap-2">
           <span className="text-xs" style={{ color: 'var(--color-brand-text)', opacity: 0.45 }}>Match:</span>
-          <div className="flex rounded-md overflow-hidden border" style={{ borderColor: 'var(--color-card-border)' }}>
+          <div className="flex rounded-md overflow-hidden border" role="radiogroup" aria-label="Match mode" style={{ borderColor: 'var(--color-card-border)' }}>
             {(['or', 'and'] as const).map((mode) => (
               <button
                 key={mode}
                 type="button"
+                role="radio"
+                aria-checked={matchMode === mode}
                 onClick={() => onMatchModeChange(mode)}
                 className="px-2.5 py-1 text-xs font-bold transition-colors cursor-pointer"
                 style={matchMode === mode
@@ -77,14 +79,31 @@ export default function AffordancesPanel({
         </button>
       </div>
 
+      {/* Visual nudge callout — shows when no affordances checked */}
+      {!someChecked && (
+        <div
+          role="status"
+          data-testid="affordances-nudge"
+          className="nudge-callout flex items-center gap-2 ml-[52px] mb-3 px-4 py-3 rounded-xl text-sm"
+          style={{
+            backgroundColor: 'var(--color-brand-accent-light)',
+            color: 'var(--color-brand-primary)',
+            border: '1px solid var(--color-brand-accent)',
+          }}
+        >
+          Check the affordances that matter to you to narrow results
+        </div>
+      )}
+
       {/* Affordance chips — C2 style */}
-      <div className="flex flex-wrap gap-2 ml-[52px]">
+      <div className="flex flex-wrap gap-2 ml-[52px]" role="group" aria-label="Affordance filters">
         {affordances.map((a) => {
           const isSelected = selectedAffordances.includes(a.id)
           return (
             <button
               key={a.id}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onToggle(a.id)}
               data-testid={`affordance-chip-${a.id}`}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer"
