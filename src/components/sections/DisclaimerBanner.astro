@@ -1,10 +1,7 @@
 ---
 /**
- * DisclaimerBanner — Harvested from v0-prototype disclaimer-banner.tsx
- * Horizontal alert/info banner with icon, message, and optional CTA link.
- *
- * Design tokens mapped to OpenHaven warm earth tones.
- * NOT wired into any page — reference component for future stories.
+ * DisclaimerBanner — Redesigned to match the warm pill/badge aesthetic
+ * used throughout the navigator (StepHeader badges, affordance chips, etc.)
  */
 
 export interface Props {
@@ -13,98 +10,92 @@ export interface Props {
   ctaHref?: string;
 }
 
-const {
-  message,
-  ctaLabel,
-  ctaHref,
-} = Astro.props;
+const { message, ctaLabel, ctaHref } = Astro.props;
 ---
 
-<section class="disclaimer-banner">
-  <div class="disclaimer-inner">
-    <div class="disclaimer-content">
-      <span class="disclaimer-icon" aria-hidden="true">&#9432;</span>
-      <p set:html={message} />
-    </div>
+<section class="disclaimer-section">
+  <div class="disclaimer-pill">
+    <span class="disclaimer-badge">Alpha</span>
+    <p class="disclaimer-text" set:html={message.replace('Alpha — ', '')} />
     {ctaLabel && ctaHref && (
-      <a href={ctaHref} class="disclaimer-cta">
+      <a href={ctaHref} class="disclaimer-link">
         {ctaLabel}
-        <span class="disclaimer-arrow" aria-hidden="true">&rarr;</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
       </a>
     )}
   </div>
 </section>
 
 <style>
-  .disclaimer-banner {
-    border-top: 1px solid var(--color-brand-accent);
-    border-bottom: 1px solid var(--color-brand-accent);
-    background: var(--color-brand-accent-light);
-    padding: 1rem;
+  .disclaimer-section {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: var(--color-brand-bg);
   }
 
-  .disclaimer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
+  .disclaimer-pill {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .disclaimer-content {
-    display: flex;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 48rem;
   }
 
-  .disclaimer-icon {
-    flex-shrink: 0;
-    font-size: 1.25rem;
+  .disclaimer-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--color-brand-primary);
-    margin-top: 0.1rem;
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 9999px;
+    flex-shrink: 0;
   }
 
-  .disclaimer-content p {
-    font-size: 0.875rem;
+  .disclaimer-text {
+    flex: 1;
+    font-size: 0.8125rem;
+    line-height: 1.5;
     color: var(--color-brand-text);
     margin: 0;
-    line-height: 1.5;
+    opacity: 0.75;
   }
 
-  .disclaimer-cta {
+  .disclaimer-link {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     color: var(--color-brand-primary);
     text-decoration: none;
     border-bottom: none;
+    flex-shrink: 0;
+    transition: gap 0.15s ease;
   }
 
-  .disclaimer-cta:hover {
-    text-decoration: underline;
+  .disclaimer-link:hover {
+    gap: 0.5rem;
     border-bottom: none;
   }
 
-  .disclaimer-arrow {
-    transition: transform 0.2s;
-  }
-
-  .disclaimer-cta:hover .disclaimer-arrow {
-    transform: translateX(2px);
-  }
-
-  @media (min-width: 640px) {
-    .disclaimer-inner {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .disclaimer-cta {
-      flex-shrink: 0;
+  @media (max-width: 639px) {
+    .disclaimer-pill {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
     }
   }
 </style>

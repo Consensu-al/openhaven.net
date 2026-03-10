@@ -5,12 +5,14 @@ export interface Principle {
 }
 
 export interface Props {
+  id?: string;
   heading?: string;
   subheading?: string;
   principles: Principle[];
 }
 
 const {
+  id,
   heading = 'How OpenHaven Works',
   subheading = 'The foundational values that guide our protocol recommendations',
   principles,
@@ -19,7 +21,7 @@ const {
 const stepLabels = ['Choose a Use Case', 'Refine by Affordance', 'Review Protocols', 'Connect & Build'];
 ---
 
-<section class="principles-section section-padding">
+<section id={id} class="principles-section section-padding">
   <div class="container principles-inner">
     <div class="principles-header">
       <h2>{heading}</h2>

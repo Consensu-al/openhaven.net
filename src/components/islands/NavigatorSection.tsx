@@ -226,11 +226,24 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
                 {selectedAffordances.length > 0 && (
                   <span> — filtered by {selectedAffordances.length} affordance{selectedAffordances.length > 1 ? 's' : ''}</span>
                 )}
-                {' '}
+
                 <Tooltip.Root>
                   <Tooltip.Trigger asChild>
-                    <button type="button" className="inline-flex items-center cursor-pointer align-middle">
-                      <Info className="w-3.5 h-3.5" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }} />
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center cursor-pointer align-middle ml-1"
+                      style={{
+                        width: '1rem',
+                        height: '1rem',
+                        borderRadius: '50%',
+                        backgroundColor: 'var(--color-brand-accent-light)',
+                        border: '1px solid rgba(139, 69, 19, 0.3)',
+                        verticalAlign: 'middle',
+                        position: 'relative',
+                        top: '-1px',
+                      }}
+                    >
+                      <Info className="w-2.5 h-2.5" style={{ color: 'var(--color-brand-primary)' }} />
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
