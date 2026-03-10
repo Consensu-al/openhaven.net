@@ -39,24 +39,27 @@ function SectionHeader({ variant, description }: { variant: string; description:
   )
 }
 
-// Shared step subheader: circle + title + subtitle
+// Shared step subheader: circle + title on same baseline, subtitle below
 function StepHeader({ step, title, subtitle }: { step: number; title: string; subtitle: string }) {
   return (
-    <div className="flex items-center gap-3 mb-8">
-      <div
-        className="w-10 h-10 rounded-full flex items-center justify-center text-base font-bold shrink-0"
-        style={{ backgroundColor: 'var(--color-brand-primary)', color: 'white' }}
-      >
-        {step}
-      </div>
-      <div>
-        <h2 className="text-lg font-semibold" style={{ color: 'var(--color-brand-primary)' }}>
+    <div className="mb-8">
+      <div className="flex items-center gap-3">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center text-base font-bold shrink-0"
+          style={{ backgroundColor: 'var(--color-brand-primary)', color: 'white' }}
+        >
+          {step}
+        </div>
+        <h2
+          className="h-10 flex items-center text-lg font-semibold"
+          style={{ color: 'var(--color-brand-primary)' }}
+        >
           {title}
         </h2>
-        <p className="text-sm" style={{ color: 'var(--color-brand-text)', opacity: 0.55 }}>
-          {subtitle}
-        </p>
       </div>
+      <p className="text-sm mt-1 ml-[52px]" style={{ color: 'var(--color-brand-text)', opacity: 0.55 }}>
+        {subtitle}
+      </p>
     </div>
   )
 }
