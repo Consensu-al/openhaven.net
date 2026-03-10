@@ -1,12 +1,15 @@
+import type { ReactNode } from 'react'
+
 /**
  * StepHeader — Numbered step indicator with title and subtitle
- * Circle + title on same line, subtitle indented below
+ * Circle + title on same line, subtitle indented below.
+ * subtitle accepts ReactNode so inline highlights can be passed.
  */
 
 interface StepHeaderProps {
   step: number
   title: string
-  subtitle: string
+  subtitle: ReactNode
 }
 
 export default function StepHeader({ step, title, subtitle }: StepHeaderProps) {

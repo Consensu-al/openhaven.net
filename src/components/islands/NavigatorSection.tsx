@@ -201,22 +201,28 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
       {/* Protocol Results — only rendered when a domain is selected */}
       {selectedDomain && selectedDomainData && (
         <div className="mt-8" key={`results-${selectedDomain}`}>
-          <div className="text-center mb-6">
-            <h3
-              className="text-xl sm:text-2xl font-semibold"
-              style={{ color: 'var(--color-brand-primary)' }}
-            >
-              {selectedDomainData.name} Protocols
-            </h3>
-            {selectedAffordances.length === 0 && (
-              <p
-                className="text-sm mt-1"
-                style={{ color: 'var(--color-brand-text)', opacity: 0.6 }}
-              >
-                {NAVIGATOR_STRINGS.allProtocolsHint(selectedDomainData.name)}
-              </p>
-            )}
-          </div>
+          <StepHeader
+            step={3}
+            title="Review Matching Protocols"
+            subtitle={
+              <>
+                Showing only{' '}
+                <span
+                  className="font-semibold px-1.5 py-0.5 rounded"
+                  style={{
+                    color: 'var(--color-brand-primary)',
+                    backgroundColor: 'var(--color-brand-accent-light)',
+                  }}
+                >
+                  {selectedDomainData.name}
+                </span>
+                {' '}protocols
+                {selectedAffordances.length > 0 && (
+                  <span> — filtered by {selectedAffordances.length} affordance{selectedAffordances.length > 1 ? 's' : ''}</span>
+                )}
+              </>
+            }
+          />
           <ProtocolResults
             protocols={protocols}
             selectedDomain={selectedDomain}
