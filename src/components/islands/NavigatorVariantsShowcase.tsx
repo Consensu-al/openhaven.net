@@ -51,7 +51,7 @@ function StepHeader({ step, title, subtitle }: { step: number; title: string; su
           {step}
         </div>
         <h2
-          className="h-10 flex items-center text-lg font-semibold"
+          className="h-10 flex items-center text-lg font-semibold !mt-0 !mb-0"
           style={{ color: 'var(--color-brand-primary)' }}
         >
           {title}
