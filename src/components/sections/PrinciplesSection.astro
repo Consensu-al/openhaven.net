@@ -136,8 +136,8 @@ const {
       ))}
     </div>
 
-    <!-- VARIANT 4: Circle Numbers — matches StepHeader design from navigator -->
-    <div class="variant-label">Variant 4: Circle Numbers (matches step headers below)</div>
+    <!-- VARIANT 4: Circle number + title in one row, description full-width below -->
+    <div class="variant-label">Variant 4: Circle + title row, description full-width</div>
     <div class="circle-steps">
       {principles.map((principle, index) => {
         const stepLabels = ['Choose a Use Case', 'Refine by Affordance', 'Review Protocols', 'Connect & Build'];
@@ -162,11 +162,35 @@ const {
       })}
     </div>
 
+    <!-- VARIANT 4B: Circle straddles the top border -->
+    <div class="variant-label">Variant 4B: Circle overlaid on top border</div>
+    <div class="circle-steps circle-steps--overlay">
+      {principles.map((principle, index) => {
+        const stepLabels = ['Choose a Use Case', 'Refine by Affordance', 'Review Protocols', 'Connect & Build'];
+        return (
+          <div class="circle-step-item">
+            <div class="circle-step-card circle-step-card--overlay">
+              <div class="circle-step-node circle-step-node--overlay">{index + 1}</div>
+              <span class="circle-step-label circle-step-label--overlay">{stepLabels[index] ?? principle.title}</span>
+              <p class="circle-step-desc circle-step-desc--full">{principle.description}</p>
+            </div>
+            {index < principles.length - 1 && (
+              <div class="circle-step-arrow">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+
   </div>
 </section>
 
 <style>
-  /* ===== VARIANT 4: Circle Numbers ===== */
+  /* ===== VARIANT 4: Circle + title row, description full-width ===== */
   .circle-steps {
     display: flex;
     flex-direction: column;
@@ -201,6 +225,8 @@ const {
     background: white;
     border: 2px solid rgba(139, 69, 19, 0.25);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
   }
 
   .circle-step-header {
@@ -231,13 +257,13 @@ const {
     line-height: 1.2;
   }
 
+  /* Full-width desc — no left indent */
   .circle-step-desc {
     font-size: 0.8125rem;
     color: var(--color-brand-text);
     opacity: 0.7;
     line-height: 1.5;
     margin: 0;
-    padding-left: 3.25rem;
   }
 
   .circle-step-arrow {
@@ -252,6 +278,53 @@ const {
     .circle-step-arrow {
       transform: rotate(0deg);
     }
+  }
+
+  /* ===== VARIANT 4B: Circle straddles top border ===== */
+  .circle-steps--overlay {
+    margin-top: 1.5rem; /* extra room for the overflowing circle */
+  }
+
+  .circle-step-card--overlay {
+    position: relative;
+    padding-top: 2.25rem; /* push content below the straddling circle */
+    text-align: center;
+    align-items: center;
+  }
+
+  .circle-step-node--overlay {
+    position: absolute;
+    top: -1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--color-brand-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 0 0 3px white;
+  }
+
+  .circle-step-label--overlay {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    line-height: 1.2;
+    margin-bottom: 0.625rem;
+    display: block;
+  }
+
+  .circle-step-desc--full {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    line-height: 1.5;
+    margin: 0;
   }
   .principles-section {
     background: white;
