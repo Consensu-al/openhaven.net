@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Check } from 'lucide-react'
 import type { Affordance } from '@/lib/types'
+import StepHeader from '@/components/islands/StepHeader'
 
 const AFFORDANCES_STRINGS = {
   stepIndicator: 'Step 2',
@@ -63,44 +64,11 @@ export default function AffordancesPanel({
       data-testid="affordances-panel"
     >
       {/* Step 2 heading */}
-      <div className="text-center mb-6">
-        <span
-          className="inline-block text-xs font-semibold uppercase tracking-wider mb-2 px-3 py-1 rounded-full"
-          style={{
-            color: 'var(--color-mvp-text)',
-            backgroundColor: 'var(--color-mvp-bg)',
-            border: '1px solid var(--color-mvp-border)',
-          }}
-        >
-          {AFFORDANCES_STRINGS.stepIndicator}
-        </span>
-        <h3
-          className="text-xl sm:text-2xl font-semibold"
-          style={{ color: 'var(--color-brand-primary)' }}
-        >
-          {AFFORDANCES_STRINGS.heading}
-        </h3>
-        {someChecked ? (
-          <p
-            className="text-xs mt-1"
-            style={{ color: 'var(--color-brand-text)', opacity: 0.6 }}
-          >
-            {AFFORDANCES_STRINGS.helperText}
-          </p>
-        ) : (
-          <p
-            className={`text-sm mt-2 px-4 py-2 rounded-lg border ${nudgeAnimating ? 'animate-pulse' : ''}`}
-            style={{
-              color: 'var(--color-brand-primary)',
-              backgroundColor: 'var(--color-brand-accent-light)',
-              borderColor: 'var(--color-brand-primary)',
-              opacity: 0.9,
-            }}
-            data-testid="affordance-nudge"
-          >
-            {AFFORDANCES_STRINGS.nudgeText}
-          </p>
-        )}
+      <StepHeader
+        step={2}
+        title="Refine by Affordance"
+        subtitle="Narrow your results — check the affordances that matter to you"
+      />
 
         {/* AND/OR toggle */}
         <div

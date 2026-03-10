@@ -5,6 +5,7 @@ import GuidedDiscoveryCTA from '@/components/islands/GuidedDiscoveryCTA'
 import GuidedDiscoveryWizard from '@/components/islands/GuidedDiscoveryWizard'
 import AffordancesPanel from '@/components/islands/AffordancesPanel'
 import ProtocolResults from '@/components/islands/ProtocolResults'
+import StepHeader from '@/components/islands/StepHeader'
 
 const NAVIGATOR_STRINGS = {
   heading: 'Choose a Use Case Domain',
@@ -160,39 +161,26 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
 
   return (
     <div>
-      {/* Section heading */}
-      <div className="text-center mb-8">
-        <span
-          className="inline-block text-xs font-semibold uppercase tracking-wider mb-2 px-3 py-1 rounded-full"
-          style={{
-            color: 'var(--color-mvp-text)',
-            backgroundColor: 'var(--color-mvp-bg)',
-            border: '1px solid var(--color-mvp-border)',
-          }}
-        >
-          {NAVIGATOR_STRINGS.stepIndicator}
-        </span>
-        <h2
-          className="text-2xl sm:text-3xl font-semibold"
-          style={{ color: 'var(--color-brand-primary)' }}
-        >
-          {NAVIGATOR_STRINGS.heading}
-        </h2>
+      {/* Step 1 heading */}
+      <StepHeader
+        step={1}
+        title="Choose a Use Case Domain"
+        subtitle="Select the category that best describes your need"
+      />
 
-        {/* Post-selection confirmation */}
-        {selectedDomainData && (
-          <p
-            className="text-sm mt-2"
-            style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}
-            data-testid="selection-confirmation"
-          >
-            {NAVIGATOR_STRINGS.showingResults}{' '}
-            <strong style={{ color: 'var(--color-brand-primary)' }}>
-              {selectedDomainData.name}
-            </strong>
-          </p>
-        )}
-      </div>
+      {/* Post-selection confirmation */}
+      {selectedDomainData && (
+        <p
+          className="text-sm mb-4 ml-[52px]"
+          style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}
+          data-testid="selection-confirmation"
+        >
+          {NAVIGATOR_STRINGS.showingResults}{' '}
+          <strong style={{ color: 'var(--color-brand-primary)' }}>
+            {selectedDomainData.name}
+          </strong>
+        </p>
+      )}
 
       {/* Guided Discovery CTA — always visible */}
       <GuidedDiscoveryCTA
