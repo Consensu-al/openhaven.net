@@ -19,14 +19,13 @@ export default function DomainCard({ domain, selected, secondary, onSelect }: Do
       aria-checked={selected}
       data-testid={`domain-card-${domain.slug}`}
       onClick={() => onSelect(domain.slug)}
-      className="card-pad-lg group relative flex flex-col rounded-2xl border transition-all duration-200 cursor-pointer text-left overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2"
+      className="card-pad-lg group relative flex flex-col rounded-2xl transition-all duration-200 cursor-pointer text-left overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2"
       style={{
-        borderColor: selected ? 'var(--color-brand-primary)' : 'var(--color-card-border)',
+        border: selected ? '2px solid var(--color-brand-primary)' : '2px solid rgba(139, 69, 19, 0.25)',
         backgroundColor: selected ? 'var(--color-domain-selected-bg)' : 'white',
         boxShadow: selected
           ? '0 8px 24px rgba(139, 69, 19, 0.14)'
           : '0 2px 8px rgba(0,0,0,0.06)',
-        borderTop: selected ? '3px solid var(--color-brand-primary)' : '3px solid transparent',
         opacity: secondary ? 0.85 : 1,
         // @ts-expect-error CSS custom property for focus ring
         '--tw-ring-color': 'var(--color-focus-ring)',
