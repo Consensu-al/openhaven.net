@@ -248,7 +248,7 @@ function VariantB({ domains }: { domains: Domain[] }) {
       <p className="text-xs font-bold uppercase tracking-wider !mb-3" style={{ color: 'var(--color-brand-primary)', opacity: 0.5 }}>CTA — Variant C: Inline text</p>
       <CtaVariantC />
 
-      <div className="mt-10">
+      <div className="step-header-wrapper">
         <StepHeader
           step={1}
           title="Choose a Use Case Domain"
