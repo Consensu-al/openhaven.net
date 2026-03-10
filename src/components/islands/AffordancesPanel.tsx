@@ -70,9 +70,10 @@ export default function AffordancesPanel({
         subtitle="Narrow your results — check the affordances that matter to you"
       />
 
-        {/* AND/OR toggle */}
+      {/* AND/OR toggle */}
+      <div className="text-center mb-6">
         <div
-          className="flex items-center justify-center gap-2 mt-3"
+          className="flex items-center justify-center gap-2"
           role="radiogroup"
           aria-label={AFFORDANCES_STRINGS.matchModeLabel}
           data-testid="match-mode-toggle"
