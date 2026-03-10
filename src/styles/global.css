@@ -294,8 +294,10 @@ a:hover {
 }
 
 
-/* Affordance chip focus ring */
-.affordance-chip:focus-visible {
+/* Navigator variant showcase — domain card button padding override */
+.domain-card-btn {
+  padding: 2rem;
+}
   --tw-ring-color: var(--color-focus-ring);
 }
 
