@@ -296,7 +296,12 @@ a:hover {
 
 /* Navigator variant showcase — domain card button padding override */
 .domain-card-btn {
-  padding: 2rem;
+  padding: 1.25rem;
+}
+
+/* Guide me button padding override (global * { padding: 0 } kills Tailwind px/py) */
+.guide-me-btn {
+  padding: 0.5rem 1.25rem;
 }
 
 /* Affordance chip focus ring */
