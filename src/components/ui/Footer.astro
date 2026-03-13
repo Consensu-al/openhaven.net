@@ -19,6 +19,12 @@ const t = useTranslations(locale);
     >
       {t('nav.contribute')}
     </a>
+    <a
+      href={`${locale !== 'en' ? `/${locale}` : ''}/contact`}
+      class="footer-link"
+    >
+      {t('nav.contact')}
+    </a>
   </div>
 </footer>
 

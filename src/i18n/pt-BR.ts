@@ -20,6 +20,7 @@ const ptBR: Translations = {
     homeBreadcrumb: 'Início',
     matrixPrototype: 'Matriz (Protótipo)',
     contribute: 'Contribuir',
+    contact: 'Contato',
   },
 
   badge: {
@@ -290,9 +291,11 @@ const ptBR: Translations = {
       'Ajude a moldar o cenário de protocolos abertos. Compartilhe seu conhecimento sobre tecnologias P2P, casos de uso e affordances com a comunidade OpenHaven.',
     heading: 'Contribua com o OpenHaven',
     intro1:
-      'O OpenHaven é uma iniciativa coletiva em favor da convergência de tecnologias P2P — um esforço compartilhado para tornar o cenário de protocolos abertos visível, navegável e acionável para todos.',
+      'O OpenHaven é uma iniciativa coletiva pela convergência de tecnologias P2P — tornando o cenário de protocolos abertos visível, navegável e acionável.',
     intro2:
-      'Precisamos especialmente de insights para mapear Casos de Uso e Affordances — definidas como capacidades específicas que uma tecnologia permite — às tecnologias e protocolos em si. Se você trabalha, pesquisa ou depende de protocolos P2P ou descentralizados, seu conhecimento é valioso aqui.',
+      'Precisamos de ajuda para mapear Casos de Uso e Affordances — capacidades específicas que uma tecnologia permite — aos protocolos. Se você trabalha ou pesquisa tecnologias P2P, seu conhecimento é valioso.',
+    contactNote:
+      'Para consultas gerais, use nosso <a href="/pt-BR/contact">formulário de contato</a>.',
     formLinkText: 'abrir o formulário diretamente →',
     formNote:
       'Se o formulário abaixo não carregar,',
@@ -300,6 +303,21 @@ const ptBR: Translations = {
     contributeBannerMessage: 'Viu algo faltando ou que poderia ser melhorado?',
     contributeBannerCta: 'Nos diga →',
     contributeBannerDismiss: 'Dispensar',
+  },
+
+  contact: {
+    pageTitle: 'Contato — OpenHaven',
+    pageDescription:
+      'Entre em contato com a equipe OpenHaven. Dúvidas, ideias de parceria ou apenas para dizer olá.',
+    heading: 'Fale Conosco',
+    intro:
+      'Tem uma dúvida, ideia de parceria ou só quer dizer olá? Adoraríamos ouvir de você.',
+    contributeNote:
+      'Quer contribuir com dados ou feedback? Use nosso <a href="/pt-BR/contribute">formulário de contribuição</a>.',
+    formLinkText: 'abrir o formulário diretamente →',
+    formNote:
+      'Se o formulário abaixo não carregar,',
+    iframeTitle: 'Formulário de Contato do OpenHaven',
   },
 
   matrixPage: {

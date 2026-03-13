@@ -18,6 +18,7 @@ const en = {
     homeBreadcrumb: 'Home',
     matrixPrototype: 'Matrix (Prototype)',
     contribute: 'Contribute',
+    contact: 'Contact',
   },
 
   badge: {
@@ -286,9 +287,11 @@ const en = {
       'Help shape the open protocol landscape. Share your knowledge of P2P technologies, use cases, and affordances with the OpenHaven community.',
     heading: 'Contribute to OpenHaven',
     intro1:
-      'OpenHaven is a collective initiative in favor of the convergence of P2P technologies — a shared effort to make the open protocol landscape visible, navigable, and actionable for everyone.',
+      'OpenHaven is a collective initiative for the convergence of P2P technologies — making the open protocol landscape visible, navigable, and actionable.',
     intro2:
-      'We need insight specifically in mapping Use Cases and Affordances — defined as specific abilities a technology allows for — to the technologies and protocols themselves. If you work with, research, or rely on P2P or decentralized protocols, your knowledge is valuable here.',
+      'We need help mapping Use Cases and Affordances — specific abilities a technology allows for — to protocols. If you work with or research P2P technologies, your knowledge is valuable.',
+    contactNote:
+      'For general inquiries, use our <a href="/contact">contact form</a>.',
     formLinkText: 'open the form directly →',
     formNote:
       'If the form below does not load,',
@@ -296,6 +299,21 @@ const en = {
     contributeBannerMessage: 'See something missing or that could be improved?',
     contributeBannerCta: 'Let us know →',
     contributeBannerDismiss: 'Dismiss',
+  },
+
+  contact: {
+    pageTitle: 'Contact — OpenHaven',
+    pageDescription:
+      'Get in touch with the OpenHaven team. Questions, partnership ideas, or just want to say hello.',
+    heading: 'Contact Us',
+    intro:
+      "Have a question, partnership idea, or just want to say hello? We'd love to hear from you.",
+    contributeNote:
+      'Want to contribute data or feedback? Use our <a href="/contribute">contribution form</a>.',
+    formLinkText: 'open the form directly →',
+    formNote:
+      'If the form below does not load,',
+    iframeTitle: 'OpenHaven Contact Form',
   },
 
   matrixPage: {

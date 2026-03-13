@@ -24,6 +24,7 @@ const FORM_EMBED_URL = 'https://cryptpad.fr/form/#/2/form/view/xChgBL3ouQRbBqOdE
         <div class="intro-card">
           <p class="intro-text">{t('contribute.intro1')}</p>
           <p class="intro-text">{t('contribute.intro2')}</p>
+          <p class="cross-link" set:html={t('contribute.contactNote')} />
         </div>
 
         <div class="form-section">
@@ -95,6 +96,19 @@ const FORM_EMBED_URL = 'https://cryptpad.fr/form/#/2/form/view/xChgBL3ouQRbBqOdE
     line-height: 1.7;
     color: var(--color-brand-text);
     margin: 0;
+  }
+
+  .cross-link {
+    font-size: 0.9375rem;
+    color: var(--color-brand-text);
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .cross-link :global(a) {
+    color: var(--color-brand-primary);
+    text-decoration: underline;
+    font-weight: 500;
   }
 
   .form-section {

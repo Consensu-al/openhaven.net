@@ -4,46 +4,46 @@ import { useTranslations } from '@/i18n'
 
 const locale = Astro.currentLocale ?? 'pt-BR'
 const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
 
-const FORM_URL = 'https://cryptpad.fr/form/#/2/form/view/xChgBL3ouQRbBqOdEkwt0W+sWc7XFcDV1EpZby1c6Hs/'
-const FORM_EMBED_URL = 'https://cryptpad.fr/form/#/2/form/view/xChgBL3ouQRbBqOdEkwt0W+sWc7XFcDV1EpZby1c6Hs/embed/'
+const FORM_URL = 'https://cryptpad.fr/form/#/2/form/view/db9duvZlOFuHHgz4BqEXNkWwdYICWkD8M1b+ppfBs3I/'
+const FORM_EMBED_URL = 'https://cryptpad.fr/form/#/2/form/view/db9duvZlOFuHHgz4BqEXNkWwdYICWkD8M1b+ppfBs3I/embed/'
 ---
 
 <BaseLayout
-  title={t('contribute.pageTitle') as string}
-  description={t('contribute.pageDescription') as string}
+  title={t('contact.pageTitle') as string}
+  description={t('contact.pageDescription') as string}
 >
-  <main data-testid="contribute-page">
+  <main data-testid="contact-page">
     <section class="section-padding">
       <div class="container">
 
         <div class="page-header">
-          <h1 class="page-title">{t('contribute.heading')}</h1>
+          <h1 class="page-title">{t('contact.heading')}</h1>
         </div>
 
         <div class="intro-card">
-          <p class="intro-text">{t('contribute.intro1')}</p>
-          <p class="intro-text">{t('contribute.intro2')}</p>
-          <p class="cross-link" set:html={t('contribute.contactNote')} />
+          <p class="intro-text">{t('contact.intro')}</p>
+          <p class="cross-link" set:html={t('contact.contributeNote')} />
         </div>
 
         <div class="form-section">
           <p class="form-note">
-            {t('contribute.formNote')}{' '}
+            {t('contact.formNote')}{' '}
             <a
               href={FORM_URL}
               target="_blank"
               rel="noopener noreferrer"
               class="form-link"
             >
-              {t('contribute.formLinkText')}
+              {t('contact.formLinkText')}
             </a>
           </p>
 
           <div class="iframe-wrapper">
             <iframe
               src={FORM_EMBED_URL}
-              title={t('contribute.iframeTitle') as string}
+              title={t('contact.iframeTitle') as string}
               style="width: 100%; height: 700px; border: none; display: block;"
             ></iframe>
           </div>
