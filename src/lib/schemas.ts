@@ -28,6 +28,7 @@ export const ProtocolSchema = z.object({
   lastInvestigated: z.string(),
   communityLink: z.string().url().optional(),
   affordanceIds: z.array(z.string()).default([]),
+  entityAttributes: z.record(z.string(), z.string().or(z.null())).optional(),
 });
 
 export const AffordanceSchema = z.object({
@@ -35,4 +36,21 @@ export const AffordanceSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   domainIds: z.array(z.string()),
+});
+
+export const EntityTypeSchema = z.object({
+  id: z.string(),
+  fullName: z.string(),
+  abbr: z.string(),
+  definition: z.string(),
+  examples: z.string().optional(),
+});
+
+export const AttributeDefSchema = z.object({
+  column: z.string(),
+  key: z.string(),
+  definition: z.string(),
+  formatOptions: z.string().optional(),
+  notes: z.string().optional(),
+  appliesToEntityTypes: z.array(z.string()),
 });

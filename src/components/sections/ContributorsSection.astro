@@ -22,11 +22,16 @@ export interface Props {
   ctaText?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  locale?: string;
 }
 
+import { useTranslations } from '@/i18n';
+const locale = Astro.props.locale ?? Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+
 const {
-  heading = "Who's Behind This",
-  subheading = 'Meet the builders and researchers who contributed these evaluations.',
+  heading = t('contributors.heading') as string,
+  subheading = t('contributors.subheading') as string,
   contributors,
   ctaHeading,
   ctaText,

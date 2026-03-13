@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Check } from 'lucide-react'
 import type { Affordance } from '@/lib/types'
 import StepHeader from '@/components/islands/StepHeader'
+import { useTranslations } from '@/i18n'
 
 interface AffordancesPanelProps {
   affordances: Affordance[]
@@ -20,6 +21,7 @@ export default function AffordancesPanel({
   onMatchModeChange,
   locale = 'en',
 }: AffordancesPanelProps) {
+  const t = useTranslations(locale)
   const allChecked = affordances.every(a => selectedAffordances.includes(a.id))
   const someChecked = selectedAffordances.length > 0
 
@@ -41,16 +43,16 @@ export default function AffordancesPanel({
       {/* Step 2 heading */}
       <StepHeader
         step={2}
-        title="Refine by Affordance"
-        subtitle="Narrow your results — check the affordances that matter to you"
-        badge="Optional"
+        title={t('affordances.title') as string}
+        subtitle={t('affordances.subtitle') as string}
+        badge={t('affordances.badge') as string}
       />
 
       {/* Controls row: Match mode + Select/Clear all */}
       <div className="flex items-center justify-between mb-4 ml-[52px]">
         <div className="flex items-center gap-2">
-          <span className="text-xs" style={{ color: 'var(--color-brand-text)', opacity: 0.45 }}>Match:</span>
-          <div className="flex rounded-md overflow-hidden border" role="radiogroup" aria-label="Match mode" style={{ borderColor: 'var(--color-card-border)' }}>
+          <span className="text-xs" style={{ color: 'var(--color-brand-text)', opacity: 0.45 }}>{t('affordances.matchLabel')}</span>
+          <div className="flex rounded-md overflow-hidden border" role="radiogroup" aria-label={t('affordances.matchModeLabel') as string} style={{ borderColor: 'var(--color-card-border)' }}>
             {(['or', 'and'] as const).map((mode) => (
               <button
                 key={mode}
@@ -64,7 +66,7 @@ export default function AffordancesPanel({
                   : { backgroundColor: 'white', color: 'var(--color-brand-text)', opacity: 0.5 }
                 }
               >
-                {mode === 'or' ? 'ANY' : 'ALL'}
+                {mode === 'or' ? t('affordances.matchAny') : t('affordances.matchAll')}
               </button>
             ))}
           </div>
@@ -75,7 +77,7 @@ export default function AffordancesPanel({
           className="text-xs cursor-pointer"
           style={{ color: 'var(--color-brand-primary)', opacity: 0.6 }}
         >
-          {someChecked ? 'Clear all' : 'Select all'}
+          {someChecked ? t('affordances.clearAll') : t('affordances.selectAll')}
         </button>
       </div>
 
@@ -91,12 +93,12 @@ export default function AffordancesPanel({
             border: '1px solid var(--color-brand-accent)',
           }}
         >
-          Check the affordances that matter to you to narrow results
+          {t('affordances.nudge')}
         </div>
       )}
 
       {/* Affordance chips — C2 style */}
-      <div className="flex flex-wrap gap-2 ml-[52px]" role="group" aria-label="Affordance filters">
+      <div className="flex flex-wrap gap-2 ml-[52px]" role="group" aria-label={t('affordances.filtersLabel') as string}>
         {affordances.map((a) => {
           const isSelected = selectedAffordances.includes(a.id)
           return (

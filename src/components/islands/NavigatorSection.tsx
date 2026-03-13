@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import type { Domain, Affordance, Protocol } from '@/lib/types'
+import { useTranslations } from '@/i18n'
 import DomainGrid from '@/components/islands/DomainGrid'
 import GuidedDiscoveryCTA from '@/components/islands/GuidedDiscoveryCTA'
 import GuidedDiscoveryWizard from '@/components/islands/GuidedDiscoveryWizard'
@@ -8,18 +9,6 @@ import ProtocolResults from '@/components/islands/ProtocolResults'
 import StepHeader from '@/components/islands/StepHeader'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { Info } from 'lucide-react'
-
-const NAVIGATOR_STRINGS = {
-  heading: 'Choose a Use Case Domain',
-  stepIndicator: 'Step 1',
-  emptyState:
-    'No use case domains are loaded yet — check back soon as we\'re actively mapping the open protocol landscape.',
-  showingResults: 'Showing results for:',
-  resultsHeading: 'Protocols',
-  allProtocolsHint: (name: string) => `Showing all ${name} protocols — check affordances above to refine`,
-  step2Indicator: 'Step 2',
-  step2Heading: 'Refine Results',
-} as const
 
 /** Update URL query string while preserving any hash fragment */
 function updateUrl(params: URLSearchParams) {
@@ -37,11 +26,14 @@ interface NavigatorSectionProps {
 }
 
 export default function NavigatorSection({ domains, affordances, protocols, locale = 'en' }: NavigatorSectionProps) {
+  const t = useTranslations(locale)
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null)
   const [selectedAffordances, setSelectedAffordances] = useState<string[]>([])
   const [matchMode, setMatchMode] = useState<'or' | 'and'>('or')
   const [wizardOpen, setWizardOpen] = useState(false)
   const ctaButtonRef = useRef<HTMLButtonElement>(null)
+  const affordancesPanelRef = useRef<HTMLDivElement>(null)
+  const hasRestoredRef = useRef(false)
 
   // Restore all state from current URL
   const restoreFromUrl = useCallback(() => {
@@ -70,10 +62,19 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
   // Restore on mount + sync on browser back/forward
   useEffect(() => {
     restoreFromUrl()
+    hasRestoredRef.current = true
     const onPopState = () => restoreFromUrl()
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
   }, [restoreFromUrl])
+
+  // Smooth-scroll to Step 2 when user clicks a domain (skip URL restore on mount)
+  useEffect(() => {
+    if (!selectedDomain || !hasRestoredRef.current) return
+    requestAnimationFrame(() => {
+      affordancesPanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }, [selectedDomain])
 
   const selectDomain = useCallback((slug: string | null) => {
     setSelectedDomain(slug)
@@ -155,7 +156,7 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
     return (
       <div className="text-center py-12">
         <p style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}>
-          {NAVIGATOR_STRINGS.emptyState}
+          {t('navigator.emptyState') as string}
         </p>
       </div>
     )
@@ -166,9 +167,9 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
       {/* Step 1 heading */}
       <StepHeader
         step={1}
-        title="Choose a Use Case"
-        subtitle="Select the category that best describes your need"
-        badge="Required"
+        title={t('navigator.step1Title') as string}
+        subtitle={t('navigator.step1Subtitle') as string}
+        badge={t('navigator.step1Badge') as string}
       />
 
       {/* Domain Grid */}
@@ -190,7 +191,7 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
 
       {/* Step 2: Affordances Panel — render when domain is selected */}
       {selectedDomain && domainAffordances.length > 0 && (
-        <div className="mt-12">
+        <div className="mt-12" ref={affordancesPanelRef} style={{ scrollMarginTop: '72px' }}>
           <AffordancesPanel
           key={selectedDomain}
           affordances={domainAffordances}
@@ -209,10 +210,10 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
           <Tooltip.Provider delayDuration={200}>
           <StepHeader
             step={3}
-            title="Review Matching Protocols"
+            title={t('navigator.step3Title') as string}
             subtitle={
               <>
-                Showing only{' '}
+                {t('navigator.showingOnly')}{' '}
                 <span
                   className="font-semibold px-1.5 py-0.5 rounded"
                   style={{
@@ -222,9 +223,9 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
                 >
                   {selectedDomainData.name}
                 </span>
-                {' '}protocols.
+                {' '}{t('navigator.protocolsDot')}
                 {selectedAffordances.length > 0 && (
-                  <span> — filtered by {selectedAffordances.length} affordance{selectedAffordances.length > 1 ? 's' : ''}</span>
+                  <span> {t('navigator.filteredBy')} {(t('navigator.affordanceCount') as (n: number) => string)(selectedAffordances.length)}</span>
                 )}
 
                 <Tooltip.Root>
@@ -256,7 +257,7 @@ export default function NavigatorSection({ domains, affordances, protocols, loca
                       }}
                       sideOffset={6}
                     >
-                      To see other protocol matches, try changing your selections in Steps 1 and 2 above.
+                      {t('navigator.resultsTip') as string}
                       <Tooltip.Arrow style={{ fill: 'var(--color-brand-primary)' }} />
                     </Tooltip.Content>
                   </Tooltip.Portal>

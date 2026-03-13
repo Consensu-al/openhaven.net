@@ -1,30 +1,22 @@
 ---
-/**
- * DisclaimerBanner — Redesigned to match the warm pill/badge aesthetic
- * used throughout the navigator (StepHeader badges, affordance chips, etc.)
- */
-
 export interface Props {
   message: string;
-  ctaLabel?: string;
-  ctaHref?: string;
+  variant?: 'error' | 'warning';
 }
 
-const { message, ctaLabel, ctaHref } = Astro.props;
+const { message, variant = 'error' } = Astro.props;
+const isWarning = variant === 'warning';
 ---
 
 <section class="disclaimer-section">
-  <div class="disclaimer-pill">
-    <span class="disclaimer-badge">Alpha</span>
-    <p class="disclaimer-text" set:html={message.replace('Alpha — ', '')} />
-    {ctaLabel && ctaHref && (
-      <a href={ctaHref} class="disclaimer-link">
-        {ctaLabel}
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-    )}
+  <div class:list={['disclaimer-banner', { 'disclaimer-warning': isWarning }]}>
+    <div class:list={['disclaimer-icon', { 'disclaimer-icon--warning': isWarning }]} aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+        <path d="M12 9v4"/><path d="M12 17h.01"/>
+      </svg>
+    </div>
+    <p class:list={['disclaimer-text', { 'disclaimer-text--warning': isWarning }]} set:html={message} />
   </div>
 </section>
 
@@ -32,70 +24,57 @@ const { message, ctaLabel, ctaHref } = Astro.props;
   .disclaimer-section {
     display: flex;
     justify-content: center;
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
     background: var(--color-brand-bg);
   }
 
-  .disclaimer-pill {
+  .disclaimer-banner {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 0.75rem;
-    background: white;
-    border: 2px solid rgba(139, 69, 19, 0.25);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    max-width: 48rem;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.5rem;
+    background: #fef2f2;
+    border: 2px solid #dc2626;
+    box-shadow: 0 1px 4px rgba(220, 38, 38, 0.15);
   }
 
-  .disclaimer-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.625rem;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-brand-primary);
-    background: var(--color-brand-accent-light);
-    border: 1px solid rgba(139, 69, 19, 0.2);
-    border-radius: 9999px;
+  .disclaimer-warning {
+    background: #fff7ed;
+    border-color: #ea580c;
+    box-shadow: 0 1px 4px rgba(234, 88, 12, 0.15);
+  }
+
+  .disclaimer-icon {
     flex-shrink: 0;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+  }
+
+  .disclaimer-icon--warning {
+    color: #ea580c;
   }
 
   .disclaimer-text {
     flex: 1;
-    font-size: 0.8125rem;
-    line-height: 1.5;
-    color: var(--color-brand-text);
-    margin: 0;
-    opacity: 0.75;
-  }
-
-  .disclaimer-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-brand-primary);
-    text-decoration: none;
-    border-bottom: none;
-    flex-shrink: 0;
-    transition: gap 0.15s ease;
+    line-height: 1.5;
+    color: #991b1b;
+    margin: 0;
   }
 
-  .disclaimer-link:hover {
-    gap: 0.5rem;
-    border-bottom: none;
+  .disclaimer-text--warning {
+    color: #9a3412;
   }
 
   @media (max-width: 639px) {
-    .disclaimer-pill {
-      flex-direction: column;
+    .disclaimer-banner {
+      flex-direction: row;
       align-items: flex-start;
-      text-align: left;
     }
   }
 </style>

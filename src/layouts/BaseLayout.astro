@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '@/components/ui/Nav.astro';
 import Footer from '@/components/ui/Footer.astro';
+import { useTranslations } from '@/i18n';
 
 export interface BaseLayoutProps {
   title: string;
@@ -9,18 +10,26 @@ export interface BaseLayoutProps {
   ogImage?: string;
 }
 
+const locale = Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+
 const {
   title,
-  description = 'OpenHaven — Discover, compare, and choose open protocols for the decentralized web.',
+  description = t('meta.defaultDescription') as string,
   ogImage,
 } = Astro.props as BaseLayoutProps;
 
 const pageTitle = title.includes('OpenHaven') ? title : `${title} — OpenHaven`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://openhaven.net');
+const siteBase = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '');
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+
+const currentPath = Astro.url.pathname;
+const enPath = currentPath.startsWith('/pt-BR') ? currentPath.replace(/^\/pt-BR/, '') || '/' : currentPath;
+const ptBRPath = currentPath.startsWith('/pt-BR') ? currentPath : `/pt-BR${currentPath}`;
 ---
 
 <!DOCTYPE html>
-<html lang={Astro.currentLocale ?? 'en'}>
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,13 +39,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://openhave
     <meta property="og:description" content={description} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={new URL(enPath, siteBase)} />
+    <link rel="alternate" hreflang="pt-BR" href={new URL(ptBRPath, siteBase)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(enPath, siteBase)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
     <slot name="head" />
   </head>
   <body>
-    <Nav />
+    <Nav locale={locale} />
     <slot />
-    <Footer />
+    <Footer locale={locale} />
   </body>
 </html>

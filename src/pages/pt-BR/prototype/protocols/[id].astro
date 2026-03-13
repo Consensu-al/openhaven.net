@@ -1,0 +1,666 @@
+---
+import { loadProtocols, loadDomains, loadAffordances, loadEntityTypes, loadAttributeDefs } from '@/lib/data'
+import type { Protocol, Domain, Affordance, EntityType, AttributeDef } from '@/lib/types'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { useTranslations } from '@/i18n'
+
+export function getStaticPaths() {
+  const protocols = loadProtocols()
+  return protocols.map((protocol) => ({
+    params: { id: protocol.id },
+    props: { protocol },
+  }))
+}
+
+const { protocol } = Astro.props as { protocol: Protocol }
+const domains = loadDomains()
+const affordances = loadAffordances()
+
+// Lookup maps
+const domainMap = new Map<string, Domain>(domains.map((d) => [d.id, d]))
+const affordanceMap = new Map<string, Affordance>(affordances.map((a) => [a.id, a]))
+
+// Entity types & attribute definitions
+const entityTypes = loadEntityTypes()
+const attributeDefs = loadAttributeDefs()
+const entityTypeMap = new Map<string, EntityType>(entityTypes.map((et) => [et.id, et]))
+
+// XLSX tab names diverge from entity-types.json fullNames — explicit mapping required
+const ENTITY_TYPE_DISPLAY_TO_ID: Record<string, string> = {
+  'P2P Protocols': 'p2p-protocol',
+  'P2P Platforms/Frameworks': 'p2p-platform',
+  'Integrated P2P Runtime': 'p2p-runtime',
+  'P2P Infrastructure': 'p2p-infrastructure',
+  'Decentralized Applications': 'd-app',
+  'Extended D Apps': 'ext-d-app',
+  'Federated Protocols': 'federated-protocol',
+  'Semantic & Data Protocols': 'semantic-data',
+  'Identity Protocols': 'identity-protocol',
+  'Identity Platforms/Frameworks': 'identity-platform',
+  'Identity Systems': 'identity-system',
+  'Standards/Coordination Systems': 'standard-coordination',
+  'Decentralized Storage Networks': 'storage-network',
+}
+
+const entityTypeId = ENTITY_TYPE_DISPLAY_TO_ID[protocol.entityType]
+const entityTypeDef = entityTypeId ? entityTypeMap.get(entityTypeId) : undefined
+
+type EntityAttribute = { label: string; value: string; description?: string }
+const entitySpecificAttributes: EntityAttribute[] = entityTypeId
+  ? attributeDefs
+      .filter((ad) => ad.appliesToEntityTypes.includes(entityTypeId))
+      .filter((ad) => {
+        const val = protocol.entityAttributes?.[ad.key]
+        return val != null && val !== ''
+      })
+      .map((ad) => ({
+        label: ad.column,
+        value: protocol.entityAttributes![ad.key]!,
+        description: ad.definition,
+      }))
+  : []
+
+// Resolve names
+const protocolDomains = protocol.domainIds
+  .map((id) => domainMap.get(id))
+  .filter((d): d is Domain => d !== undefined)
+const protocolAffordances = protocol.affordanceIds
+  .map((id) => affordanceMap.get(id))
+  .filter((a): a is Affordance => a !== undefined)
+
+// Date formatting
+const locale = Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
+const dateFormatted = new Intl.DateTimeFormat(locale, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(new Date(protocol.lastInvestigated))
+
+// UI label helpers via i18n
+const governanceLabel = (key: string) => t(`badge.governance.${key}`) as string
+const architectureLabel = (key: string) => t(`badge.architecture.${key}`) as string
+const captureRiskLabel = (key: string) => t(`badge.captureRiskLabel.${key}`) as string
+
+const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
+  low: 'var(--color-risk-low)',
+  medium: 'var(--color-risk-medium)',
+  high: 'var(--color-risk-high)',
+}
+
+// Key Attributes
+type KeyAttribute = { label: string; value: string }
+const keyAttributes: KeyAttribute[] = [
+  protocol.license ? { label: t('protocol.license') as string, value: protocol.license } : null,
+  protocol.devStatus ? { label: t('protocol.devStatus') as string, value: protocol.devStatus } : null,
+  protocol.owner ? { label: t('protocol.owner') as string, value: protocol.owner } : null,
+  protocol.country ? { label: t('protocol.country') as string, value: protocol.country } : null,
+  protocol.startYear ? { label: t('protocol.startYear') as string, value: String(protocol.startYear) } : null,
+  protocol.stack.length > 0 ? { label: t('protocol.stack') as string, value: protocol.stack.join(', ') } : null,
+  protocol.funding.length > 0 ? { label: t('protocol.funding') as string, value: protocol.funding.join(', ') } : null,
+  { label: t('protocol.lastInvestigated') as string, value: dateFormatted },
+].filter((attr): attr is KeyAttribute => attr !== null)
+
+// SEO
+const META_DESC_MAX = 155
+const fullDescription = `${protocol.description ?? protocol.name} — ${architectureLabel(protocol.architectureType)} architecture, ${governanceLabel(protocol.governanceModel)} governance`
+const pageDescription = fullDescription.length <= META_DESC_MAX
+  ? fullDescription
+  : `${fullDescription.slice(0, META_DESC_MAX - 1)}…`
+
+// Links
+const hasCommunity = protocol.communityLink
+const hasLinks = hasCommunity
+
+// --- JSON-LD ---
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://openhaven.net')
+const siteUrl = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '')
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  name: protocol.name,
+  headline: protocol.name,
+  description: protocol.description ?? '',
+  url: canonicalUrl.href,
+  dateModified: protocol.lastInvestigated,
+  author: { '@type': 'Organization', name: 'OpenHaven' },
+  publisher: { '@type': 'Organization', name: 'OpenHaven', url: siteUrl },
+  ...(protocol.communityLink ? { discussionUrl: protocol.communityLink } : {}),
+  about: [
+    { '@type': 'Thing', name: `Governance: ${governanceLabel(protocol.governanceModel)}` },
+    { '@type': 'Thing', name: `Architecture: ${architectureLabel(protocol.architectureType)}` },
+  ],
+  keywords: [
+    governanceLabel(protocol.governanceModel),
+    architectureLabel(protocol.architectureType),
+    ...protocolDomains.map((d) => d.name),
+  ],
+}
+---
+
+<BaseLayout title={`${protocol.name} — OpenHaven`} description={pageDescription}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <main class="protocol-detail">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav" data-testid="breadcrumb">
+        <ol class="breadcrumb-list">
+          <li>
+            <a href={`${prefix}/prototype`} class="breadcrumb-link" data-testid="breadcrumb-home">{t('nav.home')}</a>
+          </li>
+          <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+          <li><span>{t('nav.protocols')}</span></li>
+          <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+          <li aria-current="page"><span class="breadcrumb-current">{protocol.name}</span></li>
+        </ol>
+      </nav>
+
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-content">
+          <!-- Left: Title, badge, description -->
+          <div class="hero-main">
+            <div class="hero-title-row">
+              <h1 class="hero-title">{protocol.name}</h1>
+              <span class="entity-badge">{protocol.entityType}</span>
+            </div>
+
+            {protocol.description && (
+              <p class="hero-description">{protocol.description}</p>
+            )}
+
+            <!-- Badge Row -->
+            <div class="badge-row">
+              <span class="badge badge--architecture">
+                {architectureLabel(protocol.architectureType)}
+              </span>
+              <span class="badge badge--governance">
+                {governanceLabel(protocol.governanceModel)}
+              </span>
+              <span class="badge badge--risk">
+                <span class="risk-dot" style={`background-color: ${RISK_COLOR[protocol.captureRisk]}`}></span>
+                {captureRiskLabel(protocol.captureRisk)}
+              </span>
+            </div>
+          </div>
+
+          <!-- Right: Links -->
+          {hasLinks && (
+            <div class="hero-links">
+              <span class="links-label">{t('protocol.links')}</span>
+              <div class="links-list">
+                {hasCommunity && (
+                  <a href={protocol.communityLink} target="_blank" rel="noopener noreferrer" class="link-btn">
+                    {t('protocol.visitCommunity')}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+
+        <!-- Left Column: Attributes -->
+        <div class="attributes-card">
+          <h2 class="section-title">{t('protocol.details')}</h2>
+          <div class="attributes-list">
+            {keyAttributes.map((attr) => (
+              <div class="attribute-row">
+                <span class="attribute-label">{attr.label}</span>
+                <span class="attribute-value">{attr.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Right Column: Domains & Affordances -->
+        <div class="tags-column">
+          {protocolDomains.length > 0 && (
+            <div class="tags-card">
+              <h2 class="section-title">{t('protocol.useCaseDomains')}</h2>
+              <div class="tags-list">
+                {protocolDomains.map((domain) => (
+                  <a href={`${prefix}/prototype/domains/${domain.slug}`} class="tag tag--domain">
+                    {domain.name}
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {protocolAffordances.length > 0 && (
+            <div class="tags-card">
+              <h2 class="section-title">{t('protocol.affordances')}</h2>
+              <div class="tags-list">
+                {protocolAffordances.map((affordance) => (
+                  <span class="tag tag--affordance">
+                    {affordance.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Entity-Type-Specific Attributes -->
+      {entitySpecificAttributes.length > 0 && (
+        <div class="entity-attributes-card" data-testid="entity-attributes">
+          <h2 class="section-title">
+            {entityTypeDef?.fullName ?? protocol.entityType} {t('protocol.attributes')}
+          </h2>
+          <div class="entity-attributes-list">
+            {entitySpecificAttributes.map((attr) => (
+              <div class="entity-attribute-row">
+                <span class="entity-attribute-label" title={attr.description}>{attr.label}</span>
+                <span class="entity-attribute-value">{attr.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .protocol-detail {
+    padding: 1.5rem 1rem 4rem;
+    background: var(--color-brand-bg);
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb-nav {
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    list-style: none;
+    padding: 0;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .breadcrumb-link {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-sep {
+    opacity: 0.4;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-brand-text);
+  }
+
+  /* Hero Card */
+  .hero-card {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+
+  .hero-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hero-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 640px) {
+    .hero-title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .entity-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 9999px;
+  }
+
+  .hero-description {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-brand-text);
+    margin: 0 0 1rem 0;
+    max-width: 50ch;
+  }
+
+  /* Badge Row */
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+  }
+
+  .badge--architecture {
+    color: var(--color-brand-primary);
+    background: transparent;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+  }
+
+  .badge--governance {
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.15);
+  }
+
+  .badge--risk {
+    color: var(--color-brand-text);
+    background: transparent;
+    border: 1px solid var(--color-card-border);
+  }
+
+  .risk-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Hero Links */
+  .hero-links {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-links {
+      align-items: flex-end;
+      min-width: 140px;
+    }
+  }
+
+  .links-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-brand-text);
+    opacity: 0.5;
+    margin-bottom: 0.25rem;
+  }
+
+  .links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .link-btn:hover {
+    background: var(--color-domain-selected-bg);
+    border-color: var(--color-brand-primary);
+  }
+
+  /* Content Grid */
+  .content-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .content-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Attributes Card */
+  .attributes-card {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .attributes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .attribute-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .attribute-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .attribute-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-brand-text);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+
+  .attribute-value {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    text-align: right;
+  }
+
+  /* Tags Column */
+  .tags-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .tags-card {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .tag--domain {
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+  }
+
+  .tag--domain:hover {
+    background: var(--color-domain-selected-bg);
+    border-color: var(--color-brand-primary);
+  }
+
+  .tag--affordance {
+    color: var(--color-brand-text);
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+  }
+
+  /* Entity-Type-Specific Attributes Card */
+  .entity-attributes-card {
+    background: white;
+    border: 2px solid var(--color-card-border);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  @media (min-width: 640px) {
+    .entity-attributes-card {
+      padding: 1.5rem;
+    }
+  }
+
+  .entity-attributes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .entity-attribute-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-card-border);
+  }
+
+  .entity-attribute-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .entity-attribute-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-brand-text);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .entity-attribute-value {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+</style>

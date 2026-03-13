@@ -1,16 +1,7 @@
 import { useMemo } from 'react'
 import type { Protocol } from '@/lib/types'
 import ProtocolCard from '@/components/islands/ProtocolCard'
-
-const RESULTS_STRINGS = {
-  countHeader: (count: number) =>
-    count === 1 ? '1 protocol matches' : `${count} protocols match`,
-  emptyHeading: 'No verified protocols yet for this combination',
-  emptyBody:
-    "That doesn\u2019t mean none exist \u2014 just that we haven\u2019t mapped them yet.",
-  emptyContribute: 'Know one we should add?',
-  contributeLinkText: 'Contribute',
-} as const
+import { useTranslations } from '@/i18n'
 
 interface ProtocolResultsProps {
   protocols: Protocol[]
@@ -27,6 +18,7 @@ export default function ProtocolResults({
   matchMode,
   locale = 'en',
 }: ProtocolResultsProps) {
+  const t = useTranslations(locale)
   const filtered = useMemo(() => {
     // Domain is always selected when this component renders (parent guards)
     const domainFiltered = protocols.filter((p) =>
@@ -61,7 +53,7 @@ export default function ProtocolResults({
             style={{ color: 'var(--color-brand-text)' }}
             data-testid="results-count"
           >
-            {RESULTS_STRINGS.countHeader(filtered.length)}
+            {(t('results.countHeader') as (n: number) => string)(filtered.length)}
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             {filtered.map((protocol) => (
@@ -86,26 +78,15 @@ export default function ProtocolResults({
             className="text-lg font-medium mb-2"
             style={{ color: 'var(--color-brand-primary)' }}
           >
-            {RESULTS_STRINGS.emptyHeading}
+            {t('results.emptyHeading')}
           </p>
           <p
             className="text-sm mb-3"
             style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}
           >
-            {RESULTS_STRINGS.emptyBody}
+            {t('results.emptyBody')}
           </p>
-          <p className="text-sm">
-            <span style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}>
-              {RESULTS_STRINGS.emptyContribute}{' '}
-            </span>
-            <a
-              href="#"
-              className="underline underline-offset-2"
-              style={{ color: 'var(--color-brand-primary)' }}
-            >
-              {RESULTS_STRINGS.contributeLinkText}
-            </a>
-          </p>
+          {/* Contribute link hidden until page exists */}
         </div>
       )}
     </div>

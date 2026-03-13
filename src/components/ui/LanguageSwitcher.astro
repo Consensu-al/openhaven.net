@@ -1,86 +1,171 @@
 ---
 const currentLocale = Astro.currentLocale ?? 'en';
+const currentPath = Astro.url.pathname;
 
 const locales = [
-  { code: 'en', label: 'EN' },
-  { code: 'es', label: 'ES' },
-  { code: 'pt-BR', label: 'PT-BR' },
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'pt-BR', label: 'Português', short: 'PT' },
 ];
+
+const current = locales.find(l => l.code === currentLocale) ?? locales[0];
+
+function buildLocaleHref(targetLocale: string): string {
+  if (targetLocale === 'en') {
+    return currentPath.startsWith('/pt-BR')
+      ? currentPath.replace(/^\/pt-BR/, '') || '/'
+      : currentPath;
+  }
+  return currentPath.startsWith('/pt-BR')
+    ? currentPath
+    : `/pt-BR${currentPath}`;
+}
 ---
 
 <div class="lang-switcher" aria-label="Language selector">
-  {locales.map(({ code, label }, i) => (
-    <>
-      {i > 0 && <span class="lang-divider" aria-hidden="true">|</span>}
-      <a
-        href="#"
-        class={`lang-option ${currentLocale === code ? 'lang-option--active' : 'lang-option--inactive'}`}
-        aria-label={`Switch to ${label}`}
-        aria-current={currentLocale === code ? 'true' : undefined}
-        hreflang={code}
-      >
-        {label}
-      </a>
-    </>
-  ))}
+  <button
+    class="lang-trigger"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    type="button"
+  >
+    <svg class="lang-globe" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+    </svg>
+    <span class="lang-current">{current.short}</span>
+    <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </button>
+
+  <ul class="lang-menu" role="listbox" hidden>
+    {locales.map(({ code, label }) => (
+      <li role="option" aria-selected={currentLocale === code ? 'true' : 'false'}>
+        <a
+          href={buildLocaleHref(code)}
+          class:list={['lang-menu-item', { 'lang-menu-item--active': currentLocale === code }]}
+          hreflang={code}
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+  </ul>
 </div>
+
+<script>
+  document.querySelectorAll('.lang-switcher').forEach(switcher => {
+    const trigger = switcher.querySelector('.lang-trigger') as HTMLButtonElement;
+    const menu = switcher.querySelector('.lang-menu') as HTMLUListElement;
+    if (!trigger || !menu) return;
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!open));
+      menu.hidden = open;
+    });
+
+    document.addEventListener('click', () => {
+      trigger.setAttribute('aria-expanded', 'false');
+      menu.hidden = true;
+    });
+
+    switcher.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape') {
+        trigger.setAttribute('aria-expanded', 'false');
+        menu.hidden = true;
+        trigger.focus();
+      }
+    });
+  });
+</script>
 
 <style>
   .lang-switcher {
-    display: flex;
-    align-items: center;
-    gap: 0.125rem;
-    font-size: 0.8rem;
-    font-weight: 500;
+    position: relative;
+    display: inline-flex;
   }
 
-  .lang-divider {
-    color: var(--color-brand-primary);
-    opacity: 0.4;
-    padding: 0 0.125rem;
-    user-select: none;
-  }
-
-  .lang-option {
+  .lang-trigger {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-width: 44px;
+    gap: 0.25rem;
+    padding: 0.375rem 0.5rem;
     min-height: 44px;
-    padding: 0.25rem 0.375rem;
-    text-decoration: none;
-    border-bottom: none;
-    border-radius: 4px;
-    transition: color 0.15s, background 0.15s;
-  }
-
-  .lang-option--active {
-    color: var(--color-brand-primary);
-    font-weight: 700;
-    text-decoration: underline;
-    text-decoration-color: var(--color-brand-accent);
-    text-underline-offset: 2px;
-  }
-
-  .lang-option--inactive {
+    min-width: 44px;
+    font-size: 0.8rem;
+    font-weight: 600;
     color: var(--color-brand-text);
-    opacity: 0.5;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.03em;
   }
 
-  .lang-option--inactive:hover {
-    color: var(--color-brand-primary);
-    opacity: 1;
+  .lang-trigger:hover {
     background-color: var(--color-brand-accent-light);
+    border-color: var(--color-brand-accent);
   }
 
-  .lang-option:focus-visible {
+  .lang-trigger:focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
   }
-</style>
 
-<script>
-  document.querySelectorAll('.lang-option--inactive').forEach((link) => {
-    link.addEventListener('click', (e) => e.preventDefault());
-  });
-</script>
+  .lang-globe {
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  .lang-chevron {
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: transform 0.15s;
+  }
+
+  .lang-trigger[aria-expanded='true'] .lang-chevron {
+    transform: rotate(180deg);
+  }
+
+  .lang-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 130px;
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem;
+    background: var(--color-brand-bg);
+    border: 1px solid var(--color-brand-accent);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 200;
+  }
+
+  .lang-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    min-height: 40px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-brand-text);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: background 0.12s, color 0.12s;
+    border-bottom: none;
+  }
+
+  .lang-menu-item:hover {
+    background-color: var(--color-brand-accent-light);
+    color: var(--color-brand-primary);
+    border-bottom: none;
+  }
+
+  .lang-menu-item--active {
+    color: var(--color-brand-primary);
+    font-weight: 600;
+  }
+</style>

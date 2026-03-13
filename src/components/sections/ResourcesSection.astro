@@ -24,11 +24,16 @@ export interface Props {
   heading?: string;
   subheading?: string;
   columns: ResourceColumn[];
+  locale?: string;
 }
 
+import { useTranslations } from '@/i18n';
+const locale = Astro.props.locale ?? Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+
 const {
-  heading = 'Go Deeper',
-  subheading = 'Resources, communities, and ways to contribute to the project.',
+  heading = t('resources.heading') as string,
+  subheading = t('resources.subheading') as string,
   columns,
 } = Astro.props;
 ---

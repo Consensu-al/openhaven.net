@@ -2,6 +2,11 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NavigatorSection from '@/components/islands/NavigatorSection';
 import { loadDomains, loadAffordances, loadProtocols } from '@/lib/data';
+import { useTranslations } from '@/i18n';
+
+const locale = Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+const prefix = locale !== 'en' ? `/${locale}` : '';
 
 const domains = loadDomains();
 const affordances = loadAffordances();
@@ -9,25 +14,25 @@ const protocols = loadProtocols();
 ---
 
 <BaseLayout
-  title="Open Protocol Navigator — OpenHaven"
-  description="Navigate and compare open protocols for the decentralized web."
+  title={t('navigatorPage.title') as string}
+  description={t('navigatorPage.description') as string}
 >
   <main>
     <div class="hero">
       <div class="container">
-        <h1>Open Protocol Navigator</h1>
-        <p class="tagline">Discover, compare, and choose open protocols</p>
+        <h1>{t('navigatorPage.heading')}</h1>
+        <p class="tagline">{t('navigatorPage.tagline')}</p>
       </div>
     </div>
 
     <div class="container">
       <section class="section">
-        <NavigatorSection client:load domains={domains} affordances={affordances} protocols={protocols} locale="en" />
+        <NavigatorSection client:load domains={domains} affordances={affordances} protocols={protocols} locale={locale} />
       </section>
 
       <section class="section">
         <p>
-          <a href="/">← Back to OpenHaven</a>
+          <a href={`${prefix}/prototype`}>{t('nav.backToOpenHaven')}</a>
         </p>
       </section>
     </div>

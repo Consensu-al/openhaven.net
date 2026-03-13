@@ -3,6 +3,7 @@ import { loadDomains, loadProtocolsByDomain, loadAffordancesByDomain } from '@/l
 import type { Domain, Protocol, Affordance } from '@/lib/types'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import ProtocolCard from '@/components/islands/ProtocolCard'
+import { useTranslations } from '@/i18n'
 
 export function getStaticPaths() {
   const domains = loadDomains()
@@ -18,6 +19,8 @@ const affordances = loadAffordancesByDomain(domain.slug)
 
 // Date formatting
 const locale = Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
 
 // --- Domain Icon SVGs ---
 const DOMAIN_ICON_SVGS: Record<string, string> = {
@@ -40,8 +43,8 @@ const META_DESC_MAX = 155
 const affordanceNames = affordances.slice(0, 3).map((a) => a.name).join(', ')
 const metaParts = [
   `${domain.name}: ${domain.description}`,
-  `${protocols.length} open protocols`,
-  affordanceNames ? `Key affordances: ${affordanceNames}` : null,
+  `${protocols.length} ${t('domain.openProtocols')}`,
+  affordanceNames ? `${t('domain.keyAffordances')} ${affordanceNames}` : null,
 ].filter(Boolean)
 const fullDescription = metaParts.join(' — ')
 const pageDescription = fullDescription.length <= META_DESC_MAX
@@ -50,7 +53,7 @@ const pageDescription = fullDescription.length <= META_DESC_MAX
 
 // --- JSON-LD ---
 const siteBase = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '')
-const canonicalUrl = `${siteBase}/domains/${domain.slug}`
+const canonicalUrl = `${siteBase}/prototype/domains/${domain.slug}`
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -66,7 +69,7 @@ const jsonLd = {
       '@type': 'ListItem',
       'position': index + 1,
       'name': protocol.name,
-      'url': `${siteBase}/protocols/${protocol.id}`,
+      'url': `${siteBase}/prototype/protocols/${protocol.id}`,
     })),
   },
 }
@@ -75,8 +78,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   'itemListElement': [
-    { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': siteBase },
-    { '@type': 'ListItem', 'position': 2, 'name': 'Domains', 'item': `${siteBase}/domains` },
+    { '@type': 'ListItem', 'position': 1, 'name': t('nav.home'), 'item': siteBase },
+    { '@type': 'ListItem', 'position': 2, 'name': t('nav.domains'), 'item': `${siteBase}/prototype/domains` },
     { '@type': 'ListItem', 'position': 3, 'name': domain.name, 'item': canonicalUrl },
   ],
 }
@@ -94,10 +97,10 @@ const breadcrumbLd = {
       <nav aria-label="Breadcrumb" class="breadcrumb-nav" data-testid="breadcrumb">
         <ol class="breadcrumb-list">
           <li>
-            <a href="/" class="breadcrumb-link" data-testid="breadcrumb-home">Home</a>
+            <a href={`${prefix}/prototype`} class="breadcrumb-link" data-testid="breadcrumb-home">{t('nav.home')}</a>
           </li>
           <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
-          <li><span>Domains</span></li>
+          <li><span>{t('nav.domains')}</span></li>
           <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
           <li aria-current="page"><span class="breadcrumb-current">{domain.name}</span></li>
         </ol>
@@ -105,7 +108,7 @@ const breadcrumbLd = {
 
       <!-- Page Type Indicator -->
       <div class="page-type">
-        <span class="page-type-badge">Use Case Domain</span>
+        <span class="page-type-badge">{t('domain.useCaseDomain')}</span>
       </div>
 
       <!-- Hero Card -->
@@ -139,19 +142,19 @@ const breadcrumbLd = {
             <!-- Stats Row -->
             <div class="stats-row">
               <span class="stat-item">
-                <strong>{protocols.length}</strong> protocol{protocols.length !== 1 ? 's' : ''}
+                {(t('domain.protocolCount') as (n: number) => string)(protocols.length)}
               </span>
               <span class="stat-divider">·</span>
               <span class="stat-item">
-                <strong>{affordances.length}</strong> affordance{affordances.length !== 1 ? 's' : ''}
+                {(t('domain.affordanceCount') as (n: number) => string)(affordances.length)}
               </span>
             </div>
           </div>
 
           <!-- Right: Actions -->
           <div class="hero-actions">
-            <a href={`/?useCase=${domain.slug}`} class="action-btn action-btn--primary">
-              Explore in Navigator
+            <a href={`${prefix}/prototype?useCase=${domain.slug}`} class="action-btn action-btn--primary">
+              {t('domain.exploreInNavigator')}
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
@@ -166,8 +169,8 @@ const breadcrumbLd = {
         <!-- Left: Affordances -->
         {affordances.length > 0 && (
           <div class="content-card">
-            <h2 class="section-title">Affordances</h2>
-            <p class="section-subtitle">Capabilities protocols in this domain may provide</p>
+            <h2 class="section-title">{t('domain.affordances')}</h2>
+            <p class="section-subtitle">{t('domain.affordancesSubtitle')}</p>
             <div class="tags-list">
               {affordances.map((affordance) => (
                 <span class="tag tag--affordance">
@@ -180,18 +183,18 @@ const breadcrumbLd = {
 
         <!-- Right: Quick Stats -->
         <div class="content-card">
-          <h2 class="section-title">Overview</h2>
+          <h2 class="section-title">{t('domain.overview')}</h2>
           <div class="overview-list">
             <div class="overview-row">
-              <span class="overview-label">Primary Domain</span>
-              <span class="overview-value">{domain.isPrimary ? 'Yes' : 'No'}</span>
+              <span class="overview-label">{t('domain.primaryDomain')}</span>
+              <span class="overview-value">{domain.isPrimary ? t('domain.yes') : t('domain.no')}</span>
             </div>
             <div class="overview-row">
-              <span class="overview-label">Protocols Mapped</span>
+              <span class="overview-label">{t('domain.protocolsMapped')}</span>
               <span class="overview-value">{protocols.length}</span>
             </div>
             <div class="overview-row">
-              <span class="overview-label">Affordances</span>
+              <span class="overview-label">{t('domain.affordances')}</span>
               <span class="overview-value">{affordances.length}</span>
             </div>
           </div>
@@ -200,10 +203,10 @@ const breadcrumbLd = {
 
       <!-- Protocols Section -->
       <div class="protocols-section">
-        <h2 class="section-title-large">Protocols in {domain.name}</h2>
+        <h2 class="section-title-large">{(t('domain.protocolsIn') as (name: string) => string)(domain.name)}</h2>
 
         {protocols.length === 0 ? (
-          <p class="no-protocols">No protocols mapped yet for this domain.</p>
+          <p class="no-protocols">{t('domain.noProtocols')}</p>
         ) : (
           <div class="protocols-grid">
             {protocols.map((protocol) => (

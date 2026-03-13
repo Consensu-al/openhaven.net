@@ -34,7 +34,7 @@ const {
     {badge && (
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        <span>{badge}</span>
+        <span set:html={badge} />
       </div>
     )}
 

@@ -7,29 +7,7 @@ import {
 } from '@/components/ui/tooltip'
 import { ArrowRight } from 'lucide-react'
 import type { Protocol } from '@/lib/types'
-
-const RESULTS_STRINGS = {
-  captureRiskLabel: {
-    low: 'Low capture risk',
-    medium: 'Medium capture risk',
-    high: 'High capture risk',
-  },
-  captureRiskTooltip:
-    'Capture risk reflects governance structure, not quality. High-capture protocols may be candidates for governance transition.',
-  governanceLabel: {
-    foundation: 'Foundation',
-    dao: 'DAO',
-    'single-company': 'Company',
-    'open-standard-body': 'Open Standard',
-    community: 'Community',
-  },
-  architectureLabel: {
-    'fully-p2p': 'Fully P2P',
-    federated: 'Federated',
-    hybrid: 'Hybrid',
-  },
-  viewDetails: 'View Details',
-} as const
+import { useTranslations } from '@/i18n'
 
 const GOVERNANCE_STYLE: Record<
   Protocol['governanceModel'],
@@ -90,6 +68,8 @@ export default function ProtocolCard({
   protocol,
   locale = 'en',
 }: ProtocolCardProps) {
+  const t = useTranslations(locale)
+  const localePrefix = locale !== 'en' ? `/${locale}` : ''
   const dateFormatter = useMemo(
     () => new Intl.DateTimeFormat(locale, {
       year: 'numeric',
@@ -154,7 +134,7 @@ export default function ProtocolCard({
               backgroundColor: 'transparent',
             }}
           >
-            {RESULTS_STRINGS.architectureLabel[protocol.architectureType]}
+            {t(`badge.architecture.${protocol.architectureType}`)}
           </span>
 
           {/* Governance badge — filled style */}
@@ -166,7 +146,7 @@ export default function ProtocolCard({
             }}
             data-testid={`governance-badge-${protocol.id}`}
           >
-            {RESULTS_STRINGS.governanceLabel[protocol.governanceModel]}
+            {t(`badge.governance.${protocol.governanceModel}`)}
           </span>
         </div>
 
@@ -186,13 +166,13 @@ export default function ProtocolCard({
                     aria-hidden="true"
                   />
                   <span style={{ color: 'var(--color-brand-text)', opacity: 0.7 }}>
-                    {RESULTS_STRINGS.captureRiskLabel[protocol.captureRisk]}
+                    {t(`badge.captureRiskLabel.${protocol.captureRisk}`)}
                   </span>
                 </span>
               </TooltipTrigger>
               <TooltipContent>
                 <p className="max-w-xs text-xs">
-                  {RESULTS_STRINGS.captureRiskTooltip}
+                  {t('badge.captureRiskTooltip')}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -206,7 +186,7 @@ export default function ProtocolCard({
 
       {/* View Details footer - prominent CTA */}
       <a
-        href={`/protocols/${protocol.id}`}
+        href={`${localePrefix}/prototype/protocols/${protocol.id}`}
         className="flex items-center justify-between px-5 py-3 rounded-b-xl transition-colors"
         style={{
           backgroundColor: 'var(--color-brand-accent-light)',
@@ -219,7 +199,7 @@ export default function ProtocolCard({
           className="text-sm font-semibold"
           style={{ color: 'var(--color-brand-primary)' }}
         >
-          {RESULTS_STRINGS.viewDetails}
+          {t('card.viewDetails')}
         </span>
         <ArrowRight
           className="w-4 h-4 transition-transform group-hover:translate-x-1"

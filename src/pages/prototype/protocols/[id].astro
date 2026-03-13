@@ -1,7 +1,8 @@
 ---
-import { loadProtocols, loadDomains, loadAffordances } from '@/lib/data'
-import type { Protocol, Domain, Affordance } from '@/lib/types'
+import { loadProtocols, loadDomains, loadAffordances, loadEntityTypes, loadAttributeDefs } from '@/lib/data'
+import type { Protocol, Domain, Affordance, EntityType, AttributeDef } from '@/lib/types'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import { useTranslations } from '@/i18n'
 
 export function getStaticPaths() {
   const protocols = loadProtocols()
@@ -19,6 +20,46 @@ const affordances = loadAffordances()
 const domainMap = new Map<string, Domain>(domains.map((d) => [d.id, d]))
 const affordanceMap = new Map<string, Affordance>(affordances.map((a) => [a.id, a]))
 
+// Entity types & attribute definitions
+const entityTypes = loadEntityTypes()
+const attributeDefs = loadAttributeDefs()
+const entityTypeMap = new Map<string, EntityType>(entityTypes.map((et) => [et.id, et]))
+
+// XLSX tab names diverge from entity-types.json fullNames — explicit mapping required
+const ENTITY_TYPE_DISPLAY_TO_ID: Record<string, string> = {
+  'P2P Protocols': 'p2p-protocol',
+  'P2P Platforms/Frameworks': 'p2p-platform',
+  'Integrated P2P Runtime': 'p2p-runtime',
+  'P2P Infrastructure': 'p2p-infrastructure',
+  'Decentralized Applications': 'd-app',
+  'Extended D Apps': 'ext-d-app',
+  'Federated Protocols': 'federated-protocol',
+  'Semantic & Data Protocols': 'semantic-data',
+  'Identity Protocols': 'identity-protocol',
+  'Identity Platforms/Frameworks': 'identity-platform',
+  'Identity Systems': 'identity-system',
+  'Standards/Coordination Systems': 'standard-coordination',
+  'Decentralized Storage Networks': 'storage-network',
+}
+
+const entityTypeId = ENTITY_TYPE_DISPLAY_TO_ID[protocol.entityType]
+const entityTypeDef = entityTypeId ? entityTypeMap.get(entityTypeId) : undefined
+
+type EntityAttribute = { label: string; value: string; description?: string }
+const entitySpecificAttributes: EntityAttribute[] = entityTypeId
+  ? attributeDefs
+      .filter((ad) => ad.appliesToEntityTypes.includes(entityTypeId))
+      .filter((ad) => {
+        const val = protocol.entityAttributes?.[ad.key]
+        return val != null && val !== ''
+      })
+      .map((ad) => ({
+        label: ad.column,
+        value: protocol.entityAttributes![ad.key]!,
+        description: ad.definition,
+      }))
+  : []
+
 // Resolve names
 const protocolDomains = protocol.domainIds
   .map((id) => domainMap.get(id))
@@ -29,32 +70,18 @@ const protocolAffordances = protocol.affordanceIds
 
 // Date formatting
 const locale = Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
 const dateFormatted = new Intl.DateTimeFormat(locale, {
   year: 'numeric',
   month: 'short',
   day: 'numeric',
 }).format(new Date(protocol.lastInvestigated))
 
-// UI Strings
-const LABELS = {
-  governance: {
-    foundation: 'Foundation',
-    dao: 'DAO',
-    'single-company': 'Company',
-    'open-standard-body': 'Open Standard',
-    community: 'Community',
-  } as Record<Protocol['governanceModel'], string>,
-  architecture: {
-    'fully-p2p': 'Fully P2P',
-    federated: 'Federated',
-    hybrid: 'Hybrid',
-  } as Record<Protocol['architectureType'], string>,
-  captureRisk: {
-    low: 'Low capture risk',
-    medium: 'Medium capture risk',
-    high: 'High capture risk',
-  } as Record<Protocol['captureRisk'], string>,
-}
+// UI label helpers via i18n
+const governanceLabel = (key: string) => t(`badge.governance.${key}`) as string
+const architectureLabel = (key: string) => t(`badge.architecture.${key}`) as string
+const captureRiskLabel = (key: string) => t(`badge.captureRiskLabel.${key}`) as string
 
 const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
   low: 'var(--color-risk-low)',
@@ -65,27 +92,26 @@ const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
 // Key Attributes
 type KeyAttribute = { label: string; value: string }
 const keyAttributes: KeyAttribute[] = [
-  protocol.license ? { label: 'License', value: protocol.license } : null,
-  protocol.devStatus ? { label: 'Dev Status', value: protocol.devStatus } : null,
-  protocol.owner ? { label: 'Owner', value: protocol.owner } : null,
-  protocol.country ? { label: 'Country', value: protocol.country } : null,
-  protocol.startYear ? { label: 'Start Year', value: String(protocol.startYear) } : null,
-  protocol.stack.length > 0 ? { label: 'Stack', value: protocol.stack.join(', ') } : null,
-  protocol.funding.length > 0 ? { label: 'Funding', value: protocol.funding.join(', ') } : null,
-  { label: 'Last Investigated', value: dateFormatted },
+  protocol.license ? { label: t('protocol.license') as string, value: protocol.license } : null,
+  protocol.devStatus ? { label: t('protocol.devStatus') as string, value: protocol.devStatus } : null,
+  protocol.owner ? { label: t('protocol.owner') as string, value: protocol.owner } : null,
+  protocol.country ? { label: t('protocol.country') as string, value: protocol.country } : null,
+  protocol.startYear ? { label: t('protocol.startYear') as string, value: String(protocol.startYear) } : null,
+  protocol.stack.length > 0 ? { label: t('protocol.stack') as string, value: protocol.stack.join(', ') } : null,
+  protocol.funding.length > 0 ? { label: t('protocol.funding') as string, value: protocol.funding.join(', ') } : null,
+  { label: t('protocol.lastInvestigated') as string, value: dateFormatted },
 ].filter((attr): attr is KeyAttribute => attr !== null)
 
 // SEO
 const META_DESC_MAX = 155
-const fullDescription = `${protocol.description ?? protocol.name} — ${LABELS.architecture[protocol.architectureType]} architecture, ${LABELS.governance[protocol.governanceModel]} governance`
+const fullDescription = `${protocol.description ?? protocol.name} — ${architectureLabel(protocol.architectureType)} architecture, ${governanceLabel(protocol.governanceModel)} governance`
 const pageDescription = fullDescription.length <= META_DESC_MAX
   ? fullDescription
   : `${fullDescription.slice(0, META_DESC_MAX - 1)}…`
 
 // Links
-const hasWebsite = protocol.website
 const hasCommunity = protocol.communityLink
-const hasLinks = hasWebsite || hasCommunity
+const hasLinks = hasCommunity
 
 // --- JSON-LD ---
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://openhaven.net')
@@ -103,12 +129,12 @@ const jsonLd = {
   publisher: { '@type': 'Organization', name: 'OpenHaven', url: siteUrl },
   ...(protocol.communityLink ? { discussionUrl: protocol.communityLink } : {}),
   about: [
-    { '@type': 'Thing', name: `Governance: ${LABELS.governance[protocol.governanceModel]}` },
-    { '@type': 'Thing', name: `Architecture: ${LABELS.architecture[protocol.architectureType]}` },
+    { '@type': 'Thing', name: `Governance: ${governanceLabel(protocol.governanceModel)}` },
+    { '@type': 'Thing', name: `Architecture: ${architectureLabel(protocol.architectureType)}` },
   ],
   keywords: [
-    LABELS.governance[protocol.governanceModel],
-    LABELS.architecture[protocol.architectureType],
+    governanceLabel(protocol.governanceModel),
+    architectureLabel(protocol.architectureType),
     ...protocolDomains.map((d) => d.name),
   ],
 }
@@ -126,10 +152,10 @@ const jsonLd = {
       <nav aria-label="Breadcrumb" class="breadcrumb-nav" data-testid="breadcrumb">
         <ol class="breadcrumb-list">
           <li>
-            <a href="/" class="breadcrumb-link" data-testid="breadcrumb-home">Home</a>
+            <a href={`${prefix}/prototype`} class="breadcrumb-link" data-testid="breadcrumb-home">{t('nav.home')}</a>
           </li>
           <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
-          <li><span>Protocols</span></li>
+          <li><span>{t('nav.protocols')}</span></li>
           <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
           <li aria-current="page"><span class="breadcrumb-current">{protocol.name}</span></li>
         </ol>
@@ -152,14 +178,14 @@ const jsonLd = {
             <!-- Badge Row -->
             <div class="badge-row">
               <span class="badge badge--architecture">
-                {LABELS.architecture[protocol.architectureType]}
+                {architectureLabel(protocol.architectureType)}
               </span>
               <span class="badge badge--governance">
-                {LABELS.governance[protocol.governanceModel]}
+                {governanceLabel(protocol.governanceModel)}
               </span>
               <span class="badge badge--risk">
                 <span class="risk-dot" style={`background-color: ${RISK_COLOR[protocol.captureRisk]}`}></span>
-                {LABELS.captureRisk[protocol.captureRisk]}
+                {captureRiskLabel(protocol.captureRisk)}
               </span>
             </div>
           </div>
@@ -167,19 +193,11 @@ const jsonLd = {
           <!-- Right: Links -->
           {hasLinks && (
             <div class="hero-links">
-              <span class="links-label">Links</span>
+              <span class="links-label">{t('protocol.links')}</span>
               <div class="links-list">
-                {hasWebsite && (
-                  <a href={protocol.website} target="_blank" rel="noopener noreferrer" class="link-btn">
-                    Visit Website
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17L17 7M17 7H7M17 7v10"/>
-                    </svg>
-                  </a>
-                )}
                 {hasCommunity && (
                   <a href={protocol.communityLink} target="_blank" rel="noopener noreferrer" class="link-btn">
-                    Visit Community
+                    {t('protocol.visitCommunity')}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17L17 7M17 7H7M17 7v10"/>
                     </svg>
@@ -196,7 +214,7 @@ const jsonLd = {
 
         <!-- Left Column: Attributes -->
         <div class="attributes-card">
-          <h2 class="section-title">Details</h2>
+          <h2 class="section-title">{t('protocol.details')}</h2>
           <div class="attributes-list">
             {keyAttributes.map((attr) => (
               <div class="attribute-row">
@@ -211,10 +229,10 @@ const jsonLd = {
         <div class="tags-column">
           {protocolDomains.length > 0 && (
             <div class="tags-card">
-              <h2 class="section-title">Use Case Domains</h2>
+              <h2 class="section-title">{t('protocol.useCaseDomains')}</h2>
               <div class="tags-list">
                 {protocolDomains.map((domain) => (
-                  <a href={`/domains/${domain.slug}`} class="tag tag--domain">
+                  <a href={`${prefix}/prototype/domains/${domain.slug}`} class="tag tag--domain">
                     {domain.name}
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17L17 7M17 7H7M17 7v10"/>
@@ -227,7 +245,7 @@ const jsonLd = {
 
           {protocolAffordances.length > 0 && (
             <div class="tags-card">
-              <h2 class="section-title">Affordances</h2>
+              <h2 class="section-title">{t('protocol.affordances')}</h2>
               <div class="tags-list">
                 {protocolAffordances.map((affordance) => (
                   <span class="tag tag--affordance">
@@ -239,6 +257,23 @@ const jsonLd = {
           )}
         </div>
       </div>
+
+      <!-- Entity-Type-Specific Attributes -->
+      {entitySpecificAttributes.length > 0 && (
+        <div class="entity-attributes-card" data-testid="entity-attributes">
+          <h2 class="section-title">
+            {entityTypeDef?.fullName ?? protocol.entityType} {t('protocol.attributes')}
+          </h2>
+          <div class="entity-attributes-list">
+            {entitySpecificAttributes.map((attr) => (
+              <div class="entity-attribute-row">
+                <span class="entity-attribute-label" title={attr.description}>{attr.label}</span>
+                <span class="entity-attribute-value">{attr.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
     </div>
   </main>
@@ -576,5 +611,56 @@ const jsonLd = {
     color: var(--color-brand-text);
     background: white;
     border: 2px solid rgba(139, 69, 19, 0.25);
+  }
+
+  /* Entity-Type-Specific Attributes Card */
+  .entity-attributes-card {
+    background: white;
+    border: 2px solid var(--color-card-border);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  @media (min-width: 640px) {
+    .entity-attributes-card {
+      padding: 1.5rem;
+    }
+  }
+
+  .entity-attributes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .entity-attribute-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-card-border);
+  }
+
+  .entity-attribute-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .entity-attribute-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-brand-text);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .entity-attribute-value {
+    font-size: 0.8125rem;
+    color: var(--color-brand-text);
+    line-height: 1.5;
+    word-break: break-word;
   }
 </style>

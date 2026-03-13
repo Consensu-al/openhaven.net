@@ -7,28 +7,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-
-const SURVEY_ANSWERS = [
-  { id: 'communicate', text: 'Talk freely with people and groups', domainSlug: 'communication' },
-  { id: 'identity', text: 'Know who I\'m dealing with and control my data', domainSlug: 'identity-trust' },
-  { id: 'organize', text: 'Organize a group or make decisions together', domainSlug: 'group-governance' },
-  { id: 'help', text: 'Help and support people in my community', domainSlug: 'mutual-aid-exchange' },
-  { id: 'create', text: 'Create, learn, or share knowledge together', domainSlug: 'co-creation-knowledge' },
-  { id: 'coordinate', text: 'Coordinate events or local projects', domainSlug: 'events-coordination' },
-] as const
-
-const WIZARD_STRINGS = {
-  question: 'What are you trying to do?',
-  close: 'Close',
-  tooltipPrefix: 'This maps to:',
-  tooltipSuffix: 'in the domain grid below',
-} as const
+import { useTranslations } from '@/i18n'
 
 interface GuidedDiscoveryWizardProps {
   domains: Domain[]
   open: boolean
   onSelectDomain: (slug: string) => void
   onClose: () => void
+  locale?: string
 }
 
 export default function GuidedDiscoveryWizard({
@@ -36,7 +22,18 @@ export default function GuidedDiscoveryWizard({
   open,
   onSelectDomain,
   onClose,
+  locale,
 }: GuidedDiscoveryWizardProps) {
+  const t = useTranslations(locale)
+
+  const SURVEY_ANSWERS = [
+    { id: 'communicate', text: t('wizard.answers.communicate') as string, domainSlug: 'communication' },
+    { id: 'identity', text: t('wizard.answers.identity') as string, domainSlug: 'identity-trust' },
+    { id: 'organize', text: t('wizard.answers.organize') as string, domainSlug: 'group-governance' },
+    { id: 'help', text: t('wizard.answers.help') as string, domainSlug: 'mutual-aid-exchange' },
+    { id: 'create', text: t('wizard.answers.create') as string, domainSlug: 'co-creation-knowledge' },
+    { id: 'coordinate', text: t('wizard.answers.coordinate') as string, domainSlug: 'events-coordination' },
+  ]
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -95,7 +92,7 @@ export default function GuidedDiscoveryWizard({
               className="text-lg sm:text-xl font-semibold pr-4"
               style={{ color: 'var(--color-brand-primary)' }}
             >
-              {WIZARD_STRINGS.question}
+              {t('wizard.question')}
             </h3>
             <button
               type="button"
@@ -106,7 +103,7 @@ export default function GuidedDiscoveryWizard({
                 // @ts-expect-error CSS custom property for focus ring
                 '--tw-ring-color': 'var(--color-focus-ring)',
               }}
-              aria-label={WIZARD_STRINGS.close}
+              aria-label={t('wizard.close') as string}
               data-testid="guided-discovery-close"
             >
               <X className="h-5 w-5" aria-hidden="true" />
@@ -161,7 +158,7 @@ export default function GuidedDiscoveryWizard({
                             // @ts-expect-error CSS custom property for focus ring
                             '--tw-ring-color': 'var(--color-focus-ring)',
                           }}
-                          aria-label={`${WIZARD_STRINGS.tooltipPrefix} ${domain.name}`}
+                          aria-label={`${t('wizard.tooltipPrefix')} ${domain.name}`}
                           data-testid={`wizard-tooltip-${answer.id}`}
                         >
                           <HelpCircle className="h-4 w-4" aria-hidden="true" />
@@ -176,9 +173,9 @@ export default function GuidedDiscoveryWizard({
                         }}
                       >
                         <p>
-                          {WIZARD_STRINGS.tooltipPrefix}{' '}
+                          {t('wizard.tooltipPrefix')}{' '}
                           <strong>{domain.name}</strong>{' '}
-                          {WIZARD_STRINGS.tooltipSuffix}
+                          {t('wizard.tooltipSuffix')}
                         </p>
                       </TooltipContent>
                     </Tooltip>

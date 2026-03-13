@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import RandomImage from "../components/RandomImage.astro";
-import MediaEmbed from "../components/MediaEmbed.astro";
-import calendarsData from "../data/calendars.json";
+import RandomImage from "@/components/RandomImage.astro";
+import MediaEmbed from "@/components/MediaEmbed.astro";
+import calendarsData from "@/data/calendars.json";
 
 // Fetch raw ICS at build time (solves CORS), parsing happens client-side
 const calendarsWithICS = await Promise.all(

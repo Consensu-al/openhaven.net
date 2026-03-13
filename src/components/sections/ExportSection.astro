@@ -18,11 +18,16 @@ export interface Props {
   heading?: string;
   subheading?: string;
   protocols: ExportProtocol[];
+  locale?: string;
 }
 
+import { useTranslations } from '@/i18n';
+const locale = Astro.props.locale ?? Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+
 const {
-  heading = 'Export Your Stack for AI-Assisted Development',
-  subheading = 'Select your protocols and generate context for Cursor, Windsurf, Claude, or your vibe coding tool of choice.',
+  heading = t('exportSection.heading') as string,
+  subheading = t('exportSection.subheading') as string,
   protocols,
 } = Astro.props;
 ---
@@ -31,7 +36,7 @@ const {
   <div class="export-inner">
     <div class="export-header">
       <div class="export-badge">
-        <span>Vibe Coding Ready</span>
+        <span>{t('exportSection.badge')}</span>
       </div>
       <h2>{heading}</h2>
       <p>{subheading}</p>
@@ -39,7 +44,7 @@ const {
 
     <div class="export-card">
       <div class="export-card-header">
-        <h3>Select Protocols</h3>
+        <h3>{t('exportSection.selectProtocols')}</h3>
       </div>
 
       <div class="export-grid">
@@ -56,9 +61,9 @@ const {
 
       <div class="export-card-footer">
         <button class="btn btn-primary" type="button" disabled>
-          Generate Prompt
+          {t('exportSection.generatePrompt')}
         </button>
-        <span class="export-hint">Interactive version coming soon</span>
+        <span class="export-hint">{t('exportSection.comingSoon')}</span>
       </div>
     </div>
   </div>

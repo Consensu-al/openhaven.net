@@ -1,0 +1,50 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import PrinciplesSection from "@/components/sections/PrinciplesSection.astro";
+import DisclaimerBanner from "@/components/sections/DisclaimerBanner.astro";
+import NavigatorSection from "@/components/islands/NavigatorSection";
+import { loadDomains, loadAffordances, loadProtocols } from "@/lib/data";
+import { useTranslations } from '@/i18n';
+
+const locale = Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+
+const domains = loadDomains();
+const affordances = loadAffordances();
+const protocols = loadProtocols();
+
+const principles = t('principles.items') as Array<{title: string; description: string}>;
+---
+
+<BaseLayout
+  title={`${t('hero.title')} ${t('hero.highlight')} — OpenHaven`}
+  description={t('hero.subtitle') as string}
+>
+  <HeroSection
+    title={t('hero.title') as string}
+    highlight={t('hero.highlight') as string}
+    subtitle={t('hero.subtitle') as string}
+    badge={t('hero.badge') as string}
+    primaryCta={{ label: t('hero.getStarted') as string, href: "#how-it-works" }}
+    secondaryCta={{ label: t('hero.browseMatrix') as string, href: "/prototype/matrix" }}
+  />
+
+  <PrinciplesSection
+    id="how-it-works"
+    heading={t('principles.heading') as string}
+    subheading={t('principles.subheading') as string}
+    principles={principles}
+  />
+
+  <DisclaimerBanner
+    message={t('disclaimer.alphaIncomplete') as string}
+    variant="warning"
+  />
+
+  <section id="navigator" class="section-padding">
+    <div class="container">
+      <NavigatorSection client:load domains={domains} affordances={affordances} protocols={protocols} locale={locale} />
+    </div>
+  </section>
+</BaseLayout>

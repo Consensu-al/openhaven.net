@@ -1,11 +1,20 @@
 ---
+import { useTranslations } from '@/i18n';
+
+interface Props {
+  locale?: string;
+}
+
+const locale = Astro.props.locale ?? Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
 ---
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <p class="footer-copyright">&copy; 2026 OpenHaven</p>
+    <p class="footer-copyright">{t('footer.copyright')}</p>
     <p class="footer-attribution"></p>
-    <a href="/contribute" class="footer-link">Contribute</a>
+    <!-- Contribute link hidden until page exists -->
+
   </div>
 </footer>
 

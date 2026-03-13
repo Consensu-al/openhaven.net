@@ -1,0 +1,1268 @@
+[
+  {
+    "column": "Description",
+    "key": "description",
+    "definition": "A concise summary of what the tool does and its primary purpose",
+    "formatOptions": "1-3 sentences describing core functionality and value proposition",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Owner",
+    "key": "owner",
+    "definition": "The primary individual(s), organization, or company responsible for maintaining and developing the tool",
+    "formatOptions": "Person name(s) or organization name",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Country",
+    "key": "country",
+    "definition": "Geographic location where the primary development team or organization is based",
+    "formatOptions": "Country name or region (e.g., \"USA\", \"Europe\", \"Germany\")",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Start Date",
+    "key": "startDate",
+    "definition": "The year when the project was first initiated or announced",
+    "formatOptions": "Month and year",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Dev Status",
+    "key": "devStatus",
+    "definition": "Current state of development and availability",
+    "formatOptions": "Released, Alpha, Beta, WIP (Work In Progress), Defunct, Planned",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Source Code",
+    "key": "sourceCode",
+    "definition": "The license and availability of the project's source code",
+    "formatOptions": "Permissive (Apache, MIT, BSD), Libre (GPL, AGPL), Closed source",
+    "notes": "Include link to repository when applicable",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Origins",
+    "key": "origins",
+    "definition": "The original use case or domain from which the tool emerged",
+    "formatOptions": "Chat, File sharing, Productivity, Database, Ecosystem/SDK, Knowledge Base, Social Network",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Stack",
+    "key": "stack",
+    "definition": "Primary programming languages and runtime environments used",
+    "formatOptions": "Rust, JavaScript/TypeScript, Python, Golang, JVM/Clojure, C/C++, Erlang, PHP, Haskell",
+    "notes": "May include multiple languages separated by \"+\"",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Database",
+    "key": "database",
+    "definition": "The underlying data model and storage architecture",
+    "formatOptions": "CRDTs (Conflict-free replicated data types), ACID monolithic, Distributed (consensus-based), DAG (Directed Acyclic Graph), or specific database name",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Query Language",
+    "key": "queryLanguage",
+    "definition": "The language or API used to query and manipulate data",
+    "formatOptions": "Examples: SPARQL, GraphQL, Datalog, Custom, SQL, LDP (Linked Data Platform)",
+    "notes": "May support multiple query languages",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Data Formats",
+    "key": "dataFormats",
+    "definition": "The file formats and data structures supported for import, export, and storage",
+    "formatOptions": "JSON, JSON-LD, RDF, Markdown, XML, Custom, ActivityPub, Org-mode",
+    "notes": "Multiple formats separated by \"+\"",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Collaborative Live Editing",
+    "key": "collaborativeLiveEditing",
+    "definition": "Support for real-time simultaneous editing by multiple users",
+    "formatOptions": "Collaborative real-time editing, OT based live editing (Operational Transformation), N/A, Planned",
+    "notes": "Indicates the technology used (CRDTs, OT, etc.)",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data"
+    ]
+  },
+  {
+    "column": "Rich Text Editing",
+    "key": "richTextEditing",
+    "definition": "Support for formatted text with styling, images, and rich media",
+    "formatOptions": "Rich Text editing, Basic text only, N/A",
+    "notes": "Includes capabilities like bold, italic, embedded images, etc.",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data"
+    ]
+  },
+  {
+    "column": "Mobile Support",
+    "key": "mobileSupport",
+    "definition": "Availability of native or web-based mobile applications",
+    "formatOptions": "Mobile support, Partial Mobile support, React Native, N/A",
+    "notes": "Distinguish between native apps and responsive web apps",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Web Support",
+    "key": "webSupport",
+    "definition": "Ability to run in web browsers",
+    "formatOptions": "Yes or No",
+    "notes": "May run as progressive web app (PWA) or traditional web application",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Native Apps",
+    "key": "nativeApps",
+    "definition": "Availability of platform-specific desktop applications",
+    "formatOptions": "Native apps, Electron Desktop app, Flutter, N/A",
+    "notes": "Includes Windows, macOS, Linux applications",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Terms",
+    "key": "terms",
+    "definition": "Business model and access terms for using the tool",
+    "formatOptions": "Self-hosting, Edge device, Freemium SaaS, Licensed install, Free SaaS, Paid SaaS",
+    "notes": "Multiple terms may apply (e.g., \"Self-hosting + Freemium SaaS\")",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Funding",
+    "key": "funding",
+    "definition": "Primary source of financial support",
+    "formatOptions": "VC (Venture Capital), NGI (Next Generation Internet), ICO (Initial Coin Offering), N/A, Personal investment, Undisclosed",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Funds",
+    "key": "funds",
+    "definition": "Amount of funding raised",
+    "formatOptions": "Dollar/Euro/etc. amount with source (e.g., \"$9M\", \"€24M\")",
+    "notes": "Include link to announcement when available",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Based On",
+    "key": "basedOn",
+    "definition": "The underlying protocol(s) or technology stack this protocol builds upon",
+    "formatOptions": "Examples may include IPFS, Holochain, NextGraph, Matrix, datahike, specific blockchain implementations, etc.",
+    "notes": "Empty if original/foundational protocol",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "P2P Architecture",
+    "key": "p2pArchitecture",
+    "definition": "The peer-to-peer networking architecture and consensus mechanism used",
+    "formatOptions": "Byzantine causal broadcast, DHT (Distributed Hash Table), Federation, Mesh network, Public/Private Blockchain, Simple pub/sub",
+    "notes": "For Protocols: Describes how nodes discover and communicate with each other. For Platforms: May differ from underlying protocol if platform adds abstraction layer.",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "ext-d-app",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Overlay Network",
+    "key": "overlayNetwork",
+    "definition": "The logical network topology created on top of the physical network",
+    "formatOptions": "Global, App-wide, Store-wide, App-wide two-tier, Store-wide two-tier, N/A",
+    "notes": "\"Global\" means data scattered across entire network; \"Store-wide\" means limited to members of a specific data store",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Content Addressing",
+    "key": "contentAddressing",
+    "definition": "Whether content is addressed by cryptographic hash rather than location",
+    "formatOptions": "Yes or No",
+    "notes": "Enables verifiable, location-independent data retrieval (e.g., IPFS CIDs)",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Local-First",
+    "key": "local-first",
+    "definition": "Whether the primary data source resides on user devices with cloud as backup",
+    "formatOptions": "Local-First, Local-only, Offline first, N/A",
+    "notes": "\"Local-First\" means full offline capability with sync; \"Local-only\" means no sync capability",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "E2EE",
+    "key": "e2ee",
+    "definition": "End-to-end encryption support ensuring only sender and recipient can read data",
+    "formatOptions": "Yes or No",
+    "notes": "Data encrypted on sender device, decrypted only on recipient device",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "CRDTs Lib",
+    "key": "crdtsLib",
+    "definition": "Specific Conflict-free Replicated Data Type libraries implemented or supported",
+    "formatOptions": "Automerge, Yrs/Yjs, Custom CRDTs, Differential Dataflow, RDF SU-set",
+    "notes": "CRDTs enable automatic conflict resolution in distributed systems",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-runtime"
+    ]
+  },
+  {
+    "column": "Byzantine Fault Tolerance",
+    "key": "byzantineFaultTolerance",
+    "definition": "Ability to reach consensus even when some nodes are malicious or faulty",
+    "formatOptions": "Yes or No",
+    "notes": "Critical for trustless distributed systems",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Signature",
+    "key": "signature",
+    "definition": "Cryptographic signature mechanism used for authentication and integrity",
+    "formatOptions": "BLS Threshold signature, Ed25519, Signature, N/A",
+    "notes": "Ensures data authenticity and non-repudiation",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Permissions",
+    "key": "permissions",
+    "definition": "Access control model for managing data and resource permissions",
+    "formatOptions": "Cryptographic Capabilities, ACL (Access Control Lists), UCANs (User Controlled Authorization Networks), OCAP (Object Capabilities), OAuth/OpenID, CCAP (Convergent Capabilities)",
+    "notes": "May combine multiple models (e.g., \"Cryptographic Capabilities + ACL\")",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "identity-protocol",
+      "identity-platform",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Semantic Web Compatability",
+    "key": "semanticWebCompatability",
+    "definition": "Compatibility with RDF, JSON-LD, SPARQL. Interoperability with semantic web ecosystem.",
+    "formatOptions": "Full RDF (Resource Description Framework) compliance, Links, SOLID, Custom, N/A",
+    "notes": "Enables machine-readable linked data and interoperability",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-runtime",
+      "semantic-data",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Smart Contract",
+    "key": "smartContract",
+    "definition": "Support for programmable, self-executing contracts on the protocol",
+    "formatOptions": "Yes, No, Planned for future",
+    "notes": "Enables trustless automation of business logic",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-runtime",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Protocol Stack Position",
+    "key": "protocolStackPosition",
+    "definition": "Whether the protocol operates on top of existing TCP/IP infrastructure (the vast majority of P2P protocols) or operates at the transport/packet level itself as a parallel or replacement layer.",
+    "formatOptions": "Values: Application-layer (built on TCP/IP) / Transport-equivalent (packet-level) / Cross-layer.",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-runtime",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Asset / Value Embedding",
+    "key": "assetValueEmbedding",
+    "definition": "Whether the protocol natively embeds asset ownership and value transfer at the packet or message level, or whether value is handled externally.",
+    "formatOptions": "Values: Native (packet-level) / External ledger / Application-layer add-on / None.",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-runtime",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Development Tools",
+    "key": "developmentTools",
+    "definition": "SDKs, APIs, and tooling provided for application developers",
+    "formatOptions": "List of available tools and languages supported",
+    "notes": "REST API, GraphQL API, JavaScript SDK, Mobile SDK, CLI tools",
+    "appliesToEntityTypes": [
+      "p2p-platform",
+      "p2p-runtime",
+      "ext-d-app",
+      "identity-platform",
+      "standard-coordination"
+    ]
+  },
+  {
+    "column": "Deployment Options",
+    "key": "deploymentOptions",
+    "definition": "How applications built on this platform can be deployed",
+    "formatOptions": "Self-hosted servers, Edge devices, Cloud hosting, Hybrid deployment",
+    "notes": "Describes infrastructure options for app deployment",
+    "appliesToEntityTypes": [
+      "p2p-platform",
+      "p2p-runtime",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Authentication & Identity",
+    "key": "authenticationIdentity",
+    "definition": "Identity management system provided by the platform",
+    "formatOptions": "Decentralized ID (DID), Self-Sovereign Identity (SSI), OAuth/OpenID, Custom, Blockchain-based, Federated Identity, Delegated Identity, Hybrid, Custodial, Non-custodial",
+    "notes": "How users are identified and authenticated across applications",
+    "appliesToEntityTypes": [
+      "p2p-platform",
+      "p2p-runtime",
+      "ext-d-app",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Storage Model",
+    "key": "storageModel",
+    "definition": "How the platform handles data storage and replication",
+    "formatOptions": "Distributed storage, Local storage with sync, Hybrid cloud-edge storage, User wallet (local), Encrypted cloud storage, Distributed storage (IPFS, Arweave), Blockchain/Ledger, Hybrid (local + backup), No storage (ephemeral), Browser storage, Mobile secure enclave.",
+    "notes": "Describes where and how application data is persisted",
+    "appliesToEntityTypes": [
+      "p2p-platform",
+      "p2p-runtime",
+      "ext-d-app",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Interoperability",
+    "key": "interoperability",
+    "definition": "Ability to work with other platforms, protocols, or standards",
+    "formatOptions": "List of supported protocols, data formats, or federation capabilities. Examples: ActivityPub support, IPFS integration, Cross-chain bridges",
+    "appliesToEntityTypes": [
+      "p2p-platform",
+      "p2p-runtime",
+      "ext-d-app",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Social Graph",
+    "key": "socialGraph",
+    "definition": "Whether social graph backend feature is supported",
+    "formatOptions": "Yes or No",
+    "appliesToEntityTypes": [
+      "p2p-platform",
+      "p2p-runtime",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Use Case Category",
+    "key": "useCaseCategory",
+    "definition": "Primary application domain or user need addressed",
+    "formatOptions": "Knowledge Management, Communication/Chat, File Sharing, Productivity, Social Network, Collaboration, Media/Publishing, Note-taking",
+    "notes": "An app may serve multiple use cases",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "User Interface Type",
+    "key": "userInterfaceType",
+    "definition": "The style and paradigm of the user interface",
+    "formatOptions": "Document-centric, Graph-based, Spreadsheet, Timeline/Feed, Canvas, Chat interface, File browser",
+    "notes": "Describes how users interact with the application",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Offline Capabilities",
+    "key": "offlineCapabilities",
+    "definition": "What functionality is available without network connectivity",
+    "formatOptions": "Full functionality offline, Read-only offline, Sync required, Online only",
+    "notes": "Critical for local-first applications",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Collaboration Features",
+    "key": "collaborationFeatures",
+    "definition": "Specific features enabling multi-user collaboration",
+    "formatOptions": "List of available features. Examples: Real-time editing, Comments/annotations, Presence indicators, Version history, Conflict resolution",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Data Portability",
+    "key": "dataPortability",
+    "definition": "Ability to export and migrate data to other tools",
+    "formatOptions": "Full export (all formats), Partial export, Proprietary format only, Standards-based export",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Integration Ecosystem",
+    "key": "integrationEcosystem",
+    "definition": "Third-party integrations and extensions available",
+    "formatOptions": "Browser extensions, Mobile apps, API integrations, Plugin marketplace",
+    "notes": "Indicates extensibility and ecosystem maturity",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Web2.0 Data Export",
+    "key": "web2.0DataExport",
+    "definition": "Ability to import data from traditional centralized services",
+    "formatOptions": "Examples: Import from Google Docs, Notion, Evernote, Twitter",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Prosocial Coherence",
+    "key": "prosocialCoherence",
+    "definition": "Whether features that support collective intelligence and healthy community dynamics are included",
+    "formatOptions": "Options might include Moderation tools, Reputation systems, Governance mechanisms",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Economic Flows",
+    "key": "economicFlows",
+    "definition": "Whether features that provide economic flows, possibly in the form of tokenomics, micropayments, resource deployment, and/or financial irrigation methods are included",
+    "formatOptions": "Options might include Cryptocurrency support, Fiat payments, Smart contracts for payments",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Governance & Decision Making",
+    "key": "governanceDecisionMaking",
+    "definition": "Whether governance and decision making features are included",
+    "formatOptions": "Options might include Core team, DAO, Community voting, Foundation, Foundation-governed, Company-controlled, Consortium, W3C/IETF standards body, Multi-stakeholder",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Media / Publishing",
+    "key": "mediaPublishing",
+    "definition": "Whether media and publishing features are included",
+    "formatOptions": "Yes or No",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Knowledge Management",
+    "key": "knowledgeManagement",
+    "definition": "Whether knowledge management features are included",
+    "formatOptions": "Yes or No",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Sensemaking",
+    "key": "sensemaking",
+    "definition": "Whether features that help users synthesize information and derive insights are included",
+    "formatOptions": "Yes or No",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Project Management",
+    "key": "projectManagement",
+    "definition": "Whether project management features are included",
+    "formatOptions": "Yes or No",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Communication Model",
+    "key": "communicationModel",
+    "definition": "The primary interaction pattern the application supports, describing whether users must be online simultaneously for the core use case to function.",
+    "formatOptions": "Synchronous (real-time chat, video, live co-editing) / Asynchronous (email-like, forum, store-and-forward) / Collaborative (simultaneous multi-user document or workspace editing) / Transactional (exchanges, transfers, one-off interactions) / Hybrid (combines multiple models)",
+    "notes": "An app may support multiple models; list primary first. \"Collaborative\" overlaps with \"Synchronous\" but is distinguished by shared-artifact focus rather than conversational focus. Relates to but is distinct from \"Collaborative Live Editing\" which captures capability rather than interaction pattern.",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Network Resilience",
+    "key": "networkResilience",
+    "definition": "How the application handles degraded, intermittent, or absent network connectivity, including offline operation and sync-on-reconnect behavior.",
+    "formatOptions": "Full offline (works without any connectivity, syncs on reconnect) / Delay-tolerant (store-and-forward, mesh relay, gossip-based delivery) / Partial offline (read/draft offline, requires connection to send/commit) / Online-required (core functionality requires active connection) / Mesh-capable (can form ad-hoc local networks via BLE, Wi-Fi Direct, LoRa, etc.) Particularly relevant for serverless/P2P apps where no central server guarantees message delivery. Closely related to \"Local-First\" attribute but focuses on operational behavior rather than architectural principle. Multiple values may apply (e.g., \"Full offline + Mesh-capable\").",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Discovery Mechanism",
+    "key": "discoveryMechanism",
+    "definition": "How users find and connect with other users or join shared spaces without relying on a central directory or server.",
+    "formatOptions": "DHT (distributed hash table lookup) / QR/Out-of-band (physical or side-channel key/address exchange) / Invite link (shareable URIs encoding connection info) / DNS-like (name resolution system, e.g., NDN naming, .eth domains) / Social graph (friend-of-friend, web of trust traversal) / Relay/Rendezvous (lightweight server assists connection but doesn't mediate communication) / Broadcast (multicast, mDNS, local network announcement)",
+    "notes": "Many apps combine mechanisms (e.g., relay for initial discovery + DHT for ongoing). Distinct from \"Authentication & Identity\" which covers verification of who someone is, while Discovery covers how you find them in the first place.",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Max Participants",
+    "key": "maxParticipants",
+    "definition": "The practical upper bound on simultaneous participants in a single session, conversation, or shared workspace, as constrained by protocol, CRDT performance, or network topology.",
+    "formatOptions": "1:1 (dyadic only) / Small group (2–10) / Medium group (10–100) / Large group (100–1,000) / Broadcast (1,000+) / Unbounded (no architectural limit) / Unknown",
+    "notes": "Record the practical tested or documented limit, not theoretical maximum. Where performance degrades gracefully, note the threshold (e.g., \"Medium group; CRDT sync degrades above ~50 concurrent editors\"). Protocol-level limits may differ from UX-level limits.",
+    "appliesToEntityTypes": [
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Federation Model",
+    "key": "federationModel",
+    "definition": "How servers federate and share data. Distinguishes federation architectures.",
+    "formatOptions": "Server-to-Server (S2S), Shared Heap (ATProto-style), Hub-and-Spoke, Full mesh",
+    "appliesToEntityTypes": [
+      "federated-protocol"
+    ]
+  },
+  {
+    "column": "Instance / Server Requirements",
+    "key": "instanceServerRequirements",
+    "definition": "What's needed to run a participating server. Affects decentralization potential.",
+    "formatOptions": "Technical requirements, complexity level",
+    "notes": "ATProto Relay is \"a fairly resource-demanding service\" vs ActivityPub instances can be modest",
+    "appliesToEntityTypes": [
+      "federated-protocol"
+    ]
+  },
+  {
+    "column": "Account Portability",
+    "key": "accountPortability",
+    "definition": "Can users move between servers keeping their identity/data. Key differentiator between protocols.",
+    "formatOptions": "Full portability, Partial portability, Server-locked, DID-based",
+    "appliesToEntityTypes": [
+      "federated-protocol"
+    ]
+  },
+  {
+    "column": "Discovery / Relay Architecture",
+    "key": "discoveryRelayArchitecture",
+    "definition": "How content is discovered across federated network. Affects discoverability and centralization risks.",
+    "formatOptions": "Instance-based, Global relay/firehose, Hybrid, Search indexers",
+    "appliesToEntityTypes": [
+      "federated-protocol"
+    ]
+  },
+  {
+    "column": "Server Authority Model",
+    "key": "serverAuthorityModel",
+    "definition": "What control servers have over their users. Governance implications.",
+    "formatOptions": "Full authority, Shared authority, Minimal (data-only), User-controlled",
+    "appliesToEntityTypes": [
+      "federated-protocol"
+    ]
+  },
+  {
+    "column": "Protocol Maturity / Standardization",
+    "key": "protocolMaturityStandardization",
+    "definition": "Standardization status. Affects long-term stability.",
+    "formatOptions": "W3C Standard, W3C Draft / Recommendation Track, IETF Standard (RFC), IETF Draft, IEEE Standard, ISO Standard, Proprietary Open Standard, Community Standard, De Facto Standard, Academic / Research, Pre-specification",
+    "notes": "• IETF Standard (RFC) — A finalized, published RFC. The current list has \"IETF Draft\" but no option for completed IETF standards. Many P2P protocols build on or become RFCs. • W3C Draft / Recommendation Track — W3C has a multi-stage process (Working Draft → Candidate Recommendation → Proposed Recommendation → Recommendation). \"W3C Standard\" only captures the endpoint. Some identity and data protocols are actively on this track but not yet Recommendations. • IEEE Standard — Relevant for some P2P and networking protocols (e.g., mesh networking standards). • ISO Standard — Relevant for identity protocols especially (ISO 18013-5 for mDL, ISO 27001 references). Also relevant for some data protocols. • Academic / Research — Protocols emerging from university research with published papers but no formal standards body involvement (e.g., NDN from UCLA, some CRDT protocols). Common in P2P Pro. • De Facto Standard — Widely adopted without formal standardization body endorsement. Protocol achieves standard status through market adoption rather than committee process (e.g., Nostr, some blockchain protocols). • Pre-specification — Design or concept stage; no formal specification document yet published. Relevant for ID Sys-adjacent protocols and early-stage work.",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-runtime",
+      "federated-protocol",
+      "semantic-data",
+      "identity-protocol",
+      "standard-coordination",
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Data Sovereignty",
+    "key": "dataSovereignty",
+    "definition": "Where user data is stored and who controls it. Privacy and ownership implications.",
+    "formatOptions": "Server-controlled, User-controlled via PDS, Distributed, Hybrid",
+    "appliesToEntityTypes": [
+      "federated-protocol",
+      "d-app",
+      "ext-d-app"
+    ]
+  },
+  {
+    "column": "Vocabulary / Ontology Type",
+    "key": "vocabularyOntologyType",
+    "definition": "What domain the vocabulary describes. Defines the protocol's scope.",
+    "formatOptions": "Economic flows, Social relationships, General-purpose",
+    "appliesToEntityTypes": [
+      "semantic-data"
+    ]
+  },
+  {
+    "column": "Usage Pattern",
+    "key": "usagePattern",
+    "definition": "How the protocol is typically used. Clarifies relationship to other protocols.",
+    "formatOptions": "Embedded in other protocols, Standalone, API overlay",
+    "appliesToEntityTypes": [
+      "semantic-data"
+    ]
+  },
+  {
+    "column": "Identity Standards",
+    "key": "identityStandards",
+    "definition": "Which decentralized identity specifications and standards are supported or implemented",
+    "formatOptions": "W3C DID (Decentralized Identifiers), W3C Verifiable Credentials, DIDComm, OpenID Connect for Verifiable Credentials (OIDC4VC), FIDO2/WebAuthn, BBS+ Signatures, Self-Issued OpenID Provider v2 (SIOPv2)",
+    "notes": "Examples: W3C DID: Decentralized identifier specification, W3C VC: Verifiable credentials data model, DIDComm: Secure messaging protocol for DIDs",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "DID Methods Supported",
+    "key": "didMethodsSupported",
+    "definition": "Which specific DID method(s) the system supports for creating and resolving decentralized identifiers",
+    "formatOptions": "did:key, did:web, did:ion, did:ethr, did:pkh, did:peer, did:polygon, did:sov, did:plc, Multiple/Custom",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Key Management",
+    "key": "keyManagement",
+    "definition": "How cryptographic keys are generated, stored, and managed",
+    "formatOptions": "User-controlled (local wallet), Hardware security module (HSM), Multi-party computation (MPC), Cloud key management, Browser/OS keychain, Smart contract, Biometric-protected, Social recovery, Threshold signatures. Format: Primary method + recovery options (e.g., \"Hardware wallet + Social recovery\")",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Credential Types",
+    "key": "credentialTypes",
+    "definition": "What types of verifiable credentials or claims the system supports",
+    "formatOptions": "Verifiable Credentials (VCs), Self-Attested Claims, Third-Party Attestations, Educational Credentials, Professional Certifications, Government IDs, Membership Proofs, Reputation Scores, Token-Gated Access, ZK-Proofs",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Verification Method",
+    "key": "verificationMethod",
+    "definition": "How credentials and identity claims are verified",
+    "formatOptions": "Cryptographic signature verification, Zero-knowledge proofs (ZKPs), Blockchain anchoring, Trusted registries, Biometric verification, Multi-factor authentication, Selective disclosure, Credential revocation lists",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Privacy Features",
+    "key": "privacyFeatures",
+    "definition": "Privacy-enhancing technologies and capabilities built into the system",
+    "formatOptions": "Zero-knowledge proofs, Selective disclosure, Unlinkability (pairwise DIDs), Blinded credentials, Minimal disclosure, Credential anonymization, Anti-correlation, Privacy-preserving revocation",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Authentication Methods",
+    "key": "authenticationMethods",
+    "definition": "How users prove control of their identity when authenticating",
+    "formatOptions": "Cryptographic signatures, Biometrics, Passkeys/WebAuthn, QR code scanning, Deep linking, Passwordless, Hardware tokens, Multi-factor (MFA), Challenge-response",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Revocation Mechanism",
+    "key": "revocationMechanism",
+    "definition": "How credentials can be invalidated or revoked",
+    "formatOptions": "Revocation lists (on-chain/off-chain), Status lists, Accumulator-based, Time-bound expiration, Self-revocation, Issuer revocation, Privacy-preserving revocation (StatusList2021)",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Agent Types Supported",
+    "key": "agentTypesSupported",
+    "definition": "What types of entities can have identities in the system",
+    "formatOptions": "Humans (individuals), Organizations, DAOs/Collectives, Autonomous agents/AI, Devices/IoT, Services/APIs, Pseudonymous entities",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Wallet/Client Types",
+    "key": "walletClientTypes",
+    "definition": "What software can be used to manage the identity",
+    "formatOptions": "Mobile app, Browser extension, Desktop application, Hardware wallet, Web-based (custodial), Command-line tool, SDK/Library integration",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Recovery Mechanisms",
+    "key": "recoveryMechanisms",
+    "definition": "How users can recover access if they lose keys or credentials",
+    "formatOptions": "Social recovery (guardians), Seed phrase backup, Cloud backup (encrypted), Hardware backup, Time-locked recovery, Multi-signature recovery, No recovery (user responsible), Account abstraction",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Compliance / Regulations",
+    "key": "complianceRegulations",
+    "definition": "Which regulatory frameworks or compliance standards the system addresses",
+    "formatOptions": "GDPR compliant, eIDAS (EU regulation), KYC/AML support, CCPA, HIPAA, SOC 2, ISO 27001, NIST guidelines, Age verification (without revealing age)",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Credential Exchange Protocols",
+    "key": "credentialExchangeProtocols",
+    "definition": "Protocols used for issuing, presenting, and verifying credentials",
+    "formatOptions": "DIDComm, OIDC4VC (OpenID for Verifiable Credentials), CHAPI (Credential Handler API), Presentation Exchange, Verifiable Presentation Request",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Trust Framework",
+    "key": "trustFramework",
+    "definition": "What establishes trust in the identity system",
+    "formatOptions": "Web of Trust, Trusted issuer registries, Blockchain consensus, Cryptographic verification only, Government-anchored, Reputation systems",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination"
+    ]
+  },
+  {
+    "column": "Cost Model",
+    "key": "costModel",
+    "definition": "Economic model for using the identity system",
+    "formatOptions": "Free (no blockchain fees), Gas fees (blockchain transactions), Subscription, Per-credential fee, Freemium, Enterprise licensing",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Censorship Resistance",
+    "key": "censorshipResistance",
+    "definition": "Ability to maintain identity even if services are shut down or accounts banned",
+    "formatOptions": "Fully censorship-resistant (blockchain/P2P), Depends on DID method, Service provider dependent, Hybrid",
+    "appliesToEntityTypes": [
+      "identity-protocol",
+      "identity-platform",
+      "identity-system"
+    ]
+  },
+  {
+    "column": "Infrastructure Function",
+    "key": "infrastructureFunction",
+    "definition": "The primary service this infrastructure provides to the network or to higher-layer applications and users.",
+    "formatOptions": "Censorship circumvention, Anonymous routing, Relay / proxy, Distributed storage, Name resolution, Bandwidth sharing, Mesh transport, VPN tunneling, Mixnet, Bridge / gateway",
+    "appliesToEntityTypes": [
+      "p2p-infrastructure"
+    ]
+  },
+  {
+    "column": "Threat Model",
+    "key": "threatModel",
+    "definition": "The adversarial conditions this infrastructure is designed to withstand or the security/privacy guarantees it provides to users.",
+    "formatOptions": "State-level censorship, Mass surveillance, Traffic analysis, Network shutdown, DPI (Deep Packet Inspection), ISP-level blocking, Targeted surveillance, Metadata exposure",
+    "appliesToEntityTypes": [
+      "p2p-infrastructure"
+    ]
+  },
+  {
+    "column": "Volunteer / Node Model",
+    "key": "volunteerNodeModel",
+    "definition": "How the infrastructure's operational nodes are provisioned and who runs them.",
+    "formatOptions": "Volunteer-operated, Foundation-operated, Commercially hosted, Self-hosted, Hybrid (volunteer + commercial), Incentivized (token/payment), Embedded (runs on user devices automatically)",
+    "appliesToEntityTypes": [
+      "p2p-infrastructure"
+    ]
+  },
+  {
+    "column": "Traffic Visibility",
+    "key": "trafficVisibility",
+    "definition": "What the infrastructure operator or relay node can observe about the traffic passing through it.",
+    "formatOptions": "No content (encrypted payload only), No metadata (source/destination hidden), No content + no metadata, Content visible, Metadata visible, Partial metadata (e.g. destination but not source)",
+    "appliesToEntityTypes": [
+      "p2p-infrastructure"
+    ]
+  },
+  {
+    "column": "Active Deployment Scale",
+    "key": "activeDeploymentScale",
+    "definition": "The current operational scale of the infrastructure in terms of nodes, users, or traffic volume.",
+    "formatOptions": "Free text (e.g., \"~7,000 relay nodes, ~2M daily users\" or \"200,000+ Conduit stations activated Jan 2026\" or \"Pre-deployment\")",
+    "appliesToEntityTypes": [
+      "p2p-infrastructure"
+    ]
+  },
+  {
+    "column": "Update Policy",
+    "key": "updatePolicy",
+    "definition": "Whether and how data stored or published through this protocol/network can be modified after initial creation.",
+    "formatOptions": "Immutable / Append-only / Mutable (versioned) / Mutable (latest only) / Mutable via CRDTs / Smart-contract governed / Configurable (operator/user choice)",
+    "notes": "Immutable and append-only are stronger guarantees against censorship and data manipulation. Mutable systems often use content addressing for individual versions while providing a mutable pointer (e.g. IPNS). Where multiple policies coexist (e.g. immutable content CIDs with mutable IPNS pointers), note both.",
+    "appliesToEntityTypes": [
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Target Application Domain",
+    "key": "targetApplicationDomain",
+    "definition": "The primary use-case domain the standard is designed to serve.",
+    "formatOptions": "Agent identity / Agent reputation & trust / Agent discovery / Agent payments / Data integrity / Access control / Asset ownership / Cross-chain interoperability / General purpose (tag all that apply)",
+    "notes": "ERC-8004 spans agent identity, agent reputation & trust, and agent discovery simultaneously.",
+    "appliesToEntityTypes": [
+      "standard-coordination"
+    ]
+  },
+  {
+    "column": "Deployment Model",
+    "key": "deploymentModel",
+    "definition": "How the standard is instantiated in practice — is it a per-chain singleton (one canonical deployment per blockchain network), permissionlessly deployable by anyone (many instances may exist), factory-deployed (a root contract spawns child instances), or off-chain verifiable (the standard defines cryptographic formats that don't require on-chain deployment at all, such as DID methods or VC schemas)?",
+    "formatOptions": "Per-chain singleton / Permissionless multi-instance / Factory pattern / Off-chain verifiable / Hybrid (on-chain registry + off-chain resolution)",
+    "appliesToEntityTypes": [
+      "standard-coordination"
+    ]
+  },
+  {
+    "column": "Storage Proof Mechanism",
+    "key": "storageProofMechanism",
+    "definition": "How node operators cryptographically prove they are actually storing the data they claim to store. This is the technical heart of what distinguishes decentralized storage from simple replication.",
+    "formatOptions": "Values: Proof of Replication (PoRep) / Proof of Spacetime (PoSt) / Proof of Access (PoA) / Erasure coding with audit / Merkle audit proof / None / Hybrid.",
+    "appliesToEntityTypes": [
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Economic / Incentive Model",
+    "key": "economicIncentiveModel",
+    "definition": "How node operators are compensated for providing storage. This is structurally different from anything in P2P Pro because storage networks require explicit economic incentives to function — unlike relay nodes which are often purely volunteer.",
+    "formatOptions": "Values: Token rewards (native token) / Fiat/stablecoin payments / One-time endowment (permanent storage model) / Volunteer / Hybrid.",
+    "appliesToEntityTypes": [
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Retrieval Guarantee",
+    "key": "retrievalGuarantee",
+    "definition": "Whether the network provides any formal guarantee that stored data can be retrieved, and under what conditions.",
+    "formatOptions": "Values: Strong (cryptoeconomic enforcement) / Best-effort (incentivized but not guaranteed) / Content-addressed only (available if any node caches it) / Owner-controlled / None.",
+    "appliesToEntityTypes": [
+      "storage-network"
+    ]
+  },
+  {
+    "column": "Standard Type",
+    "key": "standardType",
+    "definition": "The structural role or architectural layer the standard occupies within the broader smart contract ecosystem. Classifies the standard by what kind of interface or behavior it specifies, independent of its application domain.",
+    "formatOptions": "Token Standard, Identity Standard, Account Standard, Interface Standard, Composability Standard, Agent/Coordination Standard, Cross-chain Standard. Values may be combined where a standard spans multiple roles (e.g. \"Token Standard / Interface Standard\").",
+    "notes": "Focuses on architectural role, not application domain — e.g. ERC-165 and ERC-721 may share a domain but are structurally distinct standard types. List is intentionally open-ended to accommodate non-EVM standards.",
+    "appliesToEntityTypes": [
+      "standard-coordination"
+    ]
+  },
+  {
+    "column": "Ecosystem",
+    "key": "ecosystem",
+    "definition": "The blockchain platform, protocol family, or runtime environment for which the standard is natively designed. Identifies the chain or chain family within which the standard has authoritative status and primary adoption.",
+    "formatOptions": "Ethereum, Cosmos, Polkadot, Solana, NEAR, Tezos, Cardano, Algorand, Bitcoin, Hyperledger, Cross-chain, Chain-agnostic",
+    "notes": "Distinct from Stack (which captures implementation language) and Based On (which captures derivation). A standard may be deployable on multiple chains but should be recorded under its native ecosystem. Use \"Cross-chain\" for standards whose primary purpose is interoperability across ecosystems; use \"Chain-agnostic\" for standards that are not tied to any specific runtime.",
+    "appliesToEntityTypes": [
+      "standard-coordination"
+    ]
+  },
+  {
+    "column": "References",
+    "key": "references",
+    "definition": "The the list of source documents and reference notes that support the information given in the other fields.",
+    "formatOptions": "List of citations or notes in the format Scource: https://website | Note: giving explanation | ...",
+    "appliesToEntityTypes": [
+      "p2p-protocol",
+      "p2p-platform",
+      "p2p-infrastructure",
+      "p2p-runtime",
+      "federated-protocol",
+      "d-app",
+      "ext-d-app",
+      "semantic-data",
+      "identity-protocol",
+      "identity-platform",
+      "identity-system",
+      "standard-coordination",
+      "storage-network"
+    ]
+  }
+]

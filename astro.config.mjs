@@ -22,6 +22,13 @@ export default defineConfig({
       },
     },
   },
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'pt-BR'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   build: {
     format: 'directory'
   },

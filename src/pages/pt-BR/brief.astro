@@ -1,0 +1,375 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { useTranslations } from '@/i18n';
+
+const locale = Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+const prefix = locale !== 'en' ? `/${locale}` : '';
+---
+
+<BaseLayout
+  title={t('brief.title') as string}
+  description={t('brief.description') as string}
+>
+  <main class="brief-page">
+    <div class="container">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li>
+            <a href={`${prefix}/`} class="breadcrumb-link">{t('nav.homeBreadcrumb')}</a>
+          </li>
+          <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+          <li aria-current="page"><span class="breadcrumb-current">{t('nav.brief')}</span></li>
+        </ol>
+      </nav>
+
+      <header class="brief-header">
+        <h1>{t('brief.heading')}</h1>
+      </header>
+
+      <section class="brief-section">
+        <h2>{t('brief.executiveSummary')}</h2>
+        <p>{t('brief.executiveSummaryP1')}</p>
+        <p set:html={t('brief.executiveSummaryP2')} />
+        <p set:html={t('brief.executiveSummaryP3')} />
+      </section>
+
+      <section class="brief-section">
+        <h2>{t('brief.coreVision')}</h2>
+
+        <h3>{t('brief.problemStatement')}</h3>
+        <p>{t('brief.problemStatementBody')}</p>
+        <ul class="brief-list">
+          {(t('brief.problemList') as string[]).map((item) => (
+            <li set:html={item} />
+          ))}
+        </ul>
+
+        <h3>{t('brief.problemImpact')}</h3>
+        <p>{t('brief.problemImpactBody')}</p>
+
+        <h3>{t('brief.whyExistingFail')}</h3>
+        <p>{t('brief.whyExistingFailIntro')}</p>
+        <ul class="brief-list">
+          {(t('brief.whyExistingFailList') as string[]).map((item) => (
+            <li set:html={item} />
+          ))}
+        </ul>
+
+        <h3>{t('brief.proposedSolution')}</h3>
+        <p>{t('brief.proposedSolutionIntro')}</p>
+        <ol class="brief-list brief-list--ordered">
+          {(t('brief.proposedSolutionList') as string[]).map((item) => (
+            <li set:html={item} />
+          ))}
+        </ol>
+        <p>{t('brief.proposedSolutionFooter')}</p>
+
+        <h3>{t('brief.keyDifferentiators')}</h3>
+        <ul class="brief-list">
+          {(t('brief.keyDifferentiatorsList') as string[]).map((item) => (
+            <li set:html={item} />
+          ))}
+        </ul>
+
+        <h3>{t('brief.ecosystemContext')}</h3>
+        <p>{t('brief.ecosystemContextBody')}</p>
+      </section>
+
+      <section class="brief-section">
+        <h2>{t('brief.whoItsFor')}</h2>
+        <p>{t('brief.whoItsForIntro')}</p>
+
+        <div class="persona">
+          <p set:html={t('brief.personas.mira')} />
+        </div>
+
+        <div class="persona">
+          <p set:html={t('brief.personas.raul')} />
+        </div>
+
+        <div class="persona">
+          <p set:html={t('brief.personas.jess')} />
+        </div>
+
+        <div class="persona">
+          <p set:html={t('brief.personas.amara')} />
+        </div>
+      </section>
+
+      <section class="brief-section">
+        <h2>{t('brief.successHeading')}</h2>
+        <ul class="brief-list">
+          {(t('brief.successMetrics') as string[]).map((item) => (
+            <li set:html={item} />
+          ))}
+        </ul>
+      </section>
+
+      <section class="cta-section">
+        <h2>{t('brief.getInTouch')}</h2>
+        <p set:html={t('brief.getInTouchBody')} />
+      </section>
+
+      <div class="brief-attribution">
+        <p class="brief-meta">{t('brief.attribution')}</p>
+      </div>
+
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav breadcrumb-nav--bottom">
+        <ol class="breadcrumb-list">
+          <li>
+            <a href={`${prefix}/`} class="breadcrumb-link">{t('nav.homeBreadcrumb')}</a>
+          </li>
+          <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+          <li aria-current="page"><span class="breadcrumb-current">{t('nav.brief')}</span></li>
+        </ol>
+      </nav>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .brief-page {
+    padding: 2rem 1rem 5rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .breadcrumb-nav {
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .breadcrumb-nav--bottom {
+    margin-bottom: 0;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    list-style: none;
+    padding: 0;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .breadcrumb-link {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-sep {
+    opacity: 0.4;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-brand-text);
+  }
+
+  .brief-header {
+    margin-bottom: 3rem;
+  }
+
+  .brief-header h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0 0 1.25rem 0;
+    line-height: 1.15;
+  }
+
+  .brief-meta {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    margin: 0 0 0.5rem 0;
+    font-style: italic;
+  }
+
+  .brief-section {
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .brief-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .brief-section h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0 0 1.25rem 0;
+  }
+
+  .brief-section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    margin: 2rem 0 0.75rem 0;
+  }
+
+  .brief-section h3:first-child {
+    margin-top: 0;
+  }
+
+  .brief-section p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-brand-text);
+    max-width: 75ch;
+    margin: 0 0 1rem 0;
+  }
+
+  .brief-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .brief-list li {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-brand-text);
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .brief-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-brand-accent);
+  }
+
+  .brief-list--ordered {
+    counter-reset: brief-counter;
+  }
+
+  .brief-list--ordered li {
+    counter-increment: brief-counter;
+    padding-left: 2rem;
+  }
+
+  .brief-list--ordered li::before {
+    content: counter(brief-counter) '.';
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    font-size: 0.9375rem;
+    top: 0;
+  }
+
+  .persona {
+    background: rgba(139, 69, 19, 0.03);
+    border-left: 3px solid var(--color-brand-accent);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+  }
+
+  .persona p {
+    margin: 0;
+  }
+
+  .cta-section {
+    background: var(--color-brand-accent-light);
+    border-left: 4px solid var(--color-brand-accent);
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 2rem 2.5rem;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .cta-section p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-brand-text);
+    margin: 0;
+    max-width: none;
+  }
+
+  .brief-attribution {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .brief-attribution .brief-meta {
+    margin: 0;
+  }
+
+  .inline-link {
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    border-bottom: 2px solid var(--color-brand-accent);
+    transition: opacity 0.15s ease;
+  }
+
+  .inline-link:hover {
+    opacity: 0.75;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: rgba(139, 69, 19, 0.06);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .brief-header h1 {
+      font-size: 2.75rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .brief-page {
+      padding: 1.5rem 0 4rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+  }
+</style>

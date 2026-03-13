@@ -1,19 +1,16 @@
 import type { RefObject } from 'react'
 import { Compass, Sparkles } from 'lucide-react'
-
-const CTA_STRINGS = {
-  heading: 'Not sure where to start?',
-  subtitle: 'Let us guide you to the right protocols',
-  button: 'Guide me',
-} as const
+import { useTranslations } from '@/i18n'
 
 interface GuidedDiscoveryCTAProps {
   onOpen: () => void
   ctaButtonRef: RefObject<HTMLButtonElement | null>
   variant?: 'full-width' | 'centered'
+  locale?: string
 }
 
-export default function GuidedDiscoveryCTA({ onOpen, ctaButtonRef, variant = 'centered' }: GuidedDiscoveryCTAProps) {
+export default function GuidedDiscoveryCTA({ onOpen, ctaButtonRef, variant = 'centered', locale }: GuidedDiscoveryCTAProps) {
+  const t = useTranslations(locale)
   if (variant === 'full-width') {
     // CTA B: Full-width with left border accent
     return (
@@ -31,13 +28,13 @@ export default function GuidedDiscoveryCTA({ onOpen, ctaButtonRef, variant = 'ce
             className="text-sm font-semibold !mb-0"
             style={{ color: 'var(--color-brand-primary)' }}
           >
-            {CTA_STRINGS.heading}
+            {t('cta.heading')}
           </p>
           <p
             className="text-xs !mb-0 mt-0.5"
             style={{ color: 'var(--color-brand-text)', opacity: 0.65 }}
           >
-            {CTA_STRINGS.subtitle}
+            {t('cta.subtitle')}
           </p>
         </div>
         <button
@@ -55,7 +52,7 @@ export default function GuidedDiscoveryCTA({ onOpen, ctaButtonRef, variant = 'ce
           data-testid="guided-discovery-open"
         >
           <Compass className="w-4 h-4" aria-hidden="true" />
-          {CTA_STRINGS.button}
+          {t('cta.button')}
         </button>
       </div>
     )
@@ -80,13 +77,13 @@ export default function GuidedDiscoveryCTA({ onOpen, ctaButtonRef, variant = 'ce
             className="text-sm font-semibold !mb-0"
             style={{ color: 'var(--color-brand-primary)' }}
           >
-            {CTA_STRINGS.heading}
+            {t('cta.heading')}
           </p>
           <p
             className="text-xs !mb-0 mt-0.5"
             style={{ color: 'var(--color-brand-text)', opacity: 0.65 }}
           >
-            {CTA_STRINGS.subtitle}
+            {t('cta.subtitle')}
           </p>
         </div>
         <button
@@ -104,7 +101,7 @@ export default function GuidedDiscoveryCTA({ onOpen, ctaButtonRef, variant = 'ce
           data-testid="guided-discovery-open"
         >
           <Compass className="w-4 h-4" aria-hidden="true" />
-          {CTA_STRINGS.button}
+          {t('cta.button')}
         </button>
       </div>
     </div>
