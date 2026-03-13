@@ -13,8 +13,12 @@ const t = useTranslations(locale);
   <div class="footer-inner">
     <p class="footer-copyright">{t('footer.copyright')}</p>
     <p class="footer-attribution"></p>
-    <!-- Contribute link hidden until page exists -->
-
+    <a
+      href={`${locale !== 'en' ? `/${locale}` : ''}/contribute`}
+      class="footer-link"
+    >
+      {t('nav.contribute')}
+    </a>
   </div>
 </footer>
 

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '@/components/ui/Nav.astro';
 import Footer from '@/components/ui/Footer.astro';
+import ContributeBanner from '@/components/ui/ContributeBanner.astro';
 import { useTranslations } from '@/i18n';
 
 export interface BaseLayoutProps {
@@ -50,5 +51,6 @@ const ptBRPath = currentPath.startsWith('/pt-BR') ? currentPath : `/pt-BR${curre
     <Nav locale={locale} />
     <slot />
     <Footer locale={locale} />
+    <ContributeBanner locale={locale} />
   </body>
 </html>

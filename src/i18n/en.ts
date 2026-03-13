@@ -17,6 +17,7 @@ const en = {
     navigatorPrototype: 'Navigator (Prototype)',
     homeBreadcrumb: 'Home',
     matrixPrototype: 'Matrix (Prototype)',
+    contribute: 'Contribute',
   },
 
   badge: {
@@ -274,9 +275,27 @@ const en = {
 
   disclaimer: {
     alphaDemo:
-      'Status: Prototype. <strong>Data is for demo purposes only.</strong> Read the <a href="/brief" style="color:inherit;text-decoration:underline;">Stakeholder Brief</a>.',
+      'Status: Prototype. <strong>Data is for demo purposes only.</strong> Please consider <a href="/contribute" style="color:inherit;text-decoration:underline;">contributing</a>.',
     alphaIncomplete:
-      'Status: Prototype. <strong>Data is for demo purposes only.</strong> Read the <a href="/brief" style="color:inherit;text-decoration:underline;">Stakeholder Brief</a>.',
+      'Status: Prototype. <strong>Data is for demo purposes only.</strong> Please consider <a href="/contribute" style="color:inherit;text-decoration:underline;">contributing</a>.',
+  },
+
+  contribute: {
+    pageTitle: 'Contribute — OpenHaven',
+    pageDescription:
+      'Help shape the open protocol landscape. Share your knowledge of P2P technologies, use cases, and affordances with the OpenHaven community.',
+    heading: 'Contribute to OpenHaven',
+    intro1:
+      'OpenHaven is a collective initiative in favor of the convergence of P2P technologies — a shared effort to make the open protocol landscape visible, navigable, and actionable for everyone.',
+    intro2:
+      'We need insight specifically in mapping Use Cases and Affordances — defined as specific abilities a technology allows for — to the technologies and protocols themselves. If you work with, research, or rely on P2P or decentralized protocols, your knowledge is valuable here.',
+    formLinkText: 'open the form directly →',
+    formNote:
+      'If the form below does not load,',
+    iframeTitle: 'OpenHaven Contribution Form',
+    contributeBannerMessage: 'See something missing or that could be improved?',
+    contributeBannerCta: 'Let us know →',
+    contributeBannerDismiss: 'Dismiss',
   },
 
   matrixPage: {

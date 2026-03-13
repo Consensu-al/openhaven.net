@@ -28,11 +28,13 @@ const navLinks = (isHomepage || isBrief)
   ? [
       { href: '/brief', label: t('nav.brief') as string },
       { href: '/prototype', label: t('nav.navigatorPrototype') as string },
+      { href: '/contribute', label: t('nav.contribute') as string },
     ]
   : [
       { href: '/brief', label: t('nav.brief') as string },
       { href: '/prototype', label: t('nav.home') as string },
       { href: '/prototype/matrix', label: t('nav.matrixPrototype') as string },
+      { href: '/contribute', label: t('nav.contribute') as string },
     ];
 ---
 

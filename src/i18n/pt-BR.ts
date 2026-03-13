@@ -19,6 +19,7 @@ const ptBR: Translations = {
     navigatorPrototype: 'Navegador (Protótipo)',
     homeBreadcrumb: 'Início',
     matrixPrototype: 'Matriz (Protótipo)',
+    contribute: 'Contribuir',
   },
 
   badge: {
@@ -278,9 +279,27 @@ const ptBR: Translations = {
 
   disclaimer: {
     alphaDemo:
-      'Status: Protótipo. <strong>Os dados são apenas para fins de demonstração.</strong> Leia o <a href="/pt-BR/brief" style="color:inherit;text-decoration:underline;">Resumo para Stakeholders</a>.',
+      'Status: Protótipo. <strong>Os dados são apenas para fins de demonstração.</strong> Por favor, considere <a href="/pt-BR/contribute" style="color:inherit;text-decoration:underline;">contribuir</a>.',
     alphaIncomplete:
-      'Status: Protótipo. <strong>Os dados são apenas para fins de demonstração.</strong> Leia o <a href="/pt-BR/brief" style="color:inherit;text-decoration:underline;">Resumo para Stakeholders</a>.',
+      'Status: Protótipo. <strong>Os dados são apenas para fins de demonstração.</strong> Por favor, considere <a href="/pt-BR/contribute" style="color:inherit;text-decoration:underline;">contribuir</a>.',
+  },
+
+  contribute: {
+    pageTitle: 'Contribuir — OpenHaven',
+    pageDescription:
+      'Ajude a moldar o cenário de protocolos abertos. Compartilhe seu conhecimento sobre tecnologias P2P, casos de uso e affordances com a comunidade OpenHaven.',
+    heading: 'Contribua com o OpenHaven',
+    intro1:
+      'O OpenHaven é uma iniciativa coletiva em favor da convergência de tecnologias P2P — um esforço compartilhado para tornar o cenário de protocolos abertos visível, navegável e acionável para todos.',
+    intro2:
+      'Precisamos especialmente de insights para mapear Casos de Uso e Affordances — definidas como capacidades específicas que uma tecnologia permite — às tecnologias e protocolos em si. Se você trabalha, pesquisa ou depende de protocolos P2P ou descentralizados, seu conhecimento é valioso aqui.',
+    formLinkText: 'abrir o formulário diretamente →',
+    formNote:
+      'Se o formulário abaixo não carregar,',
+    iframeTitle: 'Formulário de Contribuição do OpenHaven',
+    contributeBannerMessage: 'Viu algo faltando ou que poderia ser melhorado?',
+    contributeBannerCta: 'Nos diga →',
+    contributeBannerDismiss: 'Dispensar',
   },
 
   matrixPage: {

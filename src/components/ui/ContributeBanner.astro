@@ -1,0 +1,143 @@
+---
+import { useTranslations } from '@/i18n'
+
+interface Props {
+  locale?: string;
+}
+
+const locale = Astro.props.locale ?? Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
+const contributeHref = `${prefix}/contribute`
+
+const currentPath = Astro.url.pathname
+const isExcludedPage =
+  currentPath === '/contribute' ||
+  currentPath === '/contribute/' ||
+  currentPath === '/pt-BR/contribute' ||
+  currentPath === '/pt-BR/contribute/' ||
+  currentPath === '/' ||
+  currentPath === '' ||
+  currentPath === `${prefix}/` ||
+  currentPath === prefix ||
+  currentPath === '/brief' ||
+  currentPath === '/brief/' ||
+  currentPath === '/pt-BR/brief' ||
+  currentPath === '/pt-BR/brief/'
+---
+
+{!isExcludedPage && (
+  <div id="contribute-banner" class="contribute-banner" role="complementary" aria-label="Contribute to OpenHaven">
+    <div class="contribute-banner-inner">
+      <p class="contribute-banner-text">
+        {t('contribute.contributeBannerMessage')}{' '}
+        <a href={contributeHref} class="contribute-banner-link">
+          {t('contribute.contributeBannerCta')}
+        </a>
+      </p>
+      <button
+        id="contribute-banner-close"
+        class="contribute-banner-close"
+        aria-label={t('contribute.contributeBannerDismiss') as string}
+        type="button"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+)}
+
+<script>
+  const STORAGE_KEY = 'openhaven-contribute-banner-dismissed'
+
+  const banner = document.getElementById('contribute-banner')
+  if (banner) {
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
+      banner.hidden = true
+    }
+
+    const closeBtn = document.getElementById('contribute-banner-close')
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        banner.hidden = true
+        localStorage.setItem(STORAGE_KEY, '1')
+      })
+    }
+  }
+</script>
+
+<style>
+  .contribute-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    background-color: var(--color-brand-bg);
+    border-top: 2px solid var(--color-brand-primary);
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .contribute-banner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .contribute-banner-text {
+    font-size: 0.9rem;
+    color: var(--color-brand-text);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .contribute-banner-link {
+    color: var(--color-brand-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  .contribute-banner-link:hover {
+    opacity: 0.8;
+  }
+
+  .contribute-banner-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--color-brand-text);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    padding: 0;
+  }
+
+  .contribute-banner-close:hover {
+    background-color: var(--color-brand-accent-light);
+    color: var(--color-brand-primary);
+    border-color: var(--color-brand-accent-light);
+  }
+
+  .contribute-banner-close:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .contribute-banner-text {
+      font-size: 0.8125rem;
+    }
+  }
+</style>
