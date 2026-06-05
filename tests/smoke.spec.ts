@@ -5,37 +5,37 @@ test('homepage loads', async ({ page }) => {
   await expect(page).toHaveTitle(/OpenHaven/);
 });
 
-test('homepage hero section renders with correct heading', async ({ page }) => {
-  await page.goto('/');
+test('prototype navigator hero renders with correct heading', async ({ page }) => {
+  // The interactive Navigator (hero heading + islands) lives at /prototype now.
+  await page.goto('/prototype');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Navigate the Open Protocol');
 });
 
-test('Find Your Stack CTA is visible and links to #navigator', async ({ page }) => {
-  await page.goto('/');
-  const cta = page.getByRole('link', { name: 'Find Your Stack' });
+test('Browse Full Matrix CTA on /prototype links to the matrix page', async ({ page }) => {
+  await page.goto('/prototype');
+  const cta = page.getByRole('link', { name: 'Browse Full Matrix' });
   await expect(cta).toBeVisible();
-  await expect(cta).toHaveAttribute('href', '#navigator');
+  await expect(cta).toHaveAttribute('href', '/prototype/matrix');
 });
 
-test('MVP badge is visible on homepage', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByText('MVP — Real data, growing')).toBeVisible();
+test('disclaimer banner is visible on /prototype', async ({ page }) => {
+  await page.goto('/prototype');
+  await expect(page.getByText('Data is a working draft')).toBeVisible();
 });
 
-test('#navigator section exists on homepage', async ({ page }) => {
-  await page.goto('/');
+test('#navigator section exists on /prototype', async ({ page }) => {
+  await page.goto('/prototype');
   const navigatorSection = page.locator('#navigator');
   await expect(navigatorSection).toBeAttached();
 });
 
-test('homepage title contains OpenHaven and Navigate', async ({ page }) => {
+test('homepage title contains OpenHaven', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/OpenHaven/);
-  await expect(page).toHaveTitle(/Navigate/);
 });
 
-test('/navigator loads with NavigatorSection island', async ({ page }) => {
-  await page.goto('/navigator');
+test('/prototype/navigator loads with NavigatorSection island', async ({ page }) => {
+  await page.goto('/prototype/navigator');
   await expect(page).toHaveTitle(/Open Protocol Navigator/);
 
   // NavigatorSection island should be hydrated with domain grid
@@ -43,29 +43,29 @@ test('/navigator loads with NavigatorSection island', async ({ page }) => {
   await expect(grid).toBeVisible();
 });
 
-test('/calendar loads', async ({ page }) => {
-  await page.goto('/calendar');
+test('/prototype/calendar loads', async ({ page }) => {
+  await page.goto('/prototype/calendar');
   await expect(page).toHaveTitle(/NAO Calendar/);
 });
 
 test('nav links are visible on homepage', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: 'Home', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Navigator', exact: true }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Matrix', exact: true }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Convergence', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Brief', exact: true }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Contribute', exact: true }).first()).toBeVisible();
 });
 
-test('nav renders on /navigator', async ({ page }) => {
-  await page.goto('/navigator');
+test('nav renders on /prototype/navigator', async ({ page }) => {
+  await page.goto('/prototype/navigator');
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Home', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Matrix', exact: true }).first()).toBeVisible();
 });
 
-test('nav renders on /calendar', async ({ page }) => {
-  await page.goto('/calendar');
+test('nav renders on /prototype/calendar', async ({ page }) => {
+  await page.goto('/prototype/calendar');
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Home', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Matrix', exact: true }).first()).toBeVisible();
 });
 
 test('footer renders with copyright text on homepage', async ({ page }) => {

@@ -7,7 +7,7 @@ const DATA_ROW = 'tr[role="button"][data-testid^="matrix-row-"]'
 
 // 6.2 — Page load and protocol count
 test('matrix page loads and displays all 97 protocols', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
   await expect(page.locator('[data-testid="matrix-page"]')).toBeVisible()
   await expect(page.locator('[data-testid="matrix-table"]')).toBeVisible()
 
@@ -16,15 +16,15 @@ test('matrix page loads and displays all 97 protocols', async ({ page }) => {
 })
 
 // 6.3 — Protocol count label
-test('protocol count label shows "97 protocols match"', async ({ page }) => {
-  await page.goto('/matrix')
+test('protocol count label shows "97 tech tools match"', async ({ page }) => {
+  await page.goto('/prototype/matrix')
   const count = page.locator('[data-testid="matrix-count"]')
-  await expect(count).toContainText('97 protocols match')
+  await expect(count).toContainText('97 tech tools match')
 })
 
 // 6.4 — Governance filter reduces visible rows
 test('clicking governance filter reduces visible rows and updates count', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   // Open Governance dropdown then click "Foundation"
   await page.locator('[data-testid="matrix-filter-gov"] > button').first().click()
@@ -44,7 +44,7 @@ test('clicking governance filter reduces visible rows and updates count', async 
 
 // 6.5 — Text search
 test('text search for "Nostr" shows only matching rows', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
   await page.locator('[data-testid="matrix-filter-search"]').fill('Nostr')
 
   const rows = page.locator(DATA_ROW)
@@ -54,7 +54,7 @@ test('text search for "Nostr" shows only matching rows', async ({ page }) => {
 
 // 6.6 — Filter state reflected in URL params
 test('filter state is reflected in URL params', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
   await page.locator('[data-testid="matrix-filter-gov"] > button').first().click()
   await page.locator('[data-testid="matrix-filter-gov-foundation"]').click()
 
@@ -66,11 +66,11 @@ test('filter state is reflected in URL params', async ({ page }) => {
 
 // 6.7 — Deep link with pre-loaded filter (16 foundation protocols in dataset)
 test('navigating to /matrix?gov=foundation pre-loads with Foundation filter active', async ({ page }) => {
-  await page.goto('/matrix?gov=foundation')
+  await page.goto('/prototype/matrix?gov=foundation')
 
   // Wait for hydration — useEffect reads URL params and applies filters
   const countLabel = page.locator('[data-testid="matrix-count"]')
-  await expect(countLabel).toContainText('16 protocols match', { timeout: 5000 })
+  await expect(countLabel).toContainText('16 tech tools match', { timeout: 5000 })
 
   // Only Foundation governance protocols should show
   const rows = page.locator(DATA_ROW)
@@ -79,7 +79,7 @@ test('navigating to /matrix?gov=foundation pre-loads with Foundation filter acti
 
 // 6.8 — Row click expands detail panel (updated: was navigation, now expand)
 test('clicking a row expands the detail panel', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   await page.locator('[data-testid="matrix-row-nostr"]').click()
 
@@ -90,13 +90,13 @@ test('clicking a row expands the detail panel', async ({ page }) => {
   // Navigate via "View full page" link inside the panel
   const viewLink = page.locator('[data-testid="matrix-view-full-page-nostr"]')
   await expect(viewLink).toBeVisible()
-  await expect(viewLink).toHaveAttribute('href', '/protocols/nostr')
+  await expect(viewLink).toHaveAttribute('href', '/prototype/protocols/nostr')
 })
 
 // 6.9 — Mobile viewport horizontal scroll
 test('mobile viewport — table has horizontal scroll, name column remains visible', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   await expect(page.locator('[data-testid="matrix-table"]')).toBeVisible()
 
@@ -108,7 +108,7 @@ test('mobile viewport — table has horizontal scroll, name column remains visib
 
 // 6.10 — Keyboard navigation (updated: Enter now expands, not navigates)
 test('keyboard navigation — Tab moves through filters, Enter expands row', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   // Focus the first row directly and verify it's focusable
   const firstRow = page.locator(DATA_ROW).first()
@@ -126,13 +126,13 @@ test('keyboard navigation — Tab moves through filters, Enter expands row', asy
 
 // 6.11 — Page title
 test('page title contains "Protocol Matrix"', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
   await expect(page).toHaveTitle(/Protocol Matrix/)
 })
 
 // 6.12 — JSON-LD
 test('JSON-LD script is present with CollectionPage type', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   const jsonLd = await page.evaluate(() => {
     const script = document.querySelector('script[type="application/ld+json"]')
@@ -147,40 +147,40 @@ test('JSON-LD script is present with CollectionPage type', async ({ page }) => {
 })
 
 // 6.13 — Nav link
-test('Nav link shows "Matrix" and points to /matrix', async ({ page }) => {
+test('Nav link shows "Matrix" and points to /prototype/matrix', async ({ page }) => {
   await page.goto('/')
 
   // Desktop nav link (first match — mobile nav also has a copy)
   const navLink = page.locator('.nav-links a', { hasText: 'Matrix' })
   await expect(navLink).toBeVisible()
-  await expect(navLink).toHaveAttribute('href', '/matrix')
+  await expect(navLink).toHaveAttribute('href', '/prototype/matrix')
 })
 
-// 6.14 — Hero secondary CTA
-test('Hero secondary CTA shows "Browse Full Matrix" and points to /matrix', async ({ page }) => {
-  await page.goto('/')
+// 6.14 — Hero secondary CTA (lives on the /prototype navigator page hero)
+test('Hero secondary CTA shows "Browse Full Matrix" and points to /prototype/matrix', async ({ page }) => {
+  await page.goto('/prototype')
 
   const cta = page.locator('a', { hasText: 'Browse Full Matrix' })
   await expect(cta).toBeVisible()
-  await expect(cta).toHaveAttribute('href', '/matrix')
+  await expect(cta).toHaveAttribute('href', '/prototype/matrix')
 })
 
-// 6.15 — Breadcrumb
-test('breadcrumb shows "Home > Matrix" with Home linking to /', async ({ page }) => {
-  await page.goto('/matrix')
+// 6.15 — Breadcrumb (Home link now points to the /prototype navigator home)
+test('breadcrumb shows "Navigator > Matrix" with home link to /prototype', async ({ page }) => {
+  await page.goto('/prototype/matrix')
 
   const breadcrumb = page.locator('[data-testid="breadcrumb"]')
   await expect(breadcrumb).toBeVisible()
-  await expect(breadcrumb).toContainText('Home')
+  await expect(breadcrumb).toContainText('Navigator')
   await expect(breadcrumb).toContainText('Matrix')
 
   const homeLink = page.locator('[data-testid="breadcrumb-home"]')
-  await expect(homeLink).toHaveAttribute('href', '/')
+  await expect(homeLink).toHaveAttribute('href', '/prototype')
 })
 
 // 6.16 — Card-style border on table wrapper
 test('table wrapper has card-style border', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   const card = page.locator('.matrix-card')
   const borderRadius = await card.evaluate((el) => getComputedStyle(el).borderRadius)
@@ -192,7 +192,7 @@ test('table wrapper has card-style border', async ({ page }) => {
 
 // 6.17 — Empty state on 0 results
 test('applying filters that match 0 protocols shows empty state message', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
   // Apply multiple restrictive filters to get 0 results
   await page.locator('[data-testid="matrix-filter-search"]').fill('xyznonexistent')
@@ -205,11 +205,11 @@ test('applying filters that match 0 protocols shows empty state message', async 
 
 // 6.18 — Multiple filter combination
 test('multiple filters combine correctly (AND across categories)', async ({ page }) => {
-  await page.goto('/matrix')
+  await page.goto('/prototype/matrix')
 
-  // Open Architecture dropdown and select Fully P2P
-  await page.locator('[data-testid="matrix-filter-arch"] > button').first().click()
-  await page.locator('[data-testid="matrix-filter-arch-fully-p2p"]').click()
+  // Open Capture Risk dropdown and select Low
+  await page.locator('[data-testid="matrix-filter-risk"] > button').first().click()
+  await page.locator('[data-testid="matrix-filter-risk-low"]').click()
   // Open Governance dropdown and select Community
   await page.locator('[data-testid="matrix-filter-gov"] > button').first().click()
   await page.locator('[data-testid="matrix-filter-gov-community"]').click()
@@ -223,7 +223,7 @@ test('multiple filters combine correctly (AND across categories)', async ({ page
   // URL should have both params
   await page.waitForTimeout(300)
   const url = new URL(page.url())
-  expect(url.searchParams.get('arch')).toBe('fully-p2p')
+  expect(url.searchParams.get('risk')).toBe('low')
   expect(url.searchParams.get('gov')).toBe('community')
 })
 
@@ -232,7 +232,7 @@ test('multiple filters combine correctly (AND across categories)', async ({ page
 test.describe('Row Detail Expansion', () => {
   // 6.2 — Clicking a row expands detail panel
   test('clicking a row expands detail panel with correct data-testid', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
     await page.locator('[data-testid="matrix-row-nostr"]').click()
 
     const detail = page.locator('[data-testid="matrix-row-detail-nostr"]')
@@ -241,7 +241,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.3 — Expanded panel contains protocol attributes
   test('expanded panel contains protocol description, attributes, domain tags, affordance tags', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
     await page.locator('[data-testid="matrix-row-nostr"]').click()
 
     const detail = page.locator('[data-testid="matrix-row-detail-nostr"]')
@@ -257,7 +257,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.4 — Clicking same row collapses the panel
   test('clicking same row collapses the panel', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     // Expand
     await page.locator('[data-testid="matrix-row-nostr"]').click()
@@ -270,7 +270,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.5 — Clicking a different row collapses previous and expands new
   test('clicking a different row collapses previous and expands new', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     // Expand nostr
     await page.locator('[data-testid="matrix-row-nostr"]').click()
@@ -299,7 +299,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.6 — Expanding a row adds expand param to URL
   test('expanding a row adds expand={id} to URL params', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
     await page.locator('[data-testid="matrix-row-nostr"]').click()
 
     await page.waitForTimeout(100)
@@ -309,7 +309,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.7 — Deep link with expand param pre-expands row
   test('navigating to /matrix?expand=nostr pre-expands that row detail panel', async ({ page }) => {
-    await page.goto('/matrix?expand=nostr')
+    await page.goto('/prototype/matrix?expand=nostr')
 
     // Wait for hydration
     await expect(page.locator('[data-testid="matrix-row-detail-nostr"]')).toBeVisible({ timeout: 5000 })
@@ -317,7 +317,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.8 — Deep link with filters + expand
   test('deep link with filters + expand applies filters and expands row if visible', async ({ page }) => {
-    await page.goto('/matrix?gov=community&expand=nostr')
+    await page.goto('/prototype/matrix?gov=community&expand=nostr')
 
     // Wait for hydration
     await page.waitForTimeout(500)
@@ -334,7 +334,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.9 — Escape key closes expanded panel
   test('Escape key closes expanded panel', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-row-nostr"]').click()
     await expect(page.locator('[data-testid="matrix-row-detail-nostr"]')).toBeVisible()
@@ -345,7 +345,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.10 — Keyboard Enter/Space on row toggles expansion
   test('keyboard Enter/Space on row toggles expansion', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     const row = page.locator('[data-testid="matrix-row-nostr"]')
     await row.focus()
@@ -361,7 +361,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.11 — Expansion panel interactive elements are focusable and in correct DOM order
   test('expansion panel interactive elements are focusable', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-row-nostr"]').click()
     await expect(page.locator('[data-testid="matrix-row-detail-nostr"]')).toBeVisible()
@@ -379,7 +379,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.12 — "View full page" link navigates to detail page
   test('"View full page" link in expansion panel navigates to /protocols/{id}', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-row-nostr"]').click()
 
@@ -387,14 +387,14 @@ test.describe('Row Detail Expansion', () => {
     await expect(link).toBeVisible()
 
     await link.click()
-    await page.waitForURL('**/protocols/nostr')
-    expect(page.url()).toContain('/protocols/nostr')
+    await page.waitForURL('**/prototype/protocols/nostr')
+    expect(page.url()).toContain('/prototype/protocols/nostr')
   })
 
   // 6.13 — Mobile viewport — expanded panel is readable, no horizontal overflow
   test('mobile viewport (375px) — expanded panel is readable, no horizontal overflow', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-row-nostr"]').click()
     const detail = page.locator('[data-testid="matrix-row-detail-nostr"]')
@@ -407,7 +407,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.14 — Expanding a row while filters are active preserves filter state
   test('expanding a row while filters are active preserves filter state', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     // Open Governance dropdown and apply Community filter
     await page.locator('[data-testid="matrix-filter-gov"] > button').first().click()
@@ -432,7 +432,7 @@ test.describe('Row Detail Expansion', () => {
 
   // 6.15 — aria-expanded attribute toggles correctly
   test('aria-expanded attribute toggles correctly on row', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     const row = page.locator('[data-testid="matrix-row-nostr"]')
     await expect(row).toHaveAttribute('aria-expanded', 'false')
@@ -450,7 +450,7 @@ test.describe('Row Detail Expansion', () => {
 test.describe('Side-by-Side Comparison', () => {
   // 8.2 — Checkboxes visible, clicking checkbox does NOT expand row
   test('checkboxes visible on all protocol rows, clicking checkbox does NOT expand row', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     const checkboxes = page.locator('[data-testid^="matrix-compare-checkbox-"]')
     const firstCheckbox = checkboxes.first()
@@ -468,7 +468,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.3 — Selecting 2 protocols shows CTA with counter
   test('selecting 2 protocols shows "Compare 2 selected" CTA with "2/5 selected" counter', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
 
@@ -489,7 +489,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.4 — Selecting 5 protocols disables remaining checkboxes
   test('selecting 5 protocols disables remaining checkboxes', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     // Select 5 protocols via first 5 rows
     const rows = page.locator(DATA_ROW)
@@ -510,7 +510,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.5 — Clicking "Compare selected" scrolls to comparison section and renders comparison view
   test('clicking "Compare selected" scrolls to comparison section and renders comparison view', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -526,7 +526,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.6 — Comparison view shows correct number of protocol columns with expected content
   test('comparison view shows correct number of protocol columns with expected content', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -552,7 +552,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.7 — Shared affordances between selected protocols are visually highlighted
   test('shared affordances between selected protocols are visually highlighted', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -576,7 +576,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.8 — "Remove" button on a column removes that protocol from comparison and updates URL
   test('"Remove" button on a column removes that protocol from comparison and updates URL', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -603,7 +603,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.9 — Removing down to 1 protocol collapses comparison view and removes ?compare= from URL
   test('removing down to 1 protocol collapses comparison view and removes ?compare= from URL', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -626,7 +626,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.10 — "Clear comparison" removes all selections and collapses view
   test('"Clear comparison" removes all selections and collapses view', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -652,7 +652,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.11 — URL contains ?compare=id1,id2 when comparison is active
   test('URL contains ?compare=id1,id2 when comparison is active', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -667,7 +667,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.12 — Navigating to /matrix?compare=nostr,matrix pre-selects and shows comparison
   test('navigating to /matrix?compare=nostr,matrix pre-selects those rows and shows comparison', async ({ page }) => {
-    await page.goto('/matrix?compare=nostr,matrix')
+    await page.goto('/prototype/matrix?compare=nostr,matrix')
 
     // Wait for hydration
     await page.waitForTimeout(500)
@@ -683,7 +683,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.13 — Deep link with filters + compare applies both
   test('deep link with filters + compare (e.g., ?gov=foundation&compare=nostr,matrix) applies both', async ({ page }) => {
-    await page.goto('/matrix?gov=community&compare=nostr,matrix')
+    await page.goto('/prototype/matrix?gov=community&compare=nostr,matrix')
 
     await page.waitForTimeout(500)
 
@@ -704,7 +704,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.14 — Escape key closes comparison view
   test('Escape key closes comparison view', async ({ page }) => {
-    await page.goto('/matrix?compare=nostr,matrix')
+    await page.goto('/prototype/matrix?compare=nostr,matrix')
 
     const comparison = page.locator('[data-testid="comparison-view"]')
     await expect(comparison).toBeVisible({ timeout: 5000 })
@@ -716,7 +716,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.15 — Keyboard navigation: Tab through checkboxes, Space to toggle, Enter on CTA
   test('keyboard navigation — Tab through checkboxes, Space to toggle, Enter on CTA', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     // Focus the first checkbox and toggle via Space
     const firstCheckbox = page.locator('[data-testid^="matrix-compare-checkbox-"]').first()
@@ -747,7 +747,7 @@ test.describe('Side-by-Side Comparison', () => {
   // 8.16 — Mobile viewport: comparison scrolls horizontally, attribute labels sticky
   test('mobile viewport (375px) — comparison scrolls horizontally, attribute labels sticky', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto('/matrix?compare=nostr,matrix,solid')
+    await page.goto('/prototype/matrix?compare=nostr,matrix,solid')
 
     const comparison = page.locator('[data-testid="comparison-view"]')
     await expect(comparison).toBeVisible({ timeout: 5000 })
@@ -760,7 +760,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.17 — Selecting protocols, then applying filter that hides one — selection persists
   test('selecting protocols, then applying filter that hides one — selection persists, comparison still shows all selected', async ({ page }) => {
-    await page.goto('/matrix')
+    await page.goto('/prototype/matrix')
 
     await page.locator('[data-testid="matrix-compare-checkbox-nostr"]').click()
     await page.locator('[data-testid="matrix-compare-checkbox-matrix"]').click()
@@ -789,7 +789,7 @@ test.describe('Side-by-Side Comparison', () => {
 
   // 8.18 — aria-label attributes present on checkboxes, comparison region, columns
   test('aria-label attributes present on checkboxes, comparison region, columns', async ({ page }) => {
-    await page.goto('/matrix?compare=nostr,matrix')
+    await page.goto('/prototype/matrix?compare=nostr,matrix')
 
     await page.waitForTimeout(500)
 
@@ -799,7 +799,7 @@ test.describe('Side-by-Side Comparison', () => {
 
     // Comparison region
     const region = page.locator('[data-testid="comparison-view"]')
-    await expect(region).toHaveAttribute('aria-label', 'Protocol comparison')
+    await expect(region).toHaveAttribute('aria-label', 'Tech tool comparison')
     await expect(region).toHaveAttribute('role', 'region')
 
     // Column group

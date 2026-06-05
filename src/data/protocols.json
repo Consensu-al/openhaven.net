@@ -25,7 +25,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://discuss.ipfs.tech",
     "affordanceIds": [
@@ -77,7 +76,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/nostr-protocol/nostr",
     "affordanceIds": [
@@ -124,7 +122,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/ssbc/tinySSB",
     "affordanceIds": [
@@ -169,7 +166,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/hyperhyperspace",
     "affordanceIds": [
@@ -218,7 +214,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/seed-hypermedia",
     "affordanceIds": [
@@ -267,7 +262,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://willowprotocol.org",
     "affordanceIds": [
@@ -315,7 +309,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/verida",
     "affordanceIds": [
@@ -363,7 +356,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/ceramicnetwork",
     "affordanceIds": [
@@ -410,7 +402,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "high",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/LIT-Protocol",
     "affordanceIds": [
@@ -462,7 +453,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://meshtastic.org",
     "affordanceIds": [
@@ -512,7 +502,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/markqvist/Reticulum",
     "affordanceIds": [
@@ -559,7 +548,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://www.hyphanet.org",
     "affordanceIds": [
@@ -607,7 +595,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "high",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "affordanceIds": [
       "sovereign-identity"
@@ -658,7 +645,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://noiseprotocol.org",
     "affordanceIds": [
@@ -704,7 +690,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/x402-protocol",
     "affordanceIds": [
@@ -756,7 +741,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/a2aproject",
     "affordanceIds": [
@@ -801,7 +785,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "self-hostable",
@@ -844,7 +827,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://ditto.pub",
     "affordanceIds": [
@@ -884,7 +866,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "interoperable-formats",
@@ -924,7 +905,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/fluree",
     "affordanceIds": [
@@ -970,7 +950,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/assemblee-virtuelle/semapps",
     "affordanceIds": [
@@ -1017,7 +996,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://bonfirenetworks.org",
     "affordanceIds": [
@@ -1061,7 +1039,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "high",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://digi.me",
     "affordanceIds": [
@@ -1100,7 +1077,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "composable-groups",
@@ -1138,7 +1114,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "e2e-encryption",
@@ -1176,7 +1151,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "consent-audience"
@@ -1216,7 +1190,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/holochain",
     "affordanceIds": [
@@ -1272,7 +1245,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://nextgraph.org",
     "affordanceIds": [
@@ -1330,7 +1302,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "composable-groups",
@@ -1386,7 +1357,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "self-hostable",
@@ -1441,7 +1411,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://freenet.org",
     "affordanceIds": [
@@ -1502,7 +1471,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://shelterprotocol.net",
     "affordanceIds": [
@@ -1558,7 +1526,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://www.torproject.org",
     "affordanceIds": [
@@ -1604,7 +1571,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://snowflake.torproject.org",
     "affordanceIds": [
@@ -1651,7 +1617,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://geti2p.net",
     "affordanceIds": [
@@ -1698,7 +1663,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://psiphon.ca",
     "affordanceIds": [
@@ -1748,7 +1712,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "offline-mesh",
@@ -1794,7 +1757,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "federated",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://bsky.app",
     "affordanceIds": [
@@ -1852,7 +1814,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://anytype.io",
     "affordanceIds": [
@@ -1904,7 +1865,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/toeverything/AFFiNE",
     "affordanceIds": [
@@ -1955,7 +1915,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/logseq/logseq",
     "affordanceIds": [
@@ -2006,7 +1965,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "consent-audience",
@@ -2054,7 +2012,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://twake.app",
     "affordanceIds": [
@@ -2105,7 +2062,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/nextcloud",
     "affordanceIds": [
@@ -2153,7 +2109,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://internxt.com",
     "affordanceIds": [
@@ -2200,7 +2155,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/AppFlowy-IO/AppFlowy",
     "affordanceIds": [
@@ -2251,7 +2205,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://runonflux.io",
     "affordanceIds": [
@@ -2304,7 +2257,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "provenance-tracking",
@@ -2358,7 +2310,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://bitchat.surf",
     "affordanceIds": [
@@ -2414,7 +2365,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "composable-groups",
@@ -2474,7 +2424,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://getaether.net",
     "affordanceIds": [
@@ -2532,7 +2481,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "composable-groups",
@@ -2588,7 +2536,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "conflict-free-editing",
@@ -2650,7 +2597,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://matrix.org",
     "affordanceIds": [
@@ -2703,7 +2649,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://www.w3.org/TR/activitypub/",
     "affordanceIds": [
@@ -2751,7 +2696,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "federated",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://atproto.com",
     "affordanceIds": [
@@ -2798,7 +2742,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://solidproject.org",
     "affordanceIds": [
@@ -2849,7 +2792,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "federated",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://murmurations.network",
     "affordanceIds": [
@@ -2887,7 +2829,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://www.valueflo.ws",
     "affordanceIds": [
@@ -2927,7 +2868,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://atomicdata.dev",
     "affordanceIds": [
@@ -2966,7 +2906,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "federated",
     "lastInvestigated": "2026-01-15",
     "affordanceIds": [
       "sovereign-identity",
@@ -3023,7 +2962,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/nicoth-in/fan-spec",
     "affordanceIds": [
@@ -3080,7 +3018,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-01-15",
     "communityLink": "https://github.com/iden3",
     "affordanceIds": [
@@ -3138,7 +3075,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/spruceid",
     "affordanceIds": [
@@ -3196,7 +3132,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://www.dock.io",
     "affordanceIds": [
@@ -3253,7 +3188,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/walt-id",
     "affordanceIds": [
@@ -3310,7 +3244,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://meeco.me",
     "affordanceIds": [
@@ -3365,7 +3298,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://northernblock.io",
     "affordanceIds": [
@@ -3421,7 +3353,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://spherity.com",
     "affordanceIds": [
@@ -3477,7 +3408,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/animo",
     "affordanceIds": [
@@ -3535,7 +3465,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "sovereign-identity"
@@ -3592,7 +3521,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://www.affinidi.com",
     "affordanceIds": [
@@ -3645,7 +3573,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "sovereign-identity"
@@ -3700,7 +3627,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "sovereign-identity",
@@ -3757,7 +3683,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://greencheck.world",
     "affordanceIds": [
@@ -3812,7 +3737,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://eips.ethereum.org/EIPS/eip-4337",
     "affordanceIds": [
@@ -3850,7 +3774,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://eips.ethereum.org/EIPS/eip-725",
     "affordanceIds": [
@@ -3894,7 +3817,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://login.xyz",
     "affordanceIds": [
@@ -3935,7 +3857,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "sovereign-identity",
@@ -3975,7 +3896,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/CosmWasm",
     "affordanceIds": [
@@ -4015,7 +3935,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/use-ink/ink",
     "affordanceIds": [
@@ -4055,7 +3974,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/near/NEPs",
     "affordanceIds": [
@@ -4096,7 +4014,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "sovereign-identity"
@@ -4136,7 +4053,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [
       "portable-attestations"
@@ -4178,7 +4094,6 @@
     ],
     "governanceModel": "open-standard-body",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/cosmos/ibc",
     "affordanceIds": [
@@ -4220,7 +4135,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/solana-labs/solana-program-library",
     "affordanceIds": [],
@@ -4260,7 +4174,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "medium",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/coral-xyz/anchor",
     "affordanceIds": [],
@@ -4302,7 +4215,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://wiki.polkadot.network/docs/learn-xcm",
     "affordanceIds": [
@@ -4345,7 +4257,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "hybrid",
     "lastInvestigated": "2026-03-10",
     "affordanceIds": [],
     "entityAttributes": {
@@ -4382,7 +4293,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/filecoin-project",
     "affordanceIds": [
@@ -4433,7 +4343,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/ArweaveTeam",
     "affordanceIds": [
@@ -4482,7 +4391,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/storj",
     "affordanceIds": [
@@ -4533,7 +4441,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://sia.tech",
     "affordanceIds": [
@@ -4582,7 +4489,6 @@
     ],
     "governanceModel": "foundation",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://www.ethswarm.org",
     "affordanceIds": [
@@ -4631,7 +4537,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://github.com/tahoe-lafs/tahoe-lafs",
     "affordanceIds": [
@@ -4680,7 +4585,6 @@
     ],
     "governanceModel": "single-company",
     "captureRisk": "medium",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://zus.network",
     "affordanceIds": [
@@ -4728,7 +4632,6 @@
     ],
     "governanceModel": "community",
     "captureRisk": "low",
-    "architectureType": "fully-p2p",
     "lastInvestigated": "2026-03-10",
     "communityLink": "https://codex.storage",
     "affordanceIds": [

@@ -185,19 +185,6 @@ export default function ComparisonView({ protocols, domains, affordances, locale
     render: (p: Protocol) => React.ReactNode
   }> = [
     {
-      label: t('comparison.architectureType') as string,
-      render: p => (
-        <span style={{
-          ...badgeBase,
-          color: 'var(--color-brand-primary)',
-          background: 'transparent',
-          border: '2px solid rgba(139, 69, 19, 0.25)',
-        }}>
-          {t(`badge.architecture.${p.architectureType}`) as string}
-        </span>
-      ),
-    },
-    {
       label: t('comparison.governanceModel') as string,
       render: p => {
         const tokens = GOV_BADGE_TOKENS[p.governanceModel]

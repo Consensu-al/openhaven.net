@@ -80,7 +80,6 @@ const dateFormatted = new Intl.DateTimeFormat(locale, {
 
 // UI label helpers via i18n
 const governanceLabel = (key: string) => t(`badge.governance.${key}`) as string
-const architectureLabel = (key: string) => t(`badge.architecture.${key}`) as string
 const captureRiskLabel = (key: string) => t(`badge.captureRiskLabel.${key}`) as string
 
 const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
@@ -104,7 +103,7 @@ const keyAttributes: KeyAttribute[] = [
 
 // SEO
 const META_DESC_MAX = 155
-const fullDescription = `${protocol.description ?? protocol.name} — ${architectureLabel(protocol.architectureType)} architecture, ${governanceLabel(protocol.governanceModel)} governance`
+const fullDescription = `${protocol.description ?? protocol.name} — ${governanceLabel(protocol.governanceModel)} governance`
 const pageDescription = fullDescription.length <= META_DESC_MAX
   ? fullDescription
   : `${fullDescription.slice(0, META_DESC_MAX - 1)}…`
@@ -130,11 +129,9 @@ const jsonLd = {
   ...(protocol.communityLink ? { discussionUrl: protocol.communityLink } : {}),
   about: [
     { '@type': 'Thing', name: `Governance: ${governanceLabel(protocol.governanceModel)}` },
-    { '@type': 'Thing', name: `Architecture: ${architectureLabel(protocol.architectureType)}` },
   ],
   keywords: [
     governanceLabel(protocol.governanceModel),
-    architectureLabel(protocol.architectureType),
     ...protocolDomains.map((d) => d.name),
   ],
 }
@@ -177,9 +174,6 @@ const jsonLd = {
 
             <!-- Badge Row -->
             <div class="badge-row">
-              <span class="badge badge--architecture">
-                {architectureLabel(protocol.architectureType)}
-              </span>
               <span class="badge badge--governance">
                 {governanceLabel(protocol.governanceModel)}
               </span>
@@ -417,12 +411,6 @@ const jsonLd = {
     font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0.5rem;
-  }
-
-  .badge--architecture {
-    color: var(--color-brand-primary);
-    background: transparent;
-    border: 2px solid rgba(139, 69, 19, 0.25);
   }
 
   .badge--governance {

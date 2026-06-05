@@ -24,7 +24,6 @@ export const ProtocolSchema = z.object({
   funding: z.array(z.string()).default([]),
   governanceModel: z.enum(['foundation', 'dao', 'single-company', 'open-standard-body', 'community']),
   captureRisk: z.enum(['low', 'medium', 'high']),
-  architectureType: z.enum(['fully-p2p', 'federated', 'hybrid']),
   lastInvestigated: z.string(),
   communityLink: z.string().url().optional(),
   affordanceIds: z.array(z.string()).default([]),

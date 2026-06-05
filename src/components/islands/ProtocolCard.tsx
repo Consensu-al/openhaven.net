@@ -41,24 +41,6 @@ const RISK_COLOR: Record<Protocol['captureRisk'], string> = {
   high: 'var(--color-risk-high)',
 }
 
-const ARCH_STYLE: Record<
-  Protocol['architectureType'],
-  { border: string; text: string }
-> = {
-  'fully-p2p': {
-    border: 'var(--color-arch-p2p-bg)',
-    text: 'var(--color-arch-p2p-text)',
-  },
-  federated: {
-    border: 'var(--color-arch-federated-bg)',
-    text: 'var(--color-arch-federated-text)',
-  },
-  hybrid: {
-    border: 'var(--color-arch-hybrid-bg)',
-    text: 'var(--color-arch-hybrid-text)',
-  },
-}
-
 interface ProtocolCardProps {
   protocol: Protocol
   locale?: string
@@ -80,7 +62,6 @@ export default function ProtocolCard({
 
   const govStyle = GOVERNANCE_STYLE[protocol.governanceModel]
   const riskColor = RISK_COLOR[protocol.captureRisk]
-  const archStyle = ARCH_STYLE[protocol.architectureType]
 
   return (
     <div
@@ -125,18 +106,6 @@ export default function ProtocolCard({
 
         {/* Badges row */}
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {/* Architecture badge — outline style */}
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full border"
-            style={{
-              color: archStyle.text,
-              borderColor: archStyle.border,
-              backgroundColor: 'transparent',
-            }}
-          >
-            {t(`badge.architecture.${protocol.architectureType}`)}
-          </span>
-
           {/* Governance badge — filled style */}
           <span
             className="text-[10px] px-2 py-0.5 rounded-full"

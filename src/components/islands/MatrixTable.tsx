@@ -9,24 +9,6 @@ const MAX_COMPARE = 5
 // Badge styles (match protocols/[id].astro detail page treatment)
 // ---------------------------------------------------------------------------
 
-const ARCH_BADGE_STYLE: Record<Protocol['architectureType'], React.CSSProperties> = {
-  'fully-p2p': {
-    color: 'var(--color-brand-primary)',
-    background: 'transparent',
-    border: '2px solid rgba(139, 69, 19, 0.25)',
-  },
-  federated: {
-    color: 'var(--color-brand-primary)',
-    background: 'transparent',
-    border: '2px solid rgba(139, 69, 19, 0.25)',
-  },
-  hybrid: {
-    color: 'var(--color-brand-primary)',
-    background: 'transparent',
-    border: '2px solid rgba(139, 69, 19, 0.25)',
-  },
-}
-
 const GOV_BADGE_STYLE: React.CSSProperties = {
   color: 'var(--color-brand-primary)',
   background: 'var(--color-brand-accent-light)',
@@ -67,19 +49,17 @@ function updateUrl(params: URLSearchParams) {
 interface MatrixFilters {
   q: string
   entity: string[]
-  arch: Protocol['architectureType'][]
   gov: Protocol['governanceModel'][]
   risk: Protocol['captureRisk'][]
   status: string[]
 }
 
-type SortKey = 'name' | 'architecture' | 'governance' | 'captureRisk' | 'lastInvestigated'
+type SortKey = 'name' | 'governance' | 'captureRisk' | 'lastInvestigated'
 type SortDir = 'asc' | 'desc'
 
 const EMPTY_FILTERS: MatrixFilters = {
   q: '',
   entity: [],
-  arch: [],
   gov: [],
   risk: [],
   status: [],
@@ -144,7 +124,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
     setFilters({
       q: params.get('q') ?? '',
       entity: params.get('entity')?.split(',').filter(Boolean) ?? [],
-      arch: (params.get('arch')?.split(',').filter(Boolean) ?? []) as Protocol['architectureType'][],
       gov: (params.get('gov')?.split(',').filter(Boolean) ?? []) as Protocol['governanceModel'][],
       risk: (params.get('risk')?.split(',').filter(Boolean) ?? []) as Protocol['captureRisk'][],
       status: params.get('status')?.split(',').filter(Boolean) ?? [],
@@ -222,7 +201,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
       const params = new URLSearchParams()
       if (next.q) params.set('q', next.q)
       if (next.entity.length) params.set('entity', next.entity.join(','))
-      if (next.arch.length) params.set('arch', next.arch.join(','))
       if (next.gov.length) params.set('gov', next.gov.join(','))
       if (next.risk.length) params.set('risk', next.risk.join(','))
       if (next.status.length) params.set('status', next.status.join(','))
@@ -249,7 +227,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
     [protocols],
   )
 
-  const archTypes: Protocol['architectureType'][] = ['fully-p2p', 'federated', 'hybrid']
   const govModels: Protocol['governanceModel'][] = ['foundation', 'dao', 'single-company', 'open-standard-body', 'community']
   const riskLevels: Protocol['captureRisk'][] = ['low', 'medium', 'high']
 
@@ -266,9 +243,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
     }
     if (filters.entity.length > 0) {
       result = result.filter(p => filters.entity.includes(p.entityType))
-    }
-    if (filters.arch.length > 0) {
-      result = result.filter(p => filters.arch.includes(p.architectureType))
     }
     if (filters.gov.length > 0) {
       result = result.filter(p => filters.gov.includes(p.governanceModel))
@@ -291,8 +265,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
       switch (sortKey) {
         case 'name':
           return dir * a.name.localeCompare(b.name, locale)
-        case 'architecture':
-          return dir * a.architectureType.localeCompare(b.architectureType, locale)
         case 'governance':
           return dir * a.governanceModel.localeCompare(b.governanceModel, locale)
         case 'captureRisk': {
@@ -377,7 +349,7 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
     })
   }, [syncUrl])
 
-  const toggleArrayFilter = useCallback(<K extends 'entity' | 'arch' | 'gov' | 'risk' | 'status'>(
+  const toggleArrayFilter = useCallback(<K extends 'entity' | 'gov' | 'risk' | 'status'>(
     key: K,
     value: MatrixFilters[K][number],
   ) => {
@@ -400,7 +372,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
   const activeFilterCount =
     (filters.q ? 1 : 0) +
     filters.entity.length +
-    filters.arch.length +
     filters.gov.length +
     filters.risk.length +
     filters.status.length
@@ -546,13 +517,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
 
         {/* Filter dropdowns */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <DropdownFilter
-            label={t('matrix.filterArchitecture') as string}
-            testId="matrix-filter-arch"
-            options={archTypes.map(val => ({ value: val, label: t(`badge.architecture.${val}`) as string }))}
-            selected={filters.arch}
-            onToggle={val => toggleArrayFilter('arch', val as Protocol['architectureType'])}
-          />
           <DropdownFilter
             label={t('matrix.filterGovernance') as string}
             testId="matrix-filter-gov"
@@ -739,14 +703,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
                 />
                 <th style={thStyle}>{t('matrix.columns.entityType') as string}</th>
                 <SortableHeader
-                  label={t('matrix.columns.architecture') as string}
-                  sortKey="architecture"
-                  currentKey={sortKey}
-                  currentDir={sortDir}
-                  onSort={handleSort}
-                  t={t}
-                />
-                <SortableHeader
                   label={t('matrix.columns.governance') as string}
                   sortKey="governance"
                   currentKey={sortKey}
@@ -895,16 +851,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
                         </span>
                       </td>
 
-                      {/* Architecture — outline badge */}
-                      <td style={tdStyle}>
-                        <span style={{
-                          ...badgeBase,
-                          ...ARCH_BADGE_STYLE[protocol.architectureType],
-                        }}>
-                          {t(`badge.architecture.${protocol.architectureType}`) as string}
-                        </span>
-                      </td>
-
                       {/* Governance — filled badge */}
                       <td style={tdStyle}>
                         <span style={{
@@ -953,7 +899,7 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
                       }}
                     >
                       <td
-                        colSpan={8}
+                        colSpan={7}
                         role="region"
                         aria-label={(t('matrix.detailsAriaLabel') as (name: string) => string)(protocol.name)}
                         style={{ padding: 0 }}
@@ -1067,9 +1013,6 @@ export default function MatrixTable({ protocols, domains, affordances, locale = 
 
                           {/* Badge row */}
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
-                            <span style={{ ...badgeBase, ...ARCH_BADGE_STYLE[protocol.architectureType] }}>
-                              {t(`badge.architecture.${protocol.architectureType}`) as string}
-                            </span>
                             <span style={{ ...badgeBase, ...GOV_BADGE_STYLE }}>
                               {t(`badge.governance.${protocol.governanceModel}`) as string}
                             </span>
