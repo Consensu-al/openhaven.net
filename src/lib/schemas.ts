@@ -1,3 +1,4 @@
+// Zod schemas for validating data loaded from src/data/ JSON files.
 import { z } from 'zod';
 
 export const DomainSchema = z.object({
