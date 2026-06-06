@@ -1,0 +1,8 @@
+# OpenHaven — multilateral data stewardship (Story 8.8)
+# Brandon (@Enli10ment) is the data authority — required reviewer for authored
+# matrix data and the schema.
+# NOTE: advisory until branch protection ("Require review from Code Owners") is
+# enabled on this repo — future TODO. See docs/governance.md (workspace repo).
+
+/src/data/            @Enli10ment
+/src/lib/schemas.ts   @Enli10ment
