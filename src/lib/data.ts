@@ -1,3 +1,4 @@
+// Data files in src/data/ are generated from the master spreadsheet source.
 import { z } from 'zod';
 import { DomainSchema, ProtocolSchema, AffordanceSchema, EntityTypeSchema, AttributeDefSchema } from './schemas';
 import type { Domain, Protocol, Affordance, EntityType, AttributeDef } from './types';
