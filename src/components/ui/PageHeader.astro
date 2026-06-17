@@ -1,0 +1,114 @@
+---
+import { useTranslations } from '@/i18n'
+
+export interface Props {
+  title: string
+  subtitle?: string
+  breadcrumbLabel?: string
+  locale?: string
+  // Optional BCP-47 lang for title/subtitle — used on pt-BR pages where the
+  // title and/or summary stay English (FR34) so AT pronounces them correctly.
+  titleLang?: string
+  subtitleLang?: string
+}
+
+const {
+  title,
+  subtitle,
+  breadcrumbLabel,
+  locale: localeProp,
+  titleLang,
+  subtitleLang,
+} = Astro.props
+
+const locale = localeProp ?? Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
+---
+
+<div class="page-header-block">
+  {breadcrumbLabel && (
+    <nav aria-label={t('nav.breadcrumb')} class="breadcrumb-nav">
+      <ol class="breadcrumb-list">
+        <li><a href={`${prefix}/`} class="breadcrumb-link">{t('nav.homeBreadcrumb')}</a></li>
+        <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+        <li aria-current="page"><span class="breadcrumb-current">{breadcrumbLabel}</span></li>
+      </ol>
+    </nav>
+  )}
+
+  <h1 class="page-title" lang={titleLang}>{title}</h1>
+  {subtitle && <p class="page-subtitle" lang={subtitleLang}>{subtitle}</p>}
+</div>
+
+<style>
+  .page-header-block {
+    margin-bottom: 0.5rem;
+  }
+
+  .breadcrumb-nav {
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .breadcrumb-link {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-link:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .breadcrumb-sep {
+    opacity: 0.4;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-brand-text);
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 640px) {
+    .page-title {
+      font-size: 2rem;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1.0625rem;
+    color: var(--color-brand-text);
+    opacity: 0.8;
+    margin: 0;
+    line-height: 1.6;
+  }
+</style>

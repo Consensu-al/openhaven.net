@@ -20,10 +20,28 @@ const t = useTranslations(locale);
       {t('nav.contribute')}
     </a>
     <a
+      href={`${locale !== 'en' ? `/${locale}` : ''}/process`}
+      class="footer-link"
+    >
+      {t('nav.process')}
+    </a>
+    <a
+      href={`${locale !== 'en' ? `/${locale}` : ''}/research`}
+      class="footer-link"
+    >
+      {t('nav.research')}
+    </a>
+    <a
       href={`${locale !== 'en' ? `/${locale}` : ''}/contact`}
       class="footer-link"
     >
       {t('nav.contact')}
+    </a>
+    <a
+      href={`${locale !== 'en' ? `/${locale}` : ''}/beta`}
+      class="footer-link"
+    >
+      {t('nav.beta')}
     </a>
   </div>
 </footer>

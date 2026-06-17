@@ -50,22 +50,26 @@ test('/prototype/calendar loads', async ({ page }) => {
 
 test('nav links are visible on homepage', async ({ page }) => {
   await page.goto('/');
+  // Top-level (IA 2026-06-08): Research dropdown + About, Process, Contribute
+  await expect(page.locator('#nav-research-toggle')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'About/Brief', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Contribute', exact: true }).first()).toBeVisible();
+  // Navigator + Matrix now live inside the Research dropdown
+  await page.locator('#nav-research-toggle').click();
   await expect(page.getByRole('link', { name: 'Navigator', exact: true }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Matrix', exact: true }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Brief', exact: true }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Contribute', exact: true }).first()).toBeVisible();
 });
 
 test('nav renders on /prototype/navigator', async ({ page }) => {
   await page.goto('/prototype/navigator');
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Matrix', exact: true }).first()).toBeVisible();
+  await expect(page.locator('#nav-research-toggle')).toBeVisible();
 });
 
 test('nav renders on /prototype/calendar', async ({ page }) => {
   await page.goto('/prototype/calendar');
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Matrix', exact: true }).first()).toBeVisible();
+  await expect(page.locator('#nav-research-toggle')).toBeVisible();
 });
 
 test('footer renders with copyright text on homepage', async ({ page }) => {

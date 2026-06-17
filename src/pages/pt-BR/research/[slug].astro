@@ -1,0 +1,154 @@
+---
+import { getCollection, render } from 'astro:content'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHeader from '@/components/ui/PageHeader.astro'
+import ResearchArticleFooter from '@/components/research/ResearchArticleFooter.astro'
+import { useTranslations } from '@/i18n'
+import '@/styles/research-article.css'
+
+// pt-BR mirror of /research/[slug] — same collection, same English-body docs.
+// Chrome (breadcrumb, PageHeader labels, attribution, locale notice) translates;
+// the article body + OpenHaven summary stay English per FR34.
+export async function getStaticPaths() {
+  const entries = await getCollection('research')
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }))
+}
+
+const { entry } = Astro.props
+const { data } = entry
+const { Content } = await render(entry)
+
+const locale = 'pt-BR'
+const t = useTranslations(locale)
+const prefix = '/pt-BR'
+
+const siteBase = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '')
+const ogImage = data.image ? new URL(data.image, siteBase).toString() : undefined
+const canonicalUrl = `${siteBase}${prefix}/research/${entry.id}`
+
+// --- JSON-LD: Article + BreadcrumbList (F10 / Decision 11) ---
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.summary,
+  author: {
+    '@type': 'Person',
+    name: data.author,
+    ...(data.authorUrl ? { url: data.authorUrl } : {}),
+  },
+  publisher: { '@type': 'Organization', name: data.publisher },
+  license: data.licenseUrl,
+  datePublished: String(data.year),
+  url: canonicalUrl,
+  ...(ogImage ? { image: ogImage } : {}),
+}
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('nav.homeBreadcrumb'), item: `${siteBase}${prefix}/` },
+    { '@type': 'ListItem', position: 2, name: t('research.landingBreadcrumb'), item: `${siteBase}${prefix}/research` },
+    { '@type': 'ListItem', position: 3, name: data.title, item: canonicalUrl },
+  ],
+}
+---
+
+<BaseLayout title={data.title} description={data.summary} ogImage={ogImage}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify([articleLd, breadcrumbLd])} />
+  </Fragment>
+
+  <main data-testid="research-article-page">
+    <section class="section-padding">
+      <div class="container">
+
+        <!-- Hand-built 3-level breadcrumb (Decision 17/F6): Home > Research > {title} -->
+        <nav aria-label={t('nav.breadcrumb')} class="breadcrumb-nav" data-testid="breadcrumb">
+          <ol class="breadcrumb-list">
+            <li>
+              <a href={`${prefix}/`} class="breadcrumb-link" data-testid="breadcrumb-home">{t('nav.homeBreadcrumb')}</a>
+            </li>
+            <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+            <li>
+              <a href={`${prefix}/research`} class="breadcrumb-link" data-testid="breadcrumb-research">{t('research.landingBreadcrumb')}</a>
+            </li>
+            <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
+            <li aria-current="page"><span class="breadcrumb-current">{data.title}</span></li>
+          </ol>
+        </nav>
+
+        <PageHeader
+          title={data.title}
+          subtitle={data.summary}
+          locale={locale}
+          titleLang="en"
+          subtitleLang="en"
+        />
+
+        <div class="research-dek-group" lang="en">
+          {data.subtitle && <p class="research-dek">{data.subtitle}</p>}
+          {data.subtitle2 && <p class="research-dek research-dek--secondary">{data.subtitle2}</p>}
+        </div>
+
+        <div class="research-article" lang="en">
+          <Content />
+        </div>
+
+        <ResearchArticleFooter data={data} locale={locale} />
+
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Hand-built 3-level breadcrumb (Decision 17) — mirrors prototype/domains pattern */
+  .breadcrumb-nav {
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+  }
+
+  .breadcrumb-link {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-link:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .breadcrumb-sep {
+    opacity: 0.4;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-brand-text);
+  }
+</style>

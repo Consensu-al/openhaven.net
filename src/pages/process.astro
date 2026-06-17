@@ -1,0 +1,230 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHeader from '@/components/ui/PageHeader.astro'
+import { useTranslations } from '@/i18n'
+
+const locale = Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
+
+const reviewChecks = t('process.reviewChecks') as string[]
+const reviewSignals = t('process.reviewSignals') as Array<{title: string; description: string}>
+const reviewTriggerList = t('process.reviewTriggerList') as string[]
+const teamMembers = t('process.teamMembers') as Array<{name: string; role: string}>
+---
+
+<BaseLayout
+  title={t('process.pageTitle') as string}
+  description={t('process.pageDescription') as string}
+>
+  <main data-testid="process-page">
+    <section class="section-padding">
+      <div class="container">
+        <PageHeader
+          title={t('process.heading') as string}
+          subtitle={t('process.subtitle') as string}
+          breadcrumbLabel={t('nav.process') as string}
+          locale={locale}
+        />
+      </div>
+    </section>
+
+    <section class="section-padding section-alt">
+      <div class="container">
+        <h2 class="section-heading">{t('process.intakeHeading')}</h2>
+
+        <p class="body-text">{t('process.intakeIntro')}</p>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">Research-led intake.</h3>
+          <p class="body-text">{t('process.intakeResearch')}</p>
+        </div>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">Community submissions.</h3>
+          <p class="body-text">{t('process.intakeCommunity')}</p>
+          <a href={`${prefix}/contribute`} class="cta-link">{t('process.proposeEntry')}</a>
+        </div>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">What we collect.</h3>
+          <p class="body-text">{t('process.intakeCollect')}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 class="section-heading">{t('process.reviewHeading')}</h2>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">What we verify today.</h3>
+          <p class="body-text">{t('process.reviewToday')}</p>
+          <ul class="process-check-list">
+            {reviewChecks.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">Freshness tracking.</h3>
+          <p class="body-text">{t('process.reviewFreshness')}</p>
+        </div>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">Where we're headed.</h3>
+          <p class="body-text">{t('process.reviewHeadedIntro')}</p>
+          <div class="nested-card-grid">
+            {reviewSignals.map((signal) => (
+              <div class="nested-card">
+                <h4 class="detail-heading">{signal.title}</h4>
+                <p class="body-text">{signal.description}</p>
+              </div>
+            ))}
+          </div>
+          <p class="body-text">{t('process.reviewSignalsNote')}</p>
+          <p class="body-text">{t('process.reviewSharedPractice')}</p>
+        </div>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">Update triggers.</h3>
+          <p class="body-text">{t('process.reviewTriggers')}</p>
+          <ul class="process-check-list">
+            {reviewTriggerList.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="content-block">
+          <h3 class="subsection-heading">Governance and capture risk.</h3>
+          <p class="body-text">{t('process.reviewCaptureRisk')}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding section-alt">
+      <div class="container">
+        <h2 class="section-heading">{t('process.contributeHeading')}</h2>
+        <p class="body-text">{t('process.contributeIntro')}</p>
+
+        <div class="nested-card-grid">
+          <div class="nested-card">
+            <h3 class="detail-heading">{t('process.contributeFlag')}</h3>
+            <p class="body-text">{t('process.contributeFlagBody')}</p>
+            <a href={`${prefix}/contribute`} class="cta-link">{t('process.suggestUpdate')}</a>
+          </div>
+
+          <div class="nested-card">
+            <h3 class="detail-heading">{t('process.contributePropose')}</h3>
+            <p class="body-text">{t('process.contributeProposeBody')}</p>
+            <a href={`${prefix}/contribute`} class="cta-link">{t('process.proposeEntry')}</a>
+          </div>
+
+          <div class="nested-card">
+            <h3 class="detail-heading">{t('process.contributeVerification')}</h3>
+            <p class="body-text">{t('process.contributeVerificationBody')}</p>
+            <a href={`${prefix}/contact`} class="cta-link">{t('process.getInTouch')}</a>
+          </div>
+
+          <div class="nested-card">
+            <h3 class="detail-heading">{t('process.contributePartnership')}</h3>
+            <p class="body-text">{t('process.contributePartnershipBody')}</p>
+            <a href={`${prefix}/contact`} class="cta-link">{t('process.getInTouch')}</a>
+          </div>
+
+          <div class="nested-card">
+            <h3 class="detail-heading">{t('process.contributeGovernance')}</h3>
+            <p class="body-text">{t('process.contributeGovernanceBody')}</p>
+            <a href={`${prefix}/contact`} class="cta-link">{t('process.getInTouch')}</a>
+          </div>
+
+          <div class="nested-card">
+            <h3 class="detail-heading">{t('process.contributeSpread')}</h3>
+            <p class="body-text">{t('process.contributeSpreadBody')}</p>
+          </div>
+        </div>
+
+        <div class="attribution-callout">
+          <h3 class="subsection-heading">{t('process.contributeAttribution')}</h3>
+          <p class="body-text">{t('process.contributeAttributionBody')}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2 class="section-heading">{t('process.teamHeading')}</h2>
+        <ul class="team-list">
+          {teamMembers.map((member) => (
+            <li class="team-member">
+              <span class="team-member-name">{member.name}</span> — {member.role}
+            </li>
+          ))}
+        </ul>
+        <p class="body-text team-footer">
+          {t('process.teamFooter')}{' '}
+          <a href={`${prefix}/contact`} class="inline-link">{t('process.learnMore')}</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>
+
+<style>
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0;
+    min-height: 44px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .cta-link:hover {
+    border-bottom-color: var(--color-brand-primary);
+  }
+
+  .cta-link:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .attribution-callout {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-card-border);
+  }
+
+  .team-member-name {
+    font-weight: 700;
+    color: var(--color-brand-text);
+  }
+
+  .team-list {
+    list-style: none;
+    margin: 0 0 1.5rem 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .team-member {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-brand-text);
+  }
+
+  .team-footer {
+    border-top: 1px solid rgba(139, 69, 19, 0.15);
+    padding-top: 1rem;
+  }
+</style>

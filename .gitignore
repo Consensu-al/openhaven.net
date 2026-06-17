@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# test artifacts (regenerable)
+test-results/
+playwright-report/
+
+# oh-my-claudecode session state
+.omc/

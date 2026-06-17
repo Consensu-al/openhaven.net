@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHeader from '@/components/ui/PageHeader.astro'
 import { useTranslations } from '@/i18n'
 
 const locale = Astro.currentLocale ?? 'en'
@@ -18,9 +19,11 @@ const FORM_EMBED_URL = 'https://cryptpad.fr/form/#/2/form/view/db9duvZlOFuHHgz4B
     <section class="section-padding">
       <div class="container">
 
-        <div class="page-header">
-          <h1 class="page-title">{t('contact.heading')}</h1>
-        </div>
+        <PageHeader
+          title={t('contact.heading') as string}
+          breadcrumbLabel={t('nav.contact') as string}
+          locale={locale}
+        />
 
         <div class="intro-card">
           <p class="intro-text">{t('contact.intro')}</p>
@@ -55,24 +58,6 @@ const FORM_EMBED_URL = 'https://cryptpad.fr/form/#/2/form/view/db9duvZlOFuHHgz4B
 </BaseLayout>
 
 <style>
-  .page-header {
-    margin-bottom: 1.5rem;
-  }
-
-  .page-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--color-brand-primary);
-    margin: 0 0 0.5rem 0;
-    line-height: 1.2;
-  }
-
-  @media (min-width: 640px) {
-    .page-title {
-      font-size: 2rem;
-    }
-  }
-
   .intro-card {
     background: white;
     border: 2px solid rgba(139, 69, 19, 0.25);

@@ -1,6 +1,9 @@
 ---
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher.astro';
 import { useTranslations } from '@/i18n';
+import { getCollection } from 'astro:content';
+import { externalDiagrams, externalReports } from '@/lib/research-links';
+import { ICON_SVGS } from '@/lib/nav-icons';
 
 interface Props {
   locale?: string;
@@ -12,30 +15,80 @@ const t = useTranslations(locale);
 const currentPath = Astro.url.pathname;
 const prefix = locale !== 'en' ? `/${locale}` : '';
 
-const exactMatchPaths = ['/prototype', '/brief'];
+const exactMatchPaths = ['/brief', '/process'];
 const isActive = (href: string) => {
   const fullHref = `${prefix}${href}`;
   return exactMatchPaths.includes(href)
     ? currentPath === fullHref || currentPath === `${fullHref}/`
     : currentPath.startsWith(fullHref);
 };
+const isMenuItemActive = (href: string) =>
+  currentPath === href || currentPath === `${href}/`;
 
-const isHomepage = currentPath === '/' || currentPath === ''
-  || currentPath === `${prefix}/` || currentPath === prefix;
-const isBrief = currentPath === `${prefix}/brief` || currentPath === `${prefix}/brief/`;
+// Top-level nav (IA 2026-06-08): Research dropdown + About, Process, Contribute.
+// Navigator + Matrix moved INTO the Research dropdown as the primary tools.
+const navLinks = [
+  { href: '/brief', label: t('nav.about') as string },
+  { href: '/process', label: t('nav.process') as string },
+  { href: '/contribute', label: t('nav.contribute') as string },
+];
 
-const navLinks = (isHomepage || isBrief)
-  ? [
-      { href: '/brief', label: t('nav.brief') as string },
-      { href: '/prototype', label: t('nav.navigatorPrototype') as string },
-      { href: '/contribute', label: t('nav.contribute') as string },
-    ]
-  : [
-      { href: '/brief', label: t('nav.brief') as string },
-      { href: '/prototype', label: t('nav.home') as string },
-      { href: '/prototype/matrix', label: t('nav.matrixPrototype') as string },
-      { href: '/contribute', label: t('nav.contribute') as string },
-    ];
+// Research dropdown (IA 2026-06-16): four titled groups — Start Here → Key Tools
+// → Reports → Diagrams — built from a single `researchGroups` array so the desktop
+// panel and the mobile sublist render identical content (AC3). Reports pulls the
+// collection entries + externalReports (Monetary); Diagrams pulls externalDiagrams —
+// the same sources the /research landing uses (single source of truth).
+interface ResearchMenuItem {
+  href: string;
+  label: string;
+  icon?: string;
+  tag?: string;
+  external?: boolean;
+}
+interface ResearchMenuGroup {
+  key: string;
+  label: string;
+  items: ResearchMenuItem[];
+}
+
+const researchReports: ResearchMenuItem[] = (await getCollection('research'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  .map((entry) => ({ href: `${prefix}/research/${entry.id}`, label: entry.data.title }));
+
+const externalNewTab = t('research.externalNewTab') as string;
+
+const researchGroups: ResearchMenuGroup[] = [
+  {
+    key: 'start',
+    label: t('nav.menuStartHere') as string,
+    items: [
+      { href: `${prefix}/research`, label: t('nav.researchOverview') as string, tag: t('nav.startHereTag') as string },
+    ],
+  },
+  {
+    key: 'tools',
+    label: t('nav.menuKeyTools') as string,
+    items: [
+      { href: `${prefix}/prototype`, label: t('nav.navigatorPrototype') as string, icon: 'compass' },
+      { href: `${prefix}/prototype/matrix`, label: t('nav.matrixPrototype') as string, icon: 'list' },
+    ],
+  },
+  {
+    key: 'reports',
+    label: t('nav.menuReports') as string,
+    items: [
+      ...researchReports,
+      ...externalReports.map((r) => ({ href: r.href, label: t(r.titleKey) as string, external: true })),
+    ],
+  },
+  {
+    key: 'diagrams',
+    label: t('nav.menuDiagrams') as string,
+    items: externalDiagrams.map((d) => ({ href: d.href, label: t(d.titleKey) as string, external: true })),
+  },
+];
+const isResearchActive =
+  currentPath.startsWith(`${prefix}/research`) || currentPath.startsWith(`${prefix}/prototype`);
 ---
 
 <nav class="site-nav" aria-label="Main navigation">
@@ -45,6 +98,60 @@ const navLinks = (isHomepage || isBrief)
     </a>
 
     <ul class="nav-links" role="list">
+      <li class="nav-dropdown">
+        <button
+          type="button"
+          id="nav-research-toggle"
+          class={`nav-link nav-dropdown-toggle ${isResearchActive ? 'nav-link--active' : ''}`}
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="nav-research-menu"
+          aria-current={isResearchActive ? 'page' : undefined}
+        >
+          {t('nav.research')}
+          <svg class="nav-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+        <ul id="nav-research-menu" class="nav-dropdown-menu" role="list" hidden>
+          {researchGroups.map((group) => (
+            <li class="nav-dropdown-group">
+              <span class="nav-dropdown-grouplabel">{group.label}</span>
+              <ul role="list" class="nav-dropdown-grouplist" data-group={group.key}>
+                {group.items.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class="nav-dropdown-link"
+                      aria-current={!item.external && isMenuItemActive(item.href) ? 'page' : undefined}
+                      target={item.external ? '_blank' : undefined}
+                      rel={item.external ? 'noopener noreferrer' : undefined}
+                    >
+                      {item.icon && (
+                        <svg class="nav-dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <Fragment set:html={ICON_SVGS[item.icon]} />
+                        </svg>
+                      )}
+                      <span class="nav-dropdown-link-label">{item.label}</span>
+                      {item.tag && <span class="nav-dropdown-tag">{item.tag}</span>}
+                      {item.external && (
+                        <Fragment>
+                          <svg class="nav-dropdown-exticon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 7h10v10" />
+                            <path d="M7 17 17 7" />
+                          </svg>
+                          <span class="nav-dropdown-vh">({externalNewTab})</span>
+                        </Fragment>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </li>
+
       {navLinks.map(({ href, label }) => (
         <li>
           <a
@@ -77,6 +184,47 @@ const navLinks = (isHomepage || isBrief)
 
   <div id="nav-mobile-menu" class="nav-mobile" hidden>
     <ul role="list">
+      <li class="nav-mobile-group">
+        <span class="nav-mobile-grouplabel">{t('nav.research')}</span>
+        <ul role="list" class="nav-mobile-sublist">
+          {researchGroups.map((group) => (
+            <li class="nav-mobile-subgroup">
+              <span class="nav-dropdown-grouplabel">{group.label}</span>
+              <ul role="list" class="nav-mobile-subgrouplist" data-group={group.key}>
+                {group.items.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class="nav-mobile-sublink"
+                      aria-current={!item.external && isMenuItemActive(item.href) ? 'page' : undefined}
+                      target={item.external ? '_blank' : undefined}
+                      rel={item.external ? 'noopener noreferrer' : undefined}
+                    >
+                      {item.icon && (
+                        <svg class="nav-dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <Fragment set:html={ICON_SVGS[item.icon]} />
+                        </svg>
+                      )}
+                      <span class="nav-dropdown-link-label">{item.label}</span>
+                      {item.tag && <span class="nav-dropdown-tag">{item.tag}</span>}
+                      {item.external && (
+                        <Fragment>
+                          <svg class="nav-dropdown-exticon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 7h10v10" />
+                            <path d="M7 17 17 7" />
+                          </svg>
+                          <span class="nav-dropdown-vh">({externalNewTab})</span>
+                        </Fragment>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </li>
+
       {navLinks.map(({ href, label }) => (
         <li>
           <a
@@ -105,6 +253,49 @@ const navLinks = (isHomepage || isBrief)
       menu.hidden = expanded;
     });
   }
+
+  // Desktop nav dropdown(s). The menu is position:fixed and JS-anchored under its
+  // button so it escapes the .nav-links overflow:hidden clip without altering the
+  // existing single-row nav layout.
+  document.querySelectorAll('.nav-dropdown-toggle').forEach((btn) => {
+    const id = btn.getAttribute('aria-controls');
+    const panel = id ? document.getElementById(id) : null;
+    if (!panel) return;
+
+    const place = () => {
+      const r = btn.getBoundingClientRect();
+      panel.style.top = `${Math.round(r.bottom + 4)}px`;
+      panel.style.left = `${Math.round(r.left)}px`;
+    };
+    const close = () => {
+      btn.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    };
+    const open = () => {
+      place();
+      btn.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+    };
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btn.getAttribute('aria-expanded') === 'true' ? close() : open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!panel.hidden && !panel.contains(e.target as Node) && !btn.contains(e.target as Node)) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        close();
+        (btn as HTMLElement).focus();
+      }
+    });
+    panel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) close();
+    });
+    window.addEventListener('resize', () => { if (!panel.hidden) place(); });
+    window.addEventListener('scroll', () => { if (!panel.hidden) place(); }, { passive: true });
+  });
 </script>
 
 <style>
@@ -152,6 +343,9 @@ const navLinks = (isHomepage || isBrief)
     flex: 1;
     margin: 0;
     padding: 0;
+    flex-wrap: wrap;
+    overflow: hidden;
+    max-height: 44px;
   }
 
   .nav-link {
@@ -183,6 +377,161 @@ const navLinks = (isHomepage || isBrief)
     color: var(--color-brand-primary);
     border-bottom-color: var(--color-brand-accent);
     font-weight: 600;
+  }
+
+  /* Research dropdown (interim top-level placement — re-evaluate in Story 9.1) */
+  .nav-dropdown {
+    display: inline-flex;
+  }
+
+  .nav-dropdown-toggle {
+    gap: 0.25rem;
+    background: none;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    cursor: pointer;
+    /* Only neutralize button UA quirks; font-size/weight/color come from .nav-link
+       so the toggle matches the other nav items exactly. (font:inherit would reset
+       size to 16px / weight to 400 and make it look bigger + lighter.) */
+    font-family: inherit;
+    line-height: inherit;
+  }
+
+  .nav-caret {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-dropdown-toggle[aria-expanded='true'] .nav-caret {
+    transform: rotate(180deg);
+  }
+
+  .nav-dropdown-menu {
+    position: fixed;
+    z-index: 200;
+    min-width: 260px;
+    max-width: 360px;
+    /* Menu now carries ~12 rows + 4 group labels — cap height + scroll so it
+       never runs off short/zoomed viewports (⚑F5). */
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0.375rem;
+    list-style: none;
+    background: var(--color-brand-bg);
+    border: 1px solid var(--color-brand-primary);
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 24px var(--color-card-shadow);
+  }
+
+  /* Titled group structure (shared desktop + mobile section labels) */
+  .nav-dropdown-group {
+    list-style: none;
+  }
+
+  .nav-dropdown-group + .nav-dropdown-group {
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--color-card-border);
+  }
+
+  .nav-dropdown-grouplist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-dropdown-grouplabel {
+    display: block;
+    padding: 0.375rem 0.75rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-brand-primary);
+    opacity: 0.65;
+  }
+
+  /* "Start here" tag pill — brand tokens only, padded so text never kisses the edge */
+  .nav-dropdown-tag {
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 0.1875rem 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--color-brand-primary);
+    background: var(--color-brand-accent-light);
+    border-radius: 9999px;
+  }
+
+  /* External-link (Diagrams) up-right arrow — right-aligned in the row */
+  .nav-dropdown-exticon {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .nav-dropdown-vh {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .nav-dropdown-menu[hidden] {
+    display: none;
+  }
+
+  .nav-dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-brand-text);
+    text-decoration: none;
+    border-bottom: none;
+    border-radius: 4px;
+  }
+
+  .nav-dropdown-link:hover {
+    background: var(--color-brand-accent-light);
+    color: var(--color-brand-primary);
+  }
+
+  .nav-dropdown-link:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: -2px;
+  }
+
+  .nav-dropdown-icon {
+    flex-shrink: 0;
+  }
+
+  /* Active sub-item = current page: mirror the top-level .nav-link--active treatment
+     (brand-primary text + weight 600 + accent underline). The underline is a box-shadow
+     on the LABEL span so it stays text-width on the full-width flex row (⚑F4), and is
+     scoped to .nav-dropdown-link-label so it never bleeds into the "Start here" tag pill
+     (⚑H1). External items never carry aria-current, so they never show this state. */
+  .nav-dropdown-link[aria-current='page'],
+  .nav-mobile-sublink[aria-current='page'] {
+    color: var(--color-brand-primary);
+    font-weight: 600;
+  }
+
+  .nav-dropdown-link[aria-current='page'] > .nav-dropdown-link-label,
+  .nav-mobile-sublink[aria-current='page'] > .nav-dropdown-link-label {
+    box-shadow: inset 0 -2px 0 var(--color-brand-accent);
   }
 
   .nav-right {
@@ -271,13 +620,70 @@ const navLinks = (isHomepage || isBrief)
     background-color: var(--color-brand-accent-light);
   }
 
+  .nav-mobile-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-mobile-sublist {
+    margin: 0.125rem 0 0 0.75rem;
+    padding: 0 0 0 0.5rem;
+    border-left: 2px solid var(--color-brand-accent-light);
+  }
+
+  .nav-mobile-subgroup {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-mobile-subgrouplist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-mobile-grouplabel {
+    display: block;
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-brand-primary);
+    opacity: 0.7;
+  }
+
+  .nav-mobile-sublink {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-brand-text);
+    text-decoration: none;
+    border-bottom: none;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-mobile-sublink:hover {
+    background-color: var(--color-brand-accent-light);
+    color: var(--color-brand-primary);
+  }
+
+  .nav-mobile-sublink:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
   .nav-mobile-switcher {
     margin-top: 0.75rem;
     padding-top: 0.75rem;
     border-top: 1px solid var(--color-brand-accent-light);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 900px) {
     .nav-links {
       display: none;
     }

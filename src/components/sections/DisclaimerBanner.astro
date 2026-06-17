@@ -1,22 +1,25 @@
 ---
 export interface Props {
   message: string;
-  variant?: 'error' | 'warning';
+  variant?: 'error' | 'warning' | 'subtle';
 }
 
 const { message, variant = 'error' } = Astro.props;
 const isWarning = variant === 'warning';
+const isSubtle = variant === 'subtle';
 ---
 
-<section class="disclaimer-section">
-  <div class:list={['disclaimer-banner', { 'disclaimer-warning': isWarning }]}>
-    <div class:list={['disclaimer-icon', { 'disclaimer-icon--warning': isWarning }]} aria-hidden="true">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
-        <path d="M12 9v4"/><path d="M12 17h.01"/>
-      </svg>
-    </div>
-    <p class:list={['disclaimer-text', { 'disclaimer-text--warning': isWarning }]} set:html={message} />
+<section class:list={['disclaimer-section', { 'disclaimer-section--subtle': isSubtle }]}>
+  <div class:list={['disclaimer-banner', { 'disclaimer-warning': isWarning, 'disclaimer-subtle': isSubtle }]}>
+    {!isSubtle && (
+      <div class:list={['disclaimer-icon', { 'disclaimer-icon--warning': isWarning }]} aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+          <path d="M12 9v4"/><path d="M12 17h.01"/>
+        </svg>
+      </div>
+    )}
+    <p class:list={['disclaimer-text', { 'disclaimer-text--warning': isWarning, 'disclaimer-text--subtle': isSubtle }]} set:html={message} />
   </div>
 </section>
 
@@ -26,6 +29,10 @@ const isWarning = variant === 'warning';
     justify-content: center;
     padding: 1rem 1rem;
     background: var(--color-brand-bg);
+  }
+
+  .disclaimer-section--subtle {
+    padding: 0.5rem 1rem;
   }
 
   .disclaimer-banner {
@@ -45,6 +52,14 @@ const isWarning = variant === 'warning';
     background: #fff7ed;
     border-color: #ea580c;
     box-shadow: 0 1px 4px rgba(234, 88, 12, 0.15);
+  }
+
+  .disclaimer-subtle {
+    background: #f6f6f6;
+    border: 1px solid #d4d4d4;
+    box-shadow: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.375rem;
   }
 
   .disclaimer-icon {
@@ -69,6 +84,11 @@ const isWarning = variant === 'warning';
 
   .disclaimer-text--warning {
     color: #9a3412;
+  }
+
+  .disclaimer-text--subtle {
+    font-weight: 500;
+    color: #525252;
   }
 
   @media (max-width: 639px) {

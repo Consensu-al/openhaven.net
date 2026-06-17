@@ -6,19 +6,31 @@ const en = {
   },
 
   nav: {
-    home: 'Navigator (Prototype)',
+    home: 'Navigator',
     matrix: 'Matrix',
-    protocols: 'Protocols',
+    protocols: 'Tech Tools',
     domains: 'Domains',
     backToOpenHaven: '← Back to OpenHaven',
     backToHome: 'Back to Home',
     selectDomain: 'Select a use case domain',
-    brief: 'Stakeholder Brief',
-    navigatorPrototype: 'Navigator (Prototype)',
+    brief: 'Brief',
+    navigatorPrototype: 'Navigator',
     homeBreadcrumb: 'Home',
-    matrixPrototype: 'Matrix (Prototype)',
+    matrixPrototype: 'Matrix',
     contribute: 'Contribute',
+    process: 'Our Process',
+    beta: 'Beta Status',
     contact: 'Contact',
+    research: 'Our Research',
+    breadcrumb: 'Breadcrumb',
+    researchOverview: 'Research Overview',
+    about: 'About/Brief',
+    // Research dropdown section titles + "start here" tag (OpenHaven editorial)
+    menuStartHere: 'Start Here',
+    menuKeyTools: 'Key Tools',
+    menuReports: 'Reports',
+    menuDiagrams: 'Diagrams',
+    startHereTag: 'Start here',
   },
 
   badge: {
@@ -28,11 +40,6 @@ const en = {
       'single-company': 'Company',
       'open-standard-body': 'Open Standard',
       community: 'Community',
-    },
-    architecture: {
-      'fully-p2p': 'Fully P2P',
-      federated: 'Federated',
-      hybrid: 'Hybrid',
     },
     captureRisk: {
       low: 'Low',
@@ -53,20 +60,20 @@ const en = {
     emptyState:
       "No use case domains are loaded yet — check back soon as we're actively mapping the open protocol landscape.",
     showingResults: 'Showing results for:',
-    resultsHeading: 'Protocols',
+    resultsHeading: 'Tech Tools',
     allProtocolsHint: (name: string) =>
-      `Showing all ${name} protocols — check affordances above to refine`,
+      `Showing all ${name} tech tools — check affordances above to refine`,
     step1Title: 'Choose a Use Case',
     step1Subtitle: 'Select the category that best describes your need',
     step1Badge: 'Required',
-    step3Title: 'Review Matching Protocols',
+    step3Title: 'Review Matching Tech Tools',
     showingOnly: 'Showing only',
-    protocolsDot: 'protocols.',
+    protocolsDot: 'tech tools.',
     filteredBy: '— filtered by',
     affordanceCount: (n: number) =>
       `${n} affordance${n > 1 ? 's' : ''}`,
     resultsTip:
-      'To see other protocol matches, try changing your selections in Steps 1 and 2 above.',
+      'To see other tech tool matches, try changing your selections in Steps 1 and 2 above.',
   },
 
   affordances: {
@@ -87,28 +94,27 @@ const en = {
 
   matrix: {
     protocolCount: (n: number) =>
-      `${n} protocol${n !== 1 ? 's' : ''} match`,
+      `${n} tech tool${n !== 1 ? 's' : ''} match`,
     clearAll: 'Clear all',
     activeFilters: (n: number) => `${n} active`,
-    searchPlaceholder: 'Search protocols\u2026',
+    searchPlaceholder: 'Search tech tools\u2026',
     filtersLabel: 'Filters',
     columns: {
       name: 'Name',
       entityType: 'Entity Type',
-      architecture: 'Architecture',
       governance: 'Governance',
       captureRisk: 'Capture Risk',
       devStatus: 'Dev Status',
       lastInvestigated: 'Last Investigated',
     },
     emptyState:
-      'No verified protocols yet for this combination \u2014 not that none exist. This indicates an unmapped area of the landscape.',
+      'No verified tech tools yet for this combination \u2014 not that none exist. This indicates an unmapped area of the landscape.',
     sortAsc: 'Sort ascending',
     sortDesc: 'Sort descending',
     expandRow: 'Expand details',
     collapseRow: 'Collapse details',
     closeDetails: 'Close details',
-    viewFullPage: 'View full protocol page',
+    viewFullPage: 'View full tech tool page',
     useCaseDomains: 'Use Case Domains',
     affordances: 'Affordances',
     visitCommunity: 'Visit Community',
@@ -126,8 +132,7 @@ const en = {
     compareNSelected: 'Compare',
     nOfMaxSelected: 'selected',
     clearSelection: 'Clear selection',
-    maxSelection: 'Maximum 5 protocols for comparison',
-    filterArchitecture: 'Architecture',
+    maxSelection: 'Maximum 5 tech tools for comparison',
     filterGovernance: 'Governance',
     filterCaptureRisk: 'Capture Risk',
     filterEntityType: 'Entity Type',
@@ -145,8 +150,7 @@ const en = {
     clearSelection: 'Clear selection',
     clearComparison: 'Clear comparison',
     removeFromComparison: 'Remove from comparison',
-    protocolComparison: 'Protocol Comparison',
-    architectureType: 'Architecture',
+    protocolComparison: 'Tech Tool Comparison',
     governanceModel: 'Governance',
     captureRisk: 'Capture Risk',
     license: 'License',
@@ -159,10 +163,10 @@ const en = {
     affordances: 'Affordances',
     communityLink: 'Community',
     lastInvestigated: 'Last Investigated',
-    sharedAffordance: 'Shared across selected protocols',
+    sharedAffordance: 'Shared across selected tech tools',
     noValue: '\u2014',
-    maxSelection: 'Maximum 5 protocols for comparison',
-    ariaLabel: 'Protocol comparison',
+    maxSelection: 'Maximum 5 tech tools for comparison',
+    ariaLabel: 'Tech tool comparison',
     comparisonDataAriaLabel: (name: string) =>
       `${name} comparison data`,
     removeAriaLabel: (name: string) =>
@@ -172,8 +176,8 @@ const en = {
 
   results: {
     countHeader: (count: number) =>
-      count === 1 ? '1 protocol matches' : `${count} protocols match`,
-    emptyHeading: 'No verified protocols yet for this combination',
+      count === 1 ? '1 tech tool matches' : `${count} tech tools match`,
+    emptyHeading: 'No verified tech tools yet for this combination',
     emptyBody:
       "That doesn\u2019t mean none exist \u2014 just that we haven\u2019t mapped them yet.",
     emptyContribute: 'Know one we should add?',
@@ -186,7 +190,7 @@ const en = {
 
   cta: {
     heading: 'Not sure where to start?',
-    subtitle: 'Let us guide you to the right protocols',
+    subtitle: 'Let us guide you to the right technologies',
     button: 'Guide me',
   },
 
@@ -226,7 +230,7 @@ const en = {
       "Dozens of open protocols exist across the decentralized web — each solving overlapping problems, largely in isolation. Finding the right tool for a real coordination need shouldn't require deep technical knowledge.",
     navigableBody2:
       'Our technology navigator prototype lets you start from what you need, understand the capabilities required, and discover the protocols that provide them — governance model and capture risk included.',
-    explorePrototype: 'Explore the Prototype',
+    explorePrototype: 'Explore the Navigator',
     readBrief: 'Read the Stakeholder Brief',
     newBadge: 'New',
   },
@@ -247,7 +251,7 @@ const en = {
     stepLabels: [
       'Choose a Use Case',
       'Refine by Affordance',
-      'Review Protocols',
+      'Review Options',
       'Connect & Build',
     ],
     items: [
@@ -275,6 +279,8 @@ const en = {
   },
 
   disclaimer: {
+    beta:
+      'OpenHaven\u2019s Navigator and Matrix are in beta status. <strong>Data is a working draft.</strong> <a href="/beta" style="color:inherit;text-decoration:underline;">Learn more about our status \u2192</a>',
     alphaDemo:
       'Status: Prototype. <strong>Data is for demo purposes only.</strong> Please consider <a href="/contribute" style="color:inherit;text-decoration:underline;">contributing</a>.',
     alphaIncomplete:
@@ -319,14 +325,14 @@ const en = {
   matrixPage: {
     title: 'Protocol Matrix — OpenHaven',
     description:
-      'Browse and filter the full convergence matrix of open protocols. Sort by governance, architecture, capture risk, and more to surface capability overlaps across the landscape.',
+      'Browse and filter the full convergence matrix of open protocols. Sort by governance, capture risk, and more to surface capability overlaps across the landscape.',
     jsonLdName: 'Protocol Matrix — Open Protocol Landscape',
     jsonLdDescription:
-      'Browse and filter the full convergence matrix of open protocols by governance, architecture, capture risk, and more.',
+      'Browse and filter the full convergence matrix of open protocols by governance, capture risk, and more.',
     jsonLdListName: 'Open protocols in the convergence matrix',
     pageTitle: 'Protocol Matrix',
     pageSubtitle:
-      'Browse the full convergence matrix. Filter by governance, architecture, capture risk, and more to surface capability overlaps across the landscape.',
+      'Browse the full convergence matrix. Filter by governance, capture risk, and more to surface capability overlaps across the landscape.',
   },
 
   navigatorPage: {
@@ -341,21 +347,21 @@ const en = {
     useCaseDomain: 'Use Case Domain',
     affordances: 'Affordances',
     affordancesSubtitle:
-      'Capabilities protocols in this domain may provide',
+      'Capabilities tech tools in this domain may provide',
     overview: 'Overview',
     primaryDomain: 'Primary Domain',
-    protocolsMapped: 'Protocols Mapped',
+    protocolsMapped: 'Tech Tools Mapped',
     yes: 'Yes',
     no: 'No',
-    protocolsIn: (name: string) => `Protocols in ${name}`,
-    noProtocols: 'No protocols mapped yet for this domain.',
+    protocolsIn: (name: string) => `Tech Tools in ${name}`,
+    noProtocols: 'No tech tools mapped yet for this domain.',
     exploreInNavigator: 'Explore in Navigator',
     protocolCount: (n: number) =>
-      `${n} protocol${n !== 1 ? 's' : ''}`,
+      `${n} tech tool${n !== 1 ? 's' : ''}`,
     affordanceCount: (n: number) =>
       `${n} affordance${n !== 1 ? 's' : ''}`,
     keyAffordances: 'Key affordances:',
-    openProtocols: 'open protocols',
+    openProtocols: 'tech tools',
   },
 
   protocol: {
@@ -379,9 +385,9 @@ const en = {
   exportSection: {
     heading: 'Export Your Stack for AI-Assisted Development',
     subheading:
-      'Select your protocols and generate context for Cursor, Windsurf, Claude, or your vibe coding tool of choice.',
+      'Select your technologies and generate context for Cursor, Windsurf, Claude, or your vibe coding tool of choice.',
     badge: 'Vibe Coding Ready',
-    selectProtocols: 'Select Protocols',
+    selectProtocols: 'Select Tech Tools',
     generatePrompt: 'Generate Prompt',
     comingSoon: 'Interactive version coming soon',
   },
@@ -400,6 +406,130 @@ const en = {
 
   footer: {
     copyright: '\u00A9 2026 OpenHaven',
+  },
+
+  beta: {
+    pageTitle: 'Beta Status \u2014 OpenHaven',
+    pageDescription:
+      'OpenHaven is in beta. The Navigator and Matrix are live with early-stage verification, and contribution pathways are opening up.',
+    heading: 'Beta Status',
+    subtitle: 'Working tools, early-stage verification, open to contribution.',
+    statusHeading: 'Current state',
+    statusBody:
+      'OpenHaven is in active development. The Navigator and Matrix are live, but the data behind them is still being refined \u2014 reviewed, but not yet deeply verified.',
+    dataHeading: 'Data completeness',
+    dataBody:
+      'The mappings between use cases, affordances, and protocols are real research, but they need further iteration for completeness. Some entries are well-verified; others are early-stage. Every entry carries a last_investigated date so you can see how fresh it is.',
+    contributionHeading: 'Opening up contribution',
+    contributionBody:
+      'We are in the process of opening up our pathways for contribution and collaboration. Right now, the best way to get involved is through our contribution form or by reaching out directly. Formal governance participation pathways are being developed.',
+    verificationHeading: 'Verification model',
+    verificationBody:
+      'We\u2019re building a progressive verification model where entries carry visible, independent signals \u2014 not a single \u201Cverified\u201D stamp. Research Lead review is the baseline today. Development team confirmation and third-party community verification are being added.',
+    getInvolved: 'Get involved',
+    getInvolvedBody:
+      'If you work with P2P or decentralized technologies, your knowledge can directly improve this data. If you have experience with governance evaluation or data verification, we want your input on our standards.',
+    contributeLink: 'Contribute data or flag an issue \u2192',
+    processLink: 'Read how we work \u2192',
+    contactLink: 'Reach out to the team \u2192',
+    navigatorLink: 'Explore the Navigator \u2192',
+    matrixLink: 'Browse the Matrix \u2192',
+  },
+
+  process: {
+    pageTitle: 'How OpenHaven Works — OpenHaven',
+    pageDescription:
+      'How we build and maintain the Navigator and Matrix \u2014 and how to get involved.',
+    heading: 'How OpenHaven Works',
+    subtitle:
+      'How we build and maintain the Navigator and Matrix \u2014 and how to get involved.',
+    alphaNotice:
+      '<strong>OpenHaven is in active development.</strong> The data in the Navigator is real but not yet complete. We\u2019re building in the open. <a href="/contribute" style="color:inherit;text-decoration:underline;">Consider contributing \u2192</a>',
+
+    intakeHeading: 'How protocols and tools get into the Navigator',
+    intakeIntro:
+      'OpenHaven\u2019s convergence matrix \u2014 the structured dataset behind the Navigator \u2014 is built through dedicated research and community contribution.',
+    intakeResearch:
+      'Our research team investigates the peer-to-peer and decentralized protocol landscape using published documentation, source code, governance records, and direct engagement with protocol communities. New entries are proposed by the research team or by community members and partners.',
+    intakeCommunity:
+      'Anyone can propose a new protocol, tool, or project for inclusion. Our contribution pathway captures what the research team needs: protocol name, governance model, key affordances, development status, and source references.',
+    intakeCollect:
+      'Each entry includes 40+ standardized attributes covering technical capabilities, governance structure, capture risk, development status, self-hostability, source licensing, and community links. Every capability claim is backed by at least one independent source reference.',
+
+    reviewHeading: 'Our review standards \u2014 and how they\u2019re evolving',
+    reviewToday: 'Our research team drafts each entry, and our Research Lead reviews it against published sources before publication. Every entry is checked for:',
+    reviewChecks: [
+      'Development status is current (active, maintained, archived, or deprecated)',
+      'Governance model is documented and sourced (foundation, DAO, single company, open standard body, etc.)',
+      'Capture risk assessment is grounded in observable governance structure',
+      'Capability claims are supported by at least one independent source \u2014 documentation, repository evidence, or third-party confirmation. Self-attestation from a developing team is not sufficient.',
+      'Community links (repos, forums, chat groups) are active and current',
+    ],
+    reviewFreshness:
+      'Every entry carries a last_investigated date \u2014 when the research team last reviewed it. Stale data is visible, not hidden.',
+    reviewHeadedIntro:
+      'We don\u2019t stamp entries \u201Cverified\u201D or \u201Cunverified.\u201D Instead, each entry shows a combination of independent signals \u2014 research review, development team confirmation, and community verification \u2014 so you can see exactly how much scrutiny it\u2019s received.',
+    reviewSignals: [
+      {
+        title: 'Reviewed by Research Lead',
+        description: 'Internal review against published sources. This is the baseline today.',
+      },
+      {
+        title: 'Confirmed by development team',
+        description: 'The technology\u2019s own development team has reviewed and confirmed the entry\u2019s accuracy. A useful signal, but not sufficient on its own \u2014 one input, not a stamp of approval.',
+      },
+      {
+        title: 'Third-party verified (N)',
+        description: 'Independent community members have reviewed and confirmed the entry, with a visible count. An entry verified by 24 people carries more weight than one verified by 2.',
+      },
+    ],
+    reviewSignalsNote:
+      'These signals are additive, not sequential. An entry might be reviewed by the Research Lead and confirmed by 12 independent verifiers but not yet confirmed by the development team. Another might have development team confirmation but no third-party review yet. Every entry shows exactly where it stands.',
+    reviewSharedPractice:
+      'This model means verification doesn\u2019t depend on any single person. It becomes a shared practice \u2014 rooted in the community this data serves.',
+    reviewTriggers:
+      'Entries are revisited when:',
+    reviewTriggerList: [
+      'A community member flags an issue or suggests an update',
+      'A protocol team releases a significant update or governance change',
+      'Partners surface new information through coordination channels',
+    ],
+    reviewCaptureRisk:
+      'We surface governance model and capture risk on every entry because we believe it matters \u2014 a technology\u2019s governance structure shapes whether it stays open or gets captured. But we want to be direct: how to best assess capture risk for each technology is something we\u2019re still working out, and we\u2019re looking to the community for guidance on how to do it well.',
+
+    contributeHeading: 'Ways to contribute and connect',
+    contributeIntro:
+      'The Navigator is stronger because people who know the landscape help build and maintain it. If you rely on this data, you can help make it better.',
+    contributeFlag: 'Flag an error or suggest an update.',
+    contributeFlagBody: 'Community flags are a primary update trigger. Your input directly improves the data for everyone.',
+    contributePropose: 'Propose a new entry.',
+    contributeProposeBody: 'Know a protocol, tool, or project that should be here? Our contribution pathway captures what the research team needs to verify and publish it.',
+    contributeVerification: 'Help shape verification and capture-risk standards.',
+    contributeVerificationBody: 'Our verification standards and capture-risk assessment frameworks are still evolving. If you have experience with data verification, protocol evaluation, or governance assessment in open-source or decentralized contexts, we want your input.',
+    contributePartnership: 'Protocol team and coalition partnerships.',
+    contributePartnershipBody: 'If you represent a protocol team, a coalition organization, or a research group in the P2P and decentralized space \u2014 let\u2019s talk. Whether that\u2019s ensuring your project\u2019s data is accurate, coordinating on shared research, or exploring deeper collaboration.',
+    contributeGovernance: 'Participate in governance.',
+    contributeGovernanceBody: 'OpenHaven\u2019s governance evolves as the community grows. We operate as a small founding team with a consent-based decision model and are building pathways for broader participation. If you\u2019re interested in contributing to how OpenHaven is governed \u2014 not just its data \u2014 reach out.',
+    contributeAttribution: 'Attribution.',
+    contributeAttributionBody: 'Every contribution is credited. Data contributions, editorial input, and community flags are tracked with contributor attribution. When your submission is verified and published, your name (or pseudonym, by preference) appears on the work \u2014 including on protocol cards in the Navigator.',
+    contributeSpread: 'Spread the word.',
+    contributeSpreadBody: 'If OpenHaven is useful to you, share it. The more eyes on this data, the more accurate and complete it becomes.',
+
+    teamHeading: 'Team',
+    teamMembers: [
+      { name: 'Day Waterbury', role: 'Open Protocol Visionary and Project Management' },
+      { name: 'Brandon N\u00F8rgaard', role: 'Backend Development and Technical Research' },
+      { name: 'Zach Miltz', role: 'Product Management and Full Stack Development' },
+      { name: 'Marty Behrens', role: 'User Research and Community Outreach' },
+      { name: 'Kevin Triplett', role: 'Decentralized Technology Advisor' },
+    ],
+    teamFooter:
+      'OpenHaven was born from the Collaborative Technology Alliance. Our governance framework \u2014 how decisions are made and how this process evolves \u2014 is being developed transparently.',
+
+    proposeEntry: 'Propose a new entry \u2192',
+    suggestUpdate: 'Suggest an update \u2192',
+    getInTouch: 'Get in touch \u2192',
+    learnMore: 'reach out \u2192',
   },
 
   brief: {
@@ -485,6 +615,49 @@ const en = {
     attribution:
       "Produced 27-Feb-2026 by Zach Miltz for OpenHaven, the community, and in support of the technical and social convergence that will unlock humanity's collective potential.",
     explorePrototype: 'Explore the prototype →',
+  },
+
+  research: {
+    landingTitle: 'Research Overview',
+    landingBreadcrumb: 'Research Overview',
+    intro:
+      "Research and reference materials that ground OpenHaven's work — writeups on the data infrastructure behind ecosystem mapping and on commons-based finance, alongside the sovereign-stack diagrams and a monetary-architecture report.",
+    // Key Tools highlight (Navigator + Matrix) — OpenHaven editorial (flag for review)
+    keyPiecesHeading: 'The two core tools',
+    keyPiecesIntro:
+      "Everything else here supports OpenHaven's two primary tools — start with these.",
+    navigatorSummary:
+      "Guided discovery — answer a few questions about what you're building and surface the protocols and tools that fit.",
+    matrixSummary:
+      'The full comparison table — every protocol and tool, side by side across attributes.',
+    embeddedHeading: 'Reports',
+    diagramsHeading: 'Diagrams',
+    diagramsNote:
+      'These diagrams open on their original deployments; importing them into the site is planned for a later stage.',
+    externalNewTab: 'Opens in a new tab',
+    readReport: 'Read the report',
+    viewDiagram: 'View diagram',
+    attributionBy: 'By',
+    publishedBy: 'Published on behalf of',
+    licenseLabel: 'Licensed under',
+    importedOnLabel: 'One-time import on',
+    noAutoUpdate: 'This page does not auto-update if the source changes upstream.',
+    localeNotice: 'This content is published in English.',
+    attributionRegionLabel: 'Attribution and maintenance',
+    stackTitle: 'Sovereign Stack Model',
+    stackEntityTitle: 'Stack Model — Entity Placement',
+    stackSampleTitle: 'Entities Mapped to Stack Layers',
+    monetaryTitle: 'Monetary Architecture',
+    // Diagram summaries (1 line each) — OpenHaven editorial (flag for review)
+    stackSummary:
+      'An interactive map of the sovereign-technology stack — the layers, from infrastructure to application, a self-sovereign digital ecosystem is built on.',
+    stackEntitySummary:
+      "The same stack model with real protocols and projects placed onto each layer — showing where today's tools actually sit.",
+    monetarySummary:
+      'A visual breakdown of the monetary and value-flow architecture underpinning commons-oriented and regenerative economic systems.',
+    rawDocsHeading: 'Additional documents',
+    rawDocsNote: 'Standalone reference pages, shown in their original formatting outside the main site design.',
+    openDocument: 'Open document',
   },
 } as const
 

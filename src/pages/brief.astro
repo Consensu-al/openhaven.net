@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from '@/components/ui/PageHeader.astro';
 import { useTranslations } from '@/i18n';
 
 const locale = Astro.currentLocale ?? 'en';
@@ -12,29 +13,27 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
   description={t('brief.description') as string}
 >
   <main class="brief-page">
-    <div class="container">
-      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
-        <ol class="breadcrumb-list">
-          <li>
-            <a href={`${prefix}/`} class="breadcrumb-link">{t('nav.homeBreadcrumb')}</a>
-          </li>
-          <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
-          <li aria-current="page"><span class="breadcrumb-current">{t('nav.brief')}</span></li>
-        </ol>
-      </nav>
+    <section class="section-padding">
+      <div class="container">
+        <PageHeader
+          title={t('brief.heading') as string}
+          breadcrumbLabel={t('nav.brief') as string}
+          locale={locale}
+        />
+      </div>
+    </section>
 
-      <header class="brief-header">
-        <h1>{t('brief.heading')}</h1>
-      </header>
-
-      <section class="brief-section">
+    <section class="section-padding brief-section">
+      <div class="container">
         <h2>{t('brief.executiveSummary')}</h2>
         <p>{t('brief.executiveSummaryP1')}</p>
         <p set:html={t('brief.executiveSummaryP2')} />
         <p set:html={t('brief.executiveSummaryP3')} />
-      </section>
+      </div>
+    </section>
 
-      <section class="brief-section">
+    <section class="section-padding brief-section">
+      <div class="container">
         <h2>{t('brief.coreVision')}</h2>
 
         <h3>{t('brief.problemStatement')}</h3>
@@ -74,146 +73,62 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
 
         <h3>{t('brief.ecosystemContext')}</h3>
         <p>{t('brief.ecosystemContextBody')}</p>
-      </section>
+      </div>
+    </section>
 
-      <section class="brief-section">
+    <section class="section-padding brief-section">
+      <div class="container">
         <h2>{t('brief.whoItsFor')}</h2>
         <p>{t('brief.whoItsForIntro')}</p>
 
         <div class="persona">
           <p set:html={t('brief.personas.mira')} />
         </div>
-
         <div class="persona">
           <p set:html={t('brief.personas.raul')} />
         </div>
-
         <div class="persona">
           <p set:html={t('brief.personas.jess')} />
         </div>
-
         <div class="persona">
           <p set:html={t('brief.personas.amara')} />
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="brief-section">
+    <section class="section-padding brief-section brief-section--last">
+      <div class="container">
         <h2>{t('brief.successHeading')}</h2>
         <ul class="brief-list">
           {(t('brief.successMetrics') as string[]).map((item) => (
             <li set:html={item} />
           ))}
         </ul>
-      </section>
-
-      <section class="cta-section">
-        <h2>{t('brief.getInTouch')}</h2>
-        <p set:html={t('brief.getInTouchBody')} />
-      </section>
-
-      <div class="brief-attribution">
-        <p class="brief-meta">{t('brief.attribution')}</p>
       </div>
+    </section>
 
-      <nav aria-label="Breadcrumb" class="breadcrumb-nav breadcrumb-nav--bottom">
-        <ol class="breadcrumb-list">
-          <li>
-            <a href={`${prefix}/`} class="breadcrumb-link">{t('nav.homeBreadcrumb')}</a>
-          </li>
-          <li aria-hidden="true" class="breadcrumb-sep">&gt;</li>
-          <li aria-current="page"><span class="breadcrumb-current">{t('nav.brief')}</span></li>
-        </ol>
-      </nav>
-    </div>
+    <section class="section-padding">
+      <div class="container">
+        <div class="cta-section">
+          <h2>{t('brief.getInTouch')}</h2>
+          <p set:html={t('brief.getInTouchBody')} />
+        </div>
+
+        <div class="brief-attribution">
+          <p class="brief-meta">{t('brief.attribution')}</p>
+        </div>
+      </div>
+    </section>
   </main>
 </BaseLayout>
 
 <style>
-  .brief-page {
-    padding: 2rem 1rem 5rem;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-
-  .breadcrumb-nav {
-    margin-bottom: 1.25rem;
-    font-size: 0.8125rem;
-  }
-
-  .breadcrumb-nav--bottom {
-    margin-bottom: 0;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(139, 69, 19, 0.1);
-  }
-
-  .breadcrumb-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.375rem;
-    list-style: none;
-    padding: 0;
-    color: var(--color-brand-text);
-    opacity: 0.7;
-  }
-
-  .breadcrumb-link {
-    color: var(--color-brand-primary);
-    text-decoration: none;
-    min-height: 44px;
-    min-width: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .breadcrumb-link:hover {
-    text-decoration: underline;
-  }
-
-  .breadcrumb-sep {
-    opacity: 0.4;
-  }
-
-  .breadcrumb-current {
-    color: var(--color-brand-text);
-  }
-
-  .brief-header {
-    margin-bottom: 3rem;
-  }
-
-  .brief-header h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--color-brand-primary);
-    margin: 0 0 1.25rem 0;
-    line-height: 1.15;
-  }
-
-  .brief-meta {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--color-brand-text);
-    opacity: 0.7;
-    margin: 0 0 0.5rem 0;
-    font-style: italic;
-  }
-
   .brief-section {
-    margin-bottom: 3rem;
-    padding-bottom: 3rem;
     border-bottom: 1px solid rgba(139, 69, 19, 0.1);
   }
 
-  .brief-section:last-of-type {
+  .brief-section--last {
     border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
   }
 
   .brief-section h2 {
@@ -230,7 +145,7 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
     margin: 2rem 0 0.75rem 0;
   }
 
-  .brief-section h3:first-child {
+  .brief-section h3:first-of-type {
     margin-top: 0;
   }
 
@@ -238,8 +153,16 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
     font-size: 1rem;
     line-height: 1.7;
     color: var(--color-brand-text);
-    max-width: 75ch;
     margin: 0 0 1rem 0;
+  }
+
+  .brief-meta {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-brand-text);
+    opacity: 0.7;
+    margin: 0;
+    font-style: italic;
   }
 
   .brief-list {
@@ -308,7 +231,6 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
     border-left: 4px solid var(--color-brand-accent);
     border-radius: 0 0.5rem 0.5rem 0;
     padding: 2rem 2.5rem;
-    margin-top: 3rem;
     text-align: center;
   }
 
@@ -328,25 +250,9 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
   }
 
   .brief-attribution {
-    margin-top: 3rem;
+    margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid rgba(139, 69, 19, 0.1);
-  }
-
-  .brief-attribution .brief-meta {
-    margin: 0;
-  }
-
-  .inline-link {
-    font-weight: 600;
-    color: var(--color-brand-primary);
-    text-decoration: none;
-    border-bottom: 2px solid var(--color-brand-accent);
-    transition: opacity 0.15s ease;
-  }
-
-  .inline-link:hover {
-    opacity: 0.75;
   }
 
   code {
@@ -355,21 +261,5 @@ const prefix = locale !== 'en' ? `/${locale}` : '';
     background: rgba(139, 69, 19, 0.06);
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
-  }
-
-  @media (min-width: 768px) {
-    .brief-header h1 {
-      font-size: 2.75rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .brief-page {
-      padding: 1.5rem 0 4rem;
-    }
-
-    .container {
-      padding: 0 1rem;
-    }
   }
 </style>

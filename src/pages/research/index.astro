@@ -1,0 +1,180 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHeader from '@/components/ui/PageHeader.astro'
+import ResearchCard from '@/components/research/ResearchCard.astro'
+import { useTranslations } from '@/i18n'
+import { externalDiagrams, externalReports, rawDocuments } from '@/lib/research-links'
+import { ICON_SVGS } from '@/lib/nav-icons'
+
+const locale = Astro.currentLocale ?? 'en'
+const t = useTranslations(locale)
+const prefix = locale !== 'en' ? `/${locale}` : ''
+
+const reports = (await getCollection('research')).sort(
+  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0),
+)
+
+// External diagrams (link-only) + raw orphan pages — shared from src/lib/research-links.ts.
+const diagrams = externalDiagrams.map((d) => ({
+  href: d.href,
+  title: t(d.titleKey) as string,
+  summary: t(d.summaryKey) as string,
+}))
+
+const siteBase = (Astro.site ?? new URL('https://openhaven.net')).toString().replace(/\/$/, '')
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${t('research.landingTitle')} — OpenHaven`,
+  description: t('research.intro'),
+  url: `${siteBase}${prefix}/research`,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: reports.map((entry, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: entry.data.title,
+      url: `${siteBase}${prefix}/research/${entry.id}`,
+    })),
+  },
+}
+---
+
+<BaseLayout title={t('research.landingTitle') as string} description={t('research.intro') as string}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(collectionLd)} />
+  </Fragment>
+
+  <main data-testid="research-landing">
+    <section class="section-padding">
+      <div class="container">
+        <PageHeader
+          title={t('research.landingTitle') as string}
+          subtitle={t('research.intro') as string}
+          breadcrumbLabel={t('research.landingBreadcrumb') as string}
+          locale={locale}
+        />
+      </div>
+    </section>
+
+    <section class="section-padding section-alt">
+      <div class="container">
+        <h2 class="section-heading">{t('research.keyPiecesHeading')}</h2>
+        <p class="body-text key-tools-intro">{t('research.keyPiecesIntro')}</p>
+        <div class="key-tools-grid">
+          <a class="key-tool-card" href={`${prefix}/prototype`}>
+            <span class="key-tool-name">
+              <span class="key-tool-label">
+                <svg class="key-tool-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <Fragment set:html={ICON_SVGS.compass} />
+                </svg>
+                {t('nav.navigatorPrototype')}
+              </span>
+              <svg class="key-tool-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+            <span class="key-tool-summary">{t('research.navigatorSummary')}</span>
+          </a>
+          <a class="key-tool-card" href={`${prefix}/prototype/matrix`}>
+            <span class="key-tool-name">
+              <span class="key-tool-label">
+                <svg class="key-tool-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <Fragment set:html={ICON_SVGS.list} />
+                </svg>
+                {t('nav.matrixPrototype')}
+              </span>
+              <svg class="key-tool-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+            <span class="key-tool-summary">{t('research.matrixSummary')}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding" data-group="reports">
+      <div class="container">
+        <h2 class="section-heading">{t('research.embeddedHeading')}</h2>
+        <div class="research-card-grid">
+          {reports.map((entry) => (
+            <ResearchCard
+              href={`${prefix}/research/${entry.id}`}
+              title={entry.data.title}
+              summary={entry.data.summary}
+              locale={locale}
+            />
+          ))}
+          {externalReports.map((r) => (
+            <ResearchCard
+              href={r.href}
+              title={t(r.titleKey) as string}
+              summary={t(r.summaryKey) as string}
+              external={true}
+              ctaLabel={t('research.readReport') as string}
+              locale={locale}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding section-alt" data-group="diagrams">
+      <div class="container">
+        <h2 class="section-heading">{t('research.diagramsHeading')}</h2>
+        <p class="body-text research-diagrams-note">{t('research.diagramsNote')}</p>
+        <div class="research-card-grid">
+          {diagrams.map((d) => (
+            <ResearchCard href={d.href} title={d.title} summary={d.summary} external={true} locale={locale} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {rawDocuments.length > 0 && (
+      <section class="section-padding">
+        <div class="container">
+          <h2 class="section-heading">{t('research.rawDocsHeading')}</h2>
+          <p class="body-text research-diagrams-note">{t('research.rawDocsNote')}</p>
+          <div class="research-card-grid">
+            {rawDocuments.map((doc) => (
+              <ResearchCard
+                href={doc.href}
+                title={doc.title}
+                summary={doc.description}
+                external={true}
+                ctaLabel={t('research.openDocument') as string}
+                locale={locale}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+</BaseLayout>
+
+<style>
+  .research-diagrams-note {
+    margin-bottom: 1.5rem;
+    opacity: 0.85;
+  }
+
+  .research-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .research-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+  }
+</style>
